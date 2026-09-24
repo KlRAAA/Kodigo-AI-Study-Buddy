@@ -239,8 +239,10 @@
   "review": {
     "title": "Review",
     "due": "{count, plural, =0 {Walang ire-review ngayon} one {# card na ire-review ngayon} other {# cards na ire-review ngayon}}",
-    "comingSoon": "Malapit na ang spaced repetition. Sa ngayon, magbukas ng set at gamitin ang Learn mode.",
-    "pickSet": "Pumunta sa mga set ko"
+    "comingSoon": "Malapit na ang smart review schedule. Pumili ng set sa baba para mag-aral ngayon.",
+    "setDue": "{due} sa {total} ang ire-review",
+    "flashcards": "Flashcards",
+    "learn": "Learn"
   },
   "profile": {
     "title": "Profile",

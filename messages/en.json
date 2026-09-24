@@ -239,8 +239,10 @@
   "review": {
     "title": "Review",
     "due": "{count, plural, =0 {Nothing due today} one {# card due today} other {# cards due today}}",
-    "comingSoon": "Spaced repetition is coming soon. For now, open a set and use Learn mode.",
-    "pickSet": "Go to my sets"
+    "comingSoon": "Smart review scheduling is coming soon. Pick a set below to study now.",
+    "setDue": "{due} of {total} due",
+    "flashcards": "Flashcards",
+    "learn": "Learn"
   },
   "profile": {
     "title": "Profile",

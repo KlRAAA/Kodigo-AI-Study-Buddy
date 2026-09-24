@@ -89,6 +89,26 @@ export async function countDueCards(userId: string, now = new Date()) {
   return rows[0]?.n ?? 0;
 }
 
+/** Sets that have cards, with how many are due today (never-reviewed cards count as due). */
+export async function listSetsWithDue(userId: string, now = new Date()) {
+  const due = sql<number>`count(*) filter (where ${cardReviews.cardId} is null or ${cardReviews.dueAt} <= ${now.toISOString()}::timestamptz)::int`;
+  return getDb()
+    .select({
+      id: studySets.id,
+      title: studySets.title,
+      subject: studySets.subject,
+      cardCount: sql<number>`count(${cards.id})::int`,
+      dueCount: due,
+    })
+    .from(studySets)
+    .innerJoin(cards, and(eq(cards.setId, studySets.id), eq(cards.userId, userId)))
+    .leftJoin(cardReviews, eq(cardReviews.cardId, cards.id))
+    .where(eq(studySets.userId, userId))
+    .groupBy(studySets.id)
+    .orderBy(desc(due), desc(studySets.updatedAt))
+    .limit(200);
+}
+
 function escapeLike(s: string) {
   return s.replace(/[\\%_]/g, (c) => `\\${c}`);
 }

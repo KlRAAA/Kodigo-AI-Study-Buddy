@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { addCard, deleteCard, listCards, replaceCards, updateCard } from "@/server/db/queries/cards";
 import { deleteAllUserData, getOrCreateProfile } from "@/server/db/queries/profiles";
-import { createSet, deleteSet, getSet, listSets, updateSet } from "@/server/db/queries/sets";
+import { createSet, deleteSet, getSet, listSets, listSetsWithDue, updateSet } from "@/server/db/queries/sets";
 import { createTestDb } from "./helpers/db";
 
 // Every query takes the caller's userId; these tests prove user B can never
@@ -74,5 +74,14 @@ describe("per-user data isolation", () => {
     await createSet(B, { title: "B's biology", sourceType: "text", sourceText: "", outputLang: "en" });
     expect((await listSets(B, "bio")).map((s) => s.title)).toEqual(["B's biology"]);
     expect(await listSets(A, "%")).toEqual([]);
+  });
+
+  it("review list shows only the user's sets with due counts", async () => {
+    const { setId } = await seed();
+    await createSet(A, { title: "empty set", sourceType: "text", sourceText: "", outputLang: "en" });
+    expect(await listSetsWithDue(B)).toEqual([]);
+    const rows = await listSetsWithDue(A);
+    expect(rows).toHaveLength(1); // sets without cards are skipped
+    expect(rows[0]).toMatchObject({ id: setId, cardCount: 2, dueCount: 2 });
   });
 });

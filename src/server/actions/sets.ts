@@ -113,13 +113,14 @@ export async function updateSetMetaAction(input: z.input<typeof metaSchema>): Pr
   const parsed = metaSchema.safeParse(input);
   if (!parsed.success) return fail("invalid_input");
   const { setId, title, subject } = parsed.data;
+  // Mark stale before the write so viewers never see unscreened content; the write enforces ownership.
+  await markSetStale(me.user.id, setId);
   // Omitted subject = keep it (rename from list cards only sends a title).
   const found = await updateSet(me.user.id, setId, {
     title,
     ...(subject === undefined ? {} : { subject: subject || null }),
   });
   if (!found) return fail("not_found");
-  await markSetStale(me.user.id, setId);
   revalidatePath(`/sets/${setId}`);
   return ok(null);
 }
@@ -155,9 +156,9 @@ export async function addCardAction(
   if (!me) return fail("unauthorized");
   const parsed = cardFields.safeParse(input);
   if (!uuid.safeParse(setId).success || !parsed.success) return fail("invalid_input");
+  await markSetStale(me.user.id, setId);
   const card = await addCard(me.user.id, setId, { ...parsed.data, example: parsed.data.example || null });
   if (!card) return fail("not_found");
-  await markSetStale(me.user.id, setId);
   return ok(toStudyCard(card));
 }
 
@@ -169,11 +170,11 @@ export async function updateCardAction(
   if (!me) return fail("unauthorized");
   const parsed = cardFields.safeParse(input);
   if (!uuid.safeParse(cardId).success || !parsed.success) return fail("invalid_input");
-  const found = await updateCard(me.user.id, cardId, { ...parsed.data, example: parsed.data.example || null });
-  if (!found) return fail("not_found");
   const setId = await setIdForCard(me.user.id, cardId);
-  if (setId) await markSetStale(me.user.id, setId);
-  return ok(null);
+  if (!setId) return fail("not_found");
+  await markSetStale(me.user.id, setId);
+  const found = await updateCard(me.user.id, cardId, { ...parsed.data, example: parsed.data.example || null });
+  return found ? ok(null) : fail("not_found");
 }
 
 export async function toggleStarAction(cardId: string, starred: boolean): Promise<ActionResult> {
@@ -188,9 +189,9 @@ export async function deleteCardAction(cardId: string): Promise<ActionResult> {
   if (!me) return fail("unauthorized");
   if (!uuid.safeParse(cardId).success) return fail("invalid_input");
   const setId = await setIdForCard(me.user.id, cardId);
-  if (!(await deleteCard(me.user.id, cardId))) return fail("not_found");
-  if (setId) await markSetStale(me.user.id, setId);
-  return ok(null);
+  if (!setId) return fail("not_found");
+  await markSetStale(me.user.id, setId);
+  return (await deleteCard(me.user.id, cardId)) ? ok(null) : fail("not_found");
 }
 
 /** Used by study modes to refresh their offline copy. */

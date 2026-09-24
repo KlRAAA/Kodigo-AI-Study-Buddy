@@ -1,13 +1,13 @@
 import "server-only";
 import { cacheKey, callAI, readCache, writeCache } from "./index";
-import { chunkText, mergeCards, normalizeText, targetCardCount } from "./chunk";
+import { chunkText, MAX_CARDS, mergeCards, normalizeText, targetCardCount } from "./chunk";
 import { extractTextMessages, summaryAndCardsMessages, type Lang } from "./prompts";
 import { extractedTextSchema, summaryAndCardsSchema, type SummaryAndCards } from "./schemas";
 
 export type Generated = SummaryAndCards & { cached: boolean };
 
 export function generationCacheKey(notes: string, lang: Lang) {
-  return cacheKey("summary_cards:v2", lang, normalizeText(notes));
+  return cacheKey("summary_cards:v3", lang, normalizeText(notes));
 }
 
 export async function getCachedGeneration(notes: string, lang: Lang) {
@@ -42,7 +42,7 @@ export async function generateSummaryAndCards(userId: string, notes: string, lan
     summary: parts.map((p) => p.summary.trim()).join("\n\n"),
     cards: mergeCards(
       parts.map((p) => p.cards),
-      60,
+      MAX_CARDS,
     ),
   };
   await writeCache(key, "summary_cards", lang, result);

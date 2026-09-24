@@ -37,13 +37,16 @@ function lastIndex(s: string, sep: string, min: number): number | undefined {
   return i >= min ? i + sep.length : undefined;
 }
 
-/** How many cards to ask for, by note length (10–60). */
+/** Most cards a single set can get from generation. */
+export const MAX_CARDS = 150;
+
+/** How many cards to ask for: about one per 200 characters of notes (10–150). */
 export function targetCardCount(chars: number) {
-  return Math.max(10, Math.min(60, Math.round(chars / 350)));
+  return Math.max(10, Math.min(MAX_CARDS, Math.round(chars / 200)));
 }
 
 /** Merges cards from several chunks, dropping near-duplicate terms, capped at `max`. */
-export function mergeCards(groups: GeneratedCard[][], max = 60): GeneratedCard[] {
+export function mergeCards(groups: GeneratedCard[][], max = MAX_CARDS): GeneratedCard[] {
   const seen = new Set<string>();
   const out: GeneratedCard[] = [];
   for (const group of groups) {

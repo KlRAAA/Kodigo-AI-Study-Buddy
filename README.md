@@ -10,7 +10,7 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - Sign up / log in with email + password, 6-digit email verification, password reset by code, Cloudflare Turnstile
 - English ⇄ Tagalog UI, saved to your profile
 - Create a set from pasted text, **PDF** (read in the browser), **PPTX** (slides + speaker notes, read in the browser), or **photos** (compressed in the browser, read once by a vision model, never stored)
-- AI summary (markdown) + 10–60 flashcards, with an output-language override (Auto / English / Tagalog)
+- AI summary (markdown) + 10–150 flashcards (about one per 200 characters of notes), with an output-language override (Auto / English / Tagalog)
 - Edit, add, delete and star cards
 - **Flashcards**: tap to flip, swipe, shuffle, starred only
 - **Learn**: multiple choice, true/false, identification and enumeration questions with explanations, lenient answer matching; missed cards come back until mastered

@@ -69,10 +69,11 @@ describe("chunking and merging", () => {
     expect(chunks.map((c) => c.length)).toEqual([2000, 2000, 1000]);
   });
 
-  it("targets 10–60 cards by length", () => {
+  it("targets 10–150 cards by length (about one per 200 characters)", () => {
     expect(targetCardCount(100)).toBe(10);
-    expect(targetCardCount(7000)).toBe(20);
-    expect(targetCardCount(60000)).toBe(60);
+    expect(targetCardCount(7000)).toBe(35);
+    expect(targetCardCount(20000)).toBe(100);
+    expect(targetCardCount(60000)).toBe(150);
   });
 
   it("merges chunk cards, dropping near-duplicate terms", () => {

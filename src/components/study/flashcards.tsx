@@ -81,11 +81,9 @@ export function Flashcards({
           className={cn("flip-inner relative grid min-h-[22rem] w-full", flipped && "flipped")}
         >
           <span className="flip-face col-start-1 row-start-1 flex flex-col items-center justify-center rounded-3xl border border-border bg-surface p-6 shadow-sm">
-            <span className="mb-3 text-xs font-bold tracking-wide text-muted uppercase">{t("term")}</span>
             <span className="text-2xl font-black break-words">{card.term}</span>
           </span>
           <span className="flip-face flip-back col-start-1 row-start-1 flex flex-col items-center justify-center rounded-3xl border border-primary bg-primary-soft p-6 shadow-sm">
-            <span className="mb-3 text-xs font-bold tracking-wide text-muted uppercase">{t("definition")}</span>
             <span className="text-lg font-semibold break-words">{card.definition}</span>
             {card.example && <span className="mt-3 text-sm break-words italic">{card.example}</span>}
           </span>

@@ -1,4 +1,4 @@
-import { Brain, CalendarClock, Layers } from "lucide-react";
+import { Brain, CalendarClock, Layers, Repeat } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -24,12 +24,22 @@ export default async function ReviewPage() {
     <div className="space-y-5 py-4">
       <h1 className="text-2xl font-black">{t("title")}</h1>
 
-      <div className="flex items-center gap-4 rounded-3xl bg-primary p-5 text-on-primary">
-        <CalendarClock aria-hidden className="size-10 shrink-0 opacity-80" />
-        <div>
-          <p className="text-xl font-black">{t("due", { count: totalDue })}</p>
-          <p className="text-sm opacity-80">{t("comingSoon")}</p>
+      <div className="space-y-4 rounded-3xl bg-primary p-5 text-on-primary">
+        <div className="flex items-center gap-4">
+          <CalendarClock aria-hidden className="size-10 shrink-0 opacity-80" />
+          <div>
+            <p className="text-xl font-black">{t("due", { count: totalDue })}</p>
+            <p className="text-sm opacity-80">{t("howItWorks")}</p>
+          </div>
         </div>
+        {totalDue > 0 && (
+          <Link
+            href="/review/session"
+            className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-surface font-bold text-text active:scale-[0.98]"
+          >
+            <Repeat aria-hidden className="size-5 text-primary" /> {t("startReview")}
+          </Link>
+        )}
       </div>
 
       {sets.length === 0 ? (
@@ -56,7 +66,14 @@ export default async function ReviewPage() {
                 </Link>
                 <SetCardActions setId={s.id} title={s.title} />
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
+                <Link
+                  href={`/review/session?set=${s.id}`}
+                  aria-disabled={s.dueCount === 0}
+                  className={`flex min-h-11 items-center justify-center gap-1.5 rounded-xl bg-success-soft font-bold text-success active:scale-[0.98] ${s.dueCount === 0 ? "pointer-events-none opacity-50" : ""}`}
+                >
+                  <Repeat aria-hidden className="size-4" /> {t("reviewShort")}
+                </Link>
                 <Link
                   href={`/sets/${s.id}/flashcards`}
                   className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-primary-soft font-bold text-primary active:scale-[0.98]"

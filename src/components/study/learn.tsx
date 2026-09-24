@@ -7,6 +7,7 @@ import { Button, Input, ProgressBar } from "@/components/ui";
 import { isAnswerCorrect } from "@/lib/answer-match";
 import { checkEnumeration } from "@/lib/enumeration";
 import {
+  MASTERY_STEPS,
   QUESTION_TYPES,
   answer,
   buildQuestion,
@@ -20,6 +21,7 @@ import {
   type QuestionType,
 } from "@/lib/learn";
 import { cn } from "@/lib/utils";
+import { reviewCardAction } from "@/server/actions/reviews";
 import type { StudyCard } from "@/server/actions/sets";
 import { SpeakButton } from "./speak-button";
 
@@ -48,7 +50,8 @@ function parseSavedTypes(rawText: string | null): QuestionType[] | null {
   }
 }
 
-export function Learn({ cards }: { cards: StudyCard[] }) {
+/** `recordReviews`: cards mastered here count as a "Good" spaced-repetition review (online only). */
+export function Learn({ cards, recordReviews = true }: { cards: StudyCard[]; recordReviews?: boolean }) {
   const t = useTranslations("study");
   const available = useMemo(
     () => QUESTION_TYPES.filter((type) => isTypeAvailable(type, cards)),
@@ -130,6 +133,7 @@ export function Learn({ cards }: { cards: StudyCard[] }) {
       cards={session.cards}
       allCards={cards}
       types={session.types}
+      recordReviews={recordReviews}
       onChangeTypes={() => setSession(null)}
     />
   );
@@ -178,11 +182,13 @@ function LearnSession({
   cards,
   allCards,
   types,
+  recordReviews,
   onChangeTypes,
 }: {
   cards: StudyCard[];
   allCards: StudyCard[];
   types: QuestionType[];
+  recordReviews: boolean;
   onChangeTypes: () => void;
 }) {
   const t = useTranslations("study");
@@ -235,6 +241,11 @@ function LearnSession({
 
   function next() {
     if (!feedback) return;
+    const id = state.queue[0];
+    // This answer masters the card: log it as a "Good" review so it leaves "Due today".
+    if (recordReviews && id && feedback.correct && state.step[id] === MASTERY_STEPS - 1) {
+      void reviewCardAction(id, "good").catch(() => {});
+    }
     setState((s) => answer(s, feedback.correct));
     setFeedback(null);
     setTyped("");

@@ -283,10 +283,27 @@
   "review": {
     "title": "Review",
     "due": "{count, plural, =0 {Walang ire-review ngayon} one {# card na ire-review ngayon} other {# cards na ire-review ngayon}}",
-    "comingSoon": "Malapit na ang smart review schedule. Pumili ng set sa baba para mag-aral ngayon.",
     "setDue": "{due} sa {total} ang ire-review",
     "flashcards": "Flashcards",
-    "learn": "Learn"
+    "learn": "Learn",
+    "howItWorks": "Babalik ang mga card bago mo pa makalimutan.",
+    "startReview": "Simulan ang review",
+    "reviewShort": "Review",
+    "allSets": "Lahat ng set",
+    "close": "Isara",
+    "progress": "Progress",
+    "showAnswer": "Ipakita ang sagot",
+    "howWell": "Gaano mo ito naalala?",
+    "grades": {
+      "again": "Ulit",
+      "hard": "Mahirap",
+      "good": "Okay",
+      "easy": "Madali"
+    },
+    "doneTitle": "Tapos na lahat!",
+    "doneBody": "{count, plural, one {# card ang na-review.} other {# cards ang na-review.}} Bumalik kapag may ire-review na ulit.",
+    "backToReview": "Bumalik sa Review",
+    "nothingDue": "Walang ire-review ngayon. Galing!"
   },
   "profile": {
     "title": "Profile",

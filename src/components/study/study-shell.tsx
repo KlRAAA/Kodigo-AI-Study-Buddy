@@ -44,7 +44,7 @@ export function StudyShell({
           <h1 className="truncate font-black">{title}</h1>
         </div>
       </header>
-      {mode === "flashcards" ? <Flashcards cards={cards} online={online} /> : <Learn cards={cards} />}
+      {mode === "flashcards" ? <Flashcards cards={cards} online={online} /> : <Learn cards={cards} recordReviews={online} />}
     </div>
   );
 }

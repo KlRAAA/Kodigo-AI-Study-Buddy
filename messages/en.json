@@ -1,0 +1,347 @@
+{
+  "app": {
+    "tagline": "Ang kodigong pwedeng dalhin."
+  },
+  "nav": {
+    "label": "Main",
+    "home": "Home",
+    "create": "Create",
+    "review": "Review",
+    "profile": "Profile"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "landing": {
+    "headline": "Turn your notes into a reviewer in seconds.",
+    "f1": "Paste notes or upload a PDF or PowerPoint",
+    "f2": "Snap photos of your handwritten notes",
+    "f3": "Get a summary and flashcards right away",
+    "f4": "Study with Flashcards and Learn mode",
+    "free": "Free for students. English or Tagalog.",
+    "cta": "Create a free account",
+    "signIn": "I already have an account"
+  },
+  "onboarding": {
+    "title": "Hi, {name}!",
+    "subtitle": "Which language do you want Kodigo in?",
+    "changeLater": "You can change this anytime in Profile.",
+    "continue": "Let's go"
+  },
+  "auth": {
+    "signInTitle": "Welcome back",
+    "signInSubtitle": "Log in to keep reviewing.",
+    "signUpTitle": "Create your account",
+    "signUpSubtitle": "It's free. We'll send a code to verify your email.",
+    "name": "First name",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "newPassword": "New password",
+    "signIn": "Log in",
+    "signUp": "Sign up",
+    "forgot": "Forgot your password?",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?",
+    "agree": "By signing up you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+    "verifyTitle": "Check your email",
+    "verifySubtitle": "Enter the code we sent to {email}.",
+    "code": "Code",
+    "verify": "Verify",
+    "resendCode": "Didn't get it? Send a new code",
+    "codeResent": "We sent a new code. Check your inbox and spam folder.",
+    "forgotTitle": "Reset your password",
+    "forgotSubtitle": "Enter your email and we'll send you a code.",
+    "resetSubtitle": "Enter the code we sent to {email} and your new password.",
+    "sendCode": "Send code",
+    "resetPassword": "Save new password",
+    "backToSignIn": "Back to log in",
+    "notice": {
+      "verified": "Your email is verified. You can log in now.",
+      "reset": "Password changed. Log in with your new password.",
+      "deleted": "Your account and all your data have been deleted."
+    }
+  },
+  "errors": {
+    "invalid_input": "Something in the form doesn't look right. Please check and try again.",
+    "unauthorized": "Please log in again.",
+    "not_verified": "Please verify your email first.",
+    "not_found": "We couldn't find that. It may have been deleted.",
+    "suspended": "AI features are paused on your account. You can still study your sets.",
+    "rate": "Whoa, that's fast! Wait a minute, then try again.",
+    "daily": "You've used today's AI allowance. It resets at midnight (Philippine time). You can still study your sets.",
+    "global": "Kodigo is very busy today. AI features are paused until midnight, but you can still study your sets.",
+    "ai_unavailable": "Kodigo is resting. Try again in a bit.",
+    "captcha": "We couldn't confirm you're human. Please try again.",
+    "signup_throttled": "Too many sign-ups from this network. Try again in an hour.",
+    "invalid_credentials": "Wrong email or password.",
+    "email_taken": "That email already has an account. Try logging in.",
+    "weak_password": "Your password needs at least 8 characters.",
+    "invalid_code": "That code is wrong or expired. Try again or ask for a new one.",
+    "too_long": "Your notes are too long. Split them into smaller sets.",
+    "unknown": "Something went wrong. Please try again."
+  },
+  "banners": {
+    "globalBudget": "Kodigo is very busy today, so new AI generations are paused until midnight. Studying still works!",
+    "suspended": "AI features are paused on your account. You can still study your sets."
+  },
+  "home": {
+    "hello": "Hello,",
+    "allowance": "{left}/{limit} left today",
+    "dueToday": "Due today",
+    "dueCount": "{count, plural, =0 {All caught up} one {# card} other {# cards}}",
+    "search": "Search your sets",
+    "library": "Your sets",
+    "empty": "No sets yet. Make your first one!",
+    "noResults": "No sets match your search.",
+    "createFirst": "Create a set",
+    "cardCount": "{count, plural, one {# card} other {# cards}}"
+  },
+  "create": {
+    "title": "New set",
+    "sourceLabel": "Where are your notes?",
+    "source": {
+      "text": "Paste",
+      "pdf": "PDF",
+      "pptx": "PowerPoint",
+      "photo": "Photos"
+    },
+    "pasteLabel": "Your notes",
+    "pastePlaceholder": "Paste your notes here…",
+    "reviewLabel": "Check the text before generating",
+    "pickPdf": "Choose a PDF",
+    "pdfHint": "Up to 10 MB and 30 pages. The file stays on your phone; only the text is sent.",
+    "pickPptx": "Choose a PowerPoint (.pptx)",
+    "pptxHint": "Up to 10 MB. We read the slides and speaker notes on your phone.",
+    "fileTooBig": "That file is too big. The limit is {mb} MB.",
+    "pdfTruncated": "Only the first {pages} pages were read.",
+    "pdfNoText": "Pages {pages} look like scanned images with no text. Use the Photos option for those.",
+    "pptxEmpty": "We couldn't find any text in that file.",
+    "parseFailed": "We couldn't read that file. Try another one, or paste the text instead.",
+    "reading": "Reading your file…",
+    "takePhoto": "Take photo",
+    "choosePhotos": "Choose photos",
+    "photoHint": "Up to {max} photos. They're shrunk on your phone, read once, then deleted.",
+    "photoFailed": "One photo couldn't be processed. Try taking it again.",
+    "photoAlt": "Photo {n}",
+    "removePhoto": "Remove photo {n}",
+    "compressing": "Preparing photos…",
+    "extracting": "Reading your notes…",
+    "extract": "Read the text",
+    "reviewExtracted": "Done! Check the text below and fix anything that looks wrong.",
+    "setTitle": "Title (optional)",
+    "setTitlePlaceholder": "We'll make one if you leave it blank",
+    "subject": "Subject (optional)",
+    "subjectPlaceholder": "e.g. Biology, Filipino, History",
+    "outputLang": "Language of the reviewer",
+    "langAuto": "Auto",
+    "generate": "Make summary and flashcards",
+    "tooShort": "Add a bit more text first (at least a few sentences).",
+    "generating": "Generating",
+    "stage1": "Reading your notes…",
+    "stage2": "Finding the key ideas…",
+    "stage3": "Writing your summary…",
+    "stage4": "Making flashcards…",
+    "stayOnPage": "This can take up to a minute for long notes. Keep this page open."
+  },
+  "set": {
+    "back": "Back",
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "summary": "Summary",
+    "editDetails": "Edit set details",
+    "title": "Title",
+    "subject": "Subject",
+    "save": "Save",
+    "cancel": "Cancel",
+    "deleteSet": "Delete this set",
+    "confirmDeleteSet": "Delete this set and all its cards? This can't be undone.",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "addCard": "Add card",
+    "term": "Term",
+    "definition": "Definition",
+    "example": "Example (optional)",
+    "star": "Star card",
+    "unstar": "Unstar card",
+    "editCard": "Edit card",
+    "deleteCard": "Delete card",
+    "confirmDeleteCard": "Delete this card?"
+  },
+  "study": {
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "close": "Close",
+    "progress": "Progress",
+    "term": "Term",
+    "definition": "Definition",
+    "tapToFlip": "Tap the card to flip · Swipe to move",
+    "showDefinition": "Show definition",
+    "showTerm": "Show term",
+    "previous": "Previous card",
+    "next": "Next card",
+    "star": "Star card",
+    "unstar": "Unstar card",
+    "shuffle": "Shuffle",
+    "restart": "Start over",
+    "starredOnly": "Starred only",
+    "noStarred": "You haven't starred any cards yet.",
+    "noCards": "This set has no cards yet.",
+    "showAll": "Show all cards",
+    "pickTerm": "Choose the matching term",
+    "typeTerm": "Type the term",
+    "trueOrFalse": "True or false?",
+    "true": "True",
+    "false": "False",
+    "yourAnswer": "Your answer",
+    "check": "Check",
+    "dontKnow": "I don't know",
+    "correct": "Correct!",
+    "notQuite": "Not quite",
+    "answerWas": "The answer is",
+    "continue": "Continue",
+    "allMastered": "You mastered every card!",
+    "accuracy": "{accuracy}% correct across {answered} answers.",
+    "again": "Study again"
+  },
+  "review": {
+    "title": "Review",
+    "due": "{count, plural, =0 {Nothing due today} one {# card due today} other {# cards due today}}",
+    "comingSoon": "Spaced repetition is coming soon. For now, open a set and use Learn mode.",
+    "pickSet": "Go to my sets"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "save": "Save",
+    "saved": "Saved!",
+    "language": "Language",
+    "allowanceTitle": "Today's AI allowance",
+    "allowance": {
+      "generation": "New sets and photo reading",
+      "assist": "Explain and example buttons",
+      "tutor": "Tutor messages"
+    },
+    "allowanceReset": "Resets every midnight, Philippine time.",
+    "admin": "Admin",
+    "signOut": "Log out",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "deleteAccount": "Delete my account",
+    "deleteWarning": "This permanently deletes your account, all your sets, cards and progress. It can't be undone.",
+    "deleteWord": "DELETE",
+    "deleteConfirm": "Type {word} to confirm",
+    "deleteForever": "Delete forever",
+    "cancel": "Cancel"
+  },
+  "admin": {
+    "title": "Admin",
+    "global": "AI calls today (all users)",
+    "globalHint": "New AI calls stop at {pct}% of the budget.",
+    "models": "Model health",
+    "allHealthy": "No model has been benched yet.",
+    "ok": "OK",
+    "benchedUntil": "Benched until {time}",
+    "users": "Usage today",
+    "usageLine": "Sets {generation} · Assist {assist} · Tutor {tutor}",
+    "suspended": "Suspended",
+    "suspend": "Suspend",
+    "unsuspend": "Unsuspend",
+    "resetCounters": "Reset today"
+  },
+  "offline": {
+    "title": "You're offline",
+    "subtitle": "You can still study sets you opened recently on this phone.",
+    "none": "No saved sets yet. Open a set while online to save it.",
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "back": "Back",
+    "retry": "Try to reconnect"
+  },
+  "errorPage": {
+    "title": "Oops, something broke",
+    "body": "It's not you, it's us. Please try again.",
+    "retry": "Try again",
+    "notFound": "We couldn't find that page.",
+    "goHome": "Go home"
+  },
+  "legal": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "updated": "Last updated {date}",
+    "privacyPage": {
+      "title": "Privacy Policy",
+      "sections": [
+        {
+          "heading": "What we store",
+          "body": [
+            "Your account details (name, email, and a securely hashed password handled by our login provider, Neon Auth).",
+            "The text of the notes you turn into sets, the summaries and flashcards made from them, and your study progress.",
+            "Basic usage counts (how many AI actions you used today) so we can keep Kodigo free and fair for everyone."
+          ]
+        },
+        {
+          "heading": "What we don't store",
+          "body": [
+            "PDF and PowerPoint files are read on your phone. Only the extracted text is sent to us; the files themselves never leave your device.",
+            "Photos of your notes are shrunk on your phone, sent once to read the text, then discarded. We never save them."
+          ]
+        },
+        {
+          "heading": "AI providers",
+          "body": [
+            "To make summaries and flashcards, the text of your notes is sent to third-party AI services: Google (Gemini), Groq, and OpenRouter.",
+            "These services' free tiers may use the data they receive to improve their models. Please don't upload sensitive personal information such as ID numbers, medical records, or passwords."
+          ]
+        },
+        {
+          "heading": "Security",
+          "body": [
+            "Your data is only reachable through our server after you log in, and every request is limited to your own data. Bot protection is provided by Cloudflare Turnstile."
+          ]
+        },
+        {
+          "heading": "Deleting your data",
+          "body": [
+            "You can delete your account anytime in Profile → Delete my account. This removes your account, sets, cards and progress."
+          ]
+        }
+      ]
+    },
+    "termsPage": {
+      "title": "Terms of Use",
+      "sections": [
+        {
+          "heading": "Using Kodigo",
+          "body": [
+            "Kodigo is a free study tool. Use it to review your own notes and school materials.",
+            "Don't use it to break the law, harass others, or overload the service (for example with automated requests)."
+          ]
+        },
+        {
+          "heading": "AI can be wrong",
+          "body": [
+            "Summaries, flashcards and answers are generated by AI and can contain mistakes. Always double-check with your notes, teacher, or textbook."
+          ]
+        },
+        {
+          "heading": "Your content",
+          "body": [
+            "You keep ownership of your notes. You're responsible for making sure you're allowed to upload them."
+          ]
+        },
+        {
+          "heading": "Fair use limits",
+          "body": [
+            "To keep Kodigo free, there are daily limits on AI features. Accounts that abuse the service may have AI features paused."
+          ]
+        },
+        {
+          "heading": "No warranty",
+          "body": [
+            "Kodigo is provided as is, without guarantees of availability. We may change or discontinue features at any time."
+          ]
+        }
+      ]
+    }
+  }
+}

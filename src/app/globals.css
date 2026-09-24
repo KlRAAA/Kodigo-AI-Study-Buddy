@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+/* Kodigo palette: deep teal + warm mango on a soft paper background. */
+:root {
+  --bg: #f7f5ef;
+  --surface: #ffffff;
+  --surface-2: #efece3;
+  --text: #1c2624;
+  --muted: #5e6b68;
+  --border: #e0dccf;
+  --primary: #0d6e66;
+  --primary-strong: #0a5751;
+  --primary-soft: #d8efeb;
+  --on-primary: #ffffff;
+  --accent: #f4a53b;
+  --accent-soft: #fdebd0;
+  --danger: #c2413a;
+  --danger-soft: #fbe3e1;
+  --success: #2f8a4c;
+  --success-soft: #def3e4;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111716;
+    --surface: #1a2220;
+    --surface-2: #232d2b;
+    --text: #e9eeec;
+    --muted: #9aa8a4;
+    --border: #2e3a37;
+    --primary: #3fb8ab;
+    --primary-strong: #5fcabe;
+    --primary-soft: #183b37;
+    --on-primary: #0b1614;
+    --accent: #f6b458;
+    --accent-soft: #3d2f1a;
+    --danger: #ef7b73;
+    --danger-soft: #3d1f1d;
+    --success: #6fcf8c;
+    --success-soft: #1b3525;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+}
+
+/* iOS zooms into inputs under 16px. */
+input,
+textarea,
+select {
+  font-size: 16px;
+}
+
+/* Safe-area helpers for the notch and home indicator. */
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top), 0.75rem);
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.pb-nav {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+/* Flashcard flip. */
+.flip-card {
+  perspective: 1200px;
+}
+.flip-inner {
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+/* Markdown summary. */
+.prose-kodigo h1,
+.prose-kodigo h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 1.25rem 0 0.5rem;
+}
+.prose-kodigo h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 1rem 0 0.4rem;
+}
+.prose-kodigo p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+.prose-kodigo ul,
+.prose-kodigo ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+.prose-kodigo ul {
+  list-style: disc;
+}
+.prose-kodigo ol {
+  list-style: decimal;
+}
+.prose-kodigo li {
+  margin: 0.25rem 0;
+  line-height: 1.55;
+}
+.prose-kodigo strong {
+  color: var(--primary-strong);
+  font-weight: 800;
+}
+.prose-kodigo table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose-kodigo th,
+.prose-kodigo td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+}
+.prose-kodigo code {
+  background: var(--surface-2);
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.3rem;
+}

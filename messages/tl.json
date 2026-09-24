@@ -1,0 +1,347 @@
+{
+  "app": {
+    "tagline": "Ang kodigong pwedeng dalhin."
+  },
+  "nav": {
+    "label": "Pangunahin",
+    "home": "Home",
+    "create": "Gumawa",
+    "review": "Review",
+    "profile": "Profile"
+  },
+  "language": {
+    "label": "Wika"
+  },
+  "landing": {
+    "headline": "Gawing reviewer ang notes mo sa ilang segundo.",
+    "f1": "I-paste ang notes o mag-upload ng PDF o PowerPoint",
+    "f2": "Kunan ng picture ang sulat-kamay mong notes",
+    "f3": "May summary at flashcards ka agad",
+    "f4": "Mag-aral gamit ang Flashcards at Learn mode",
+    "free": "Libre para sa mga estudyante. English o Tagalog.",
+    "cta": "Gumawa ng libreng account",
+    "signIn": "May account na ako"
+  },
+  "onboarding": {
+    "title": "Hi, {name}!",
+    "subtitle": "Anong wika ang gusto mo sa Kodigo?",
+    "changeLater": "Pwede mo itong palitan anytime sa Profile.",
+    "continue": "Tara na"
+  },
+  "auth": {
+    "signInTitle": "Welcome back",
+    "signInSubtitle": "Mag-log in para ituloy ang pagre-review.",
+    "signUpTitle": "Gumawa ng account",
+    "signUpSubtitle": "Libre ito. Magpapadala kami ng code para i-verify ang email mo.",
+    "name": "Pangalan",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Hindi bababa sa 8 characters.",
+    "newPassword": "Bagong password",
+    "signIn": "Mag-log in",
+    "signUp": "Mag-sign up",
+    "forgot": "Nakalimutan ang password?",
+    "noAccount": "Wala ka pang account?",
+    "haveAccount": "May account ka na?",
+    "agree": "Sa pag-sign up, sumasang-ayon ka sa aming <terms>Terms</terms> at <privacy>Privacy Policy</privacy>.",
+    "verifyTitle": "Tingnan ang email mo",
+    "verifySubtitle": "Ilagay ang code na ipinadala namin sa {email}.",
+    "code": "Code",
+    "verify": "I-verify",
+    "resendCode": "Hindi natanggap? Magpadala ng bagong code",
+    "codeResent": "Nagpadala kami ng bagong code. Tingnan ang inbox at spam folder mo.",
+    "forgotTitle": "I-reset ang password",
+    "forgotSubtitle": "Ilagay ang email mo at padadalhan ka namin ng code.",
+    "resetSubtitle": "Ilagay ang code na ipinadala namin sa {email} at ang bago mong password.",
+    "sendCode": "Ipadala ang code",
+    "resetPassword": "I-save ang bagong password",
+    "backToSignIn": "Bumalik sa log in",
+    "notice": {
+      "verified": "Verified na ang email mo. Pwede ka nang mag-log in.",
+      "reset": "Napalitan na ang password. Mag-log in gamit ang bago mong password.",
+      "deleted": "Nabura na ang account mo at lahat ng data mo."
+    }
+  },
+  "errors": {
+    "invalid_input": "May mali sa form. Pakicheck at subukan ulit.",
+    "unauthorized": "Pakilog in ulit.",
+    "not_verified": "I-verify muna ang email mo.",
+    "not_found": "Hindi namin ito mahanap. Baka nabura na.",
+    "suspended": "Naka-pause ang AI features sa account mo. Pwede mo pa ring pag-aralan ang mga set mo.",
+    "rate": "Teka lang, ang bilis! Maghintay ng isang minuto bago subukan ulit.",
+    "daily": "Naubos mo na ang AI allowance mo ngayong araw. Magre-reset ito pagdating ng hatinggabi (oras sa Pilipinas). Pwede ka pa ring mag-aral ng mga set mo.",
+    "global": "Sobrang busy ng Kodigo ngayon. Naka-pause ang AI features hanggang hatinggabi, pero pwede ka pa ring mag-aral.",
+    "ai_unavailable": "Nagpapahinga muna si Kodigo. Subukan ulit mamaya.",
+    "captcha": "Hindi namin makumpirmang tao ka. Pakisubukan ulit.",
+    "signup_throttled": "Masyadong maraming nag-sign up mula sa network na ito. Subukan ulit after isang oras.",
+    "invalid_credentials": "Mali ang email o password.",
+    "email_taken": "May account na ang email na iyan. Subukang mag-log in.",
+    "weak_password": "Kailangan ng hindi bababa sa 8 characters ang password mo.",
+    "invalid_code": "Mali o expired na ang code. Subukan ulit o humingi ng bago.",
+    "too_long": "Masyadong mahaba ang notes mo. Hatiin ito sa mas maliliit na set.",
+    "unknown": "May nangyaring mali. Pakisubukan ulit."
+  },
+  "banners": {
+    "globalBudget": "Sobrang busy ng Kodigo ngayon kaya naka-pause muna ang bagong AI generations hanggang hatinggabi. Pwede ka pa ring mag-aral!",
+    "suspended": "Naka-pause ang AI features sa account mo. Pwede mo pa ring pag-aralan ang mga set mo."
+  },
+  "home": {
+    "hello": "Hello,",
+    "allowance": "{left}/{limit} natitira ngayon",
+    "dueToday": "Ire-review ngayon",
+    "dueCount": "{count, plural, =0 {Tapos ka na lahat} one {# card} other {# cards}}",
+    "search": "Hanapin sa mga set mo",
+    "library": "Mga set mo",
+    "empty": "Wala ka pang set. Gawin na ang una mo!",
+    "noResults": "Walang set na tugma sa hinanap mo.",
+    "createFirst": "Gumawa ng set",
+    "cardCount": "{count, plural, one {# card} other {# cards}}"
+  },
+  "create": {
+    "title": "Bagong set",
+    "sourceLabel": "Nasaan ang notes mo?",
+    "source": {
+      "text": "I-paste",
+      "pdf": "PDF",
+      "pptx": "PowerPoint",
+      "photo": "Photos"
+    },
+    "pasteLabel": "Ang notes mo",
+    "pastePlaceholder": "I-paste dito ang notes mo…",
+    "reviewLabel": "Tingnan muna ang text bago mag-generate",
+    "pickPdf": "Pumili ng PDF",
+    "pdfHint": "Hanggang 10 MB at 30 pages. Nasa phone mo lang ang file; text lang ang ipinapadala.",
+    "pickPptx": "Pumili ng PowerPoint (.pptx)",
+    "pptxHint": "Hanggang 10 MB. Binabasa namin ang slides at speaker notes sa phone mo.",
+    "fileTooBig": "Masyadong malaki ang file. Hanggang {mb} MB lang.",
+    "pdfTruncated": "Ang unang {pages} pages lang ang nabasa.",
+    "pdfNoText": "Mukhang scanned na picture ang pages {pages} at walang text. Gamitin ang Photos para doon.",
+    "pptxEmpty": "Wala kaming nakitang text sa file na iyan.",
+    "parseFailed": "Hindi namin mabasa ang file. Subukan ang ibang file, o i-paste na lang ang text.",
+    "reading": "Binabasa ang file mo…",
+    "takePhoto": "Kumuha ng picture",
+    "choosePhotos": "Pumili ng photos",
+    "photoHint": "Hanggang {max} photos. Pinapaliit sa phone mo, binabasa nang isang beses, tapos binubura.",
+    "photoFailed": "May isang photo na hindi na-process. Subukang kunan ulit.",
+    "photoAlt": "Photo {n}",
+    "removePhoto": "Tanggalin ang photo {n}",
+    "compressing": "Inihahanda ang photos…",
+    "extracting": "Binabasa ang notes mo…",
+    "extract": "Basahin ang text",
+    "reviewExtracted": "Tapos na! Tingnan ang text sa baba at ayusin ang mga mali.",
+    "setTitle": "Title (optional)",
+    "setTitlePlaceholder": "Kami na ang gagawa kung iiwan mong blangko",
+    "subject": "Subject (optional)",
+    "subjectPlaceholder": "hal. Biology, Filipino, History",
+    "outputLang": "Wika ng reviewer",
+    "langAuto": "Auto",
+    "generate": "Gumawa ng summary at flashcards",
+    "tooShort": "Magdagdag muna ng kaunting text (ilang sentences man lang).",
+    "generating": "Ginagawa",
+    "stage1": "Binabasa ang notes mo…",
+    "stage2": "Hinahanap ang mga importanteng idea…",
+    "stage3": "Isinusulat ang summary…",
+    "stage4": "Ginagawa ang flashcards…",
+    "stayOnPage": "Pwedeng umabot ng isang minuto kung mahaba ang notes. Huwag munang isara ang page."
+  },
+  "set": {
+    "back": "Bumalik",
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "summary": "Summary",
+    "editDetails": "I-edit ang set",
+    "title": "Title",
+    "subject": "Subject",
+    "save": "I-save",
+    "cancel": "Kanselahin",
+    "deleteSet": "Burahin ang set na ito",
+    "confirmDeleteSet": "Burahin ang set na ito at lahat ng cards nito? Hindi na ito maibabalik.",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "addCard": "Magdagdag",
+    "term": "Term",
+    "definition": "Definition",
+    "example": "Halimbawa (optional)",
+    "star": "I-star ang card",
+    "unstar": "Tanggalin ang star",
+    "editCard": "I-edit ang card",
+    "deleteCard": "Burahin ang card",
+    "confirmDeleteCard": "Burahin ang card na ito?"
+  },
+  "study": {
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "close": "Isara",
+    "progress": "Progress",
+    "term": "Term",
+    "definition": "Definition",
+    "tapToFlip": "I-tap ang card para baligtarin · I-swipe para lumipat",
+    "showDefinition": "Ipakita ang definition",
+    "showTerm": "Ipakita ang term",
+    "previous": "Nakaraang card",
+    "next": "Susunod na card",
+    "star": "I-star ang card",
+    "unstar": "Tanggalin ang star",
+    "shuffle": "Shuffle",
+    "restart": "Ulitin",
+    "starredOnly": "Starred lang",
+    "noStarred": "Wala ka pang ini-star na card.",
+    "noCards": "Wala pang cards ang set na ito.",
+    "showAll": "Ipakita lahat",
+    "pickTerm": "Piliin ang tamang term",
+    "typeTerm": "I-type ang term",
+    "trueOrFalse": "Tama o mali?",
+    "true": "Tama",
+    "false": "Mali",
+    "yourAnswer": "Sagot mo",
+    "check": "I-check",
+    "dontKnow": "Hindi ko alam",
+    "correct": "Tama!",
+    "notQuite": "Hindi pa tama",
+    "answerWas": "Ang sagot ay",
+    "continue": "Tuloy",
+    "allMastered": "Na-master mo lahat ng cards!",
+    "accuracy": "{accuracy}% tama sa {answered} na sagot.",
+    "again": "Mag-aral ulit"
+  },
+  "review": {
+    "title": "Review",
+    "due": "{count, plural, =0 {Walang ire-review ngayon} one {# card na ire-review ngayon} other {# cards na ire-review ngayon}}",
+    "comingSoon": "Malapit na ang spaced repetition. Sa ngayon, magbukas ng set at gamitin ang Learn mode.",
+    "pickSet": "Pumunta sa mga set ko"
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Pangalan",
+    "save": "I-save",
+    "saved": "Na-save!",
+    "language": "Wika",
+    "allowanceTitle": "AI allowance ngayong araw",
+    "allowance": {
+      "generation": "Bagong set at pagbasa ng photos",
+      "assist": "Explain at example buttons",
+      "tutor": "Mensahe sa tutor"
+    },
+    "allowanceReset": "Nagre-reset tuwing hatinggabi, oras sa Pilipinas.",
+    "admin": "Admin",
+    "signOut": "Mag-log out",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "deleteAccount": "Burahin ang account ko",
+    "deleteWarning": "Permanenteng mabubura ang account mo, lahat ng set, cards at progress mo. Hindi na ito maibabalik.",
+    "deleteWord": "BURAHIN",
+    "deleteConfirm": "I-type ang {word} para kumpirmahin",
+    "deleteForever": "Burahin nang tuluyan",
+    "cancel": "Kanselahin"
+  },
+  "admin": {
+    "title": "Admin",
+    "global": "AI calls ngayon (lahat ng users)",
+    "globalHint": "Titigil ang bagong AI calls sa {pct}% ng budget.",
+    "models": "Kalagayan ng models",
+    "allHealthy": "Wala pang model na naka-bench.",
+    "ok": "OK",
+    "benchedUntil": "Naka-bench hanggang {time}",
+    "users": "Paggamit ngayon",
+    "usageLine": "Sets {generation} · Assist {assist} · Tutor {tutor}",
+    "suspended": "Suspended",
+    "suspend": "I-suspend",
+    "unsuspend": "Alisin ang suspend",
+    "resetCounters": "I-reset ngayon"
+  },
+  "offline": {
+    "title": "Offline ka",
+    "subtitle": "Pwede mo pa ring pag-aralan ang mga set na binuksan mo kamakailan sa phone na ito.",
+    "none": "Wala pang naka-save na set. Magbukas ng set habang online para ma-save ito.",
+    "flashcards": "Flashcards",
+    "learn": "Learn",
+    "back": "Bumalik",
+    "retry": "Subukang kumonekta ulit"
+  },
+  "errorPage": {
+    "title": "Oops, may nasira",
+    "body": "Hindi ikaw ang may kasalanan, kami. Pakisubukan ulit.",
+    "retry": "Subukan ulit",
+    "notFound": "Hindi namin mahanap ang page na iyan.",
+    "goHome": "Pumunta sa Home"
+  },
+  "legal": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "updated": "Huling in-update noong {date}",
+    "privacyPage": {
+      "title": "Privacy Policy",
+      "sections": [
+        {
+          "heading": "Ano ang sine-save namin",
+          "body": [
+            "Ang detalye ng account mo (pangalan, email, at password na ligtas na naka-hash at hawak ng login provider namin, ang Neon Auth).",
+            "Ang text ng notes na ginagawa mong set, ang mga summary at flashcards na ginawa mula dito, at ang study progress mo.",
+            "Simpleng bilang ng paggamit (ilang AI actions ang nagamit mo ngayong araw) para manatiling libre at patas ang Kodigo para sa lahat."
+          ]
+        },
+        {
+          "heading": "Ano ang hindi namin sine-save",
+          "body": [
+            "Binabasa sa phone mo ang mga PDF at PowerPoint. Text lang ang ipinapadala sa amin; hindi umaalis sa device mo ang mismong file.",
+            "Pinapaliit sa phone mo ang mga picture ng notes, ipinapadala nang isang beses para mabasa ang text, tapos itinatapon. Hindi namin sine-save ang mga ito."
+          ]
+        },
+        {
+          "heading": "Mga AI provider",
+          "body": [
+            "Para makagawa ng summary at flashcards, ipinapadala ang text ng notes mo sa mga third-party AI service: Google (Gemini), Groq, at OpenRouter.",
+            "Pwedeng gamitin ng free tier ng mga serbisyong ito ang data na natatanggap nila para pagandahin ang kanilang models. Huwag mag-upload ng sensitibong personal na impormasyon tulad ng ID numbers, medical records, o passwords."
+          ]
+        },
+        {
+          "heading": "Seguridad",
+          "body": [
+            "Maaabot lang ang data mo sa pamamagitan ng server namin pagkatapos mong mag-log in, at bawat request ay limitado sa sarili mong data. Ang bot protection ay mula sa Cloudflare Turnstile."
+          ]
+        },
+        {
+          "heading": "Pagbura ng data mo",
+          "body": [
+            "Pwede mong burahin ang account mo anytime sa Profile → Burahin ang account ko. Mabubura ang account, sets, cards at progress mo."
+          ]
+        }
+      ]
+    },
+    "termsPage": {
+      "title": "Terms of Use",
+      "sections": [
+        {
+          "heading": "Paggamit ng Kodigo",
+          "body": [
+            "Libreng study tool ang Kodigo. Gamitin ito para i-review ang sarili mong notes at school materials.",
+            "Huwag itong gamitin para lumabag sa batas, mang-harass ng iba, o i-overload ang serbisyo (halimbawa, gamit ang automated requests)."
+          ]
+        },
+        {
+          "heading": "Pwedeng magkamali ang AI",
+          "body": [
+            "Gawa ng AI ang mga summary, flashcards at sagot, kaya pwedeng may mali. Laging i-double check sa notes mo, sa teacher mo, o sa libro."
+          ]
+        },
+        {
+          "heading": "Ang content mo",
+          "body": [
+            "Sa iyo pa rin ang notes mo. Responsibilidad mong siguraduhin na pwede mo itong i-upload."
+          ]
+        },
+        {
+          "heading": "Patas na limit",
+          "body": [
+            "Para manatiling libre ang Kodigo, may daily limits ang AI features. Pwedeng i-pause ang AI features ng mga account na nang-aabuso sa serbisyo."
+          ]
+        },
+        {
+          "heading": "Walang garantiya",
+          "body": [
+            "Ibinibigay ang Kodigo nang as is, at walang garantiya na laging available ito. Pwede naming baguhin o itigil ang mga feature anytime."
+          ]
+        }
+      ]
+    }
+  }
+}

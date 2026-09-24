@@ -30,6 +30,13 @@ describe("readLimits", () => {
     expect(l.perMinute).toBe(5);
     expect(l.globalCutoff).toBe(0.9);
   });
+
+  it("reads community limits with defaults", () => {
+    const l = readLimits({ DAILY_SHARES_PER_USER: "4" });
+    expect(l.daily.share).toBe(4);
+    expect(l.daily.report).toBe(20);
+    expect(l.daily.follow).toBe(100);
+  });
 });
 
 describe("usage counters (Postgres)", () => {

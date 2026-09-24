@@ -8,6 +8,20 @@
       "when": 1790259159452,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790269048230,
+      "tag": "0001_community",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790269058807,
+      "tag": "0002_drop_is_public",
+      "breakpoints": true
     }
   ]
 }

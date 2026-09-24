@@ -9,7 +9,6 @@ import { requireUser } from "@/server/auth";
 import { followFeed } from "@/server/db/queries/community";
 import { countDueCards, listSets } from "@/server/db/queries/sets";
 import type { SourceType } from "@/server/db/schema";
-import { SearchBox } from "./search-box";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -24,13 +23,11 @@ const sourceIcons: Record<SourceType, typeof FileText> = {
   quizlet: BookOpen,
 };
 
-export default async function HomePage({ searchParams }: PageProps<"/home">) {
+export default async function HomePage() {
   const { user, profile } = await requireUser();
-  const { q } = await searchParams;
-  const query = typeof q === "string" ? q.slice(0, 100) : "";
   const t = await getTranslations("home");
   const format = await getFormatter();
-  const [sets, due, feed] = await Promise.all([listSets(user.id, query), countDueCards(user.id), followFeed(user.id)]);
+  const [sets, due, feed] = await Promise.all([listSets(user.id), countDueCards(user.id), followFeed(user.id)]);
 
   return (
     <div className="space-y-5 py-4">
@@ -56,14 +53,13 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
       <Link href="/explore" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-surface font-bold active:bg-surface-2">
         <Compass aria-hidden className="size-5 text-primary" /> {t("explore")}
       </Link>
-      {feed.length > 0 && !query && (
+      {feed.length > 0 && (
         <section aria-labelledby="feed-heading" className="space-y-2">
           <h2 id="feed-heading" className="text-lg font-black">{t("fromFollowing")}</h2>
           <div className="space-y-2">{feed.map((s) => <SetTile key={s.slug} set={s} />)}</div>
         </section>
       )}
 
-      <SearchBox initial={query} />
 
       <section aria-labelledby="library-heading" className="space-y-3">
         <h2 id="library-heading" className="text-lg font-black">
@@ -71,15 +67,13 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
         </h2>
         {sets.length === 0 ? (
           <div className="rounded-3xl border-2 border-dashed border-border p-8 text-center">
-            <p className="font-bold">{query ? t("noResults") : t("empty")}</p>
-            {!query && (
-              <Link
-                href="/create"
-                className="mt-4 inline-flex min-h-12 items-center rounded-2xl bg-primary px-5 font-bold text-on-primary"
-              >
-                {t("createFirst")}
-              </Link>
-            )}
+            <p className="font-bold">{t("empty")}</p>
+            <Link
+              href="/create"
+              className="mt-4 inline-flex min-h-12 items-center rounded-2xl bg-primary px-5 font-bold text-on-primary"
+            >
+              {t("createFirst")}
+            </Link>
           </div>
         ) : (
           <ul className="space-y-2">

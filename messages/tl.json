@@ -7,7 +7,8 @@
     "home": "Home",
     "create": "Gumawa",
     "review": "Review",
-    "profile": "Profile"
+    "profile": "Profile",
+    "search": "Hanapin"
   },
   "language": {
     "label": "Wika"
@@ -131,10 +132,8 @@
     "allowance": "{left}/{limit} natitira ngayon",
     "dueToday": "Ire-review ngayon",
     "dueCount": "{count, plural, =0 {Tapos ka na lahat} one {# card} other {# cards}}",
-    "search": "Hanapin sa mga set mo",
     "library": "Mga set mo",
     "empty": "Wala ka pang set. Gawin na ang una mo!",
-    "noResults": "Walang set na tugma sa hinanap mo.",
     "createFirst": "Gumawa ng set",
     "cardCount": "{count, plural, one {# card} other {# cards}}",
     "explore": "Tuklasin ang public sets",
@@ -558,5 +557,14 @@
     "empty": "Wala pang public set na nahanap.",
     "prev": "Nakaraan",
     "next": "Susunod"
+  },
+  "search": {
+    "title": "Hanapin",
+    "placeholder": "Hanapin sa mga set mo at public sets",
+    "hint": "I-type ang title o subject para hanapin sa library mo at sa public sets.",
+    "yourSets": "Mga set mo",
+    "publicSets": "Public sets",
+    "noneMine": "Walang tugma sa mga set mo.",
+    "nonePublic": "Walang public set na tugma."
   }
 }

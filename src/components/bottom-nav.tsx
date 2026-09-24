@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Home, Plus, UserRound } from "lucide-react";
+import { BookOpen, Home, Plus, Search, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 const tabs = [
   { href: "/home", key: "home", Icon: Home },
+  { href: "/search", key: "search", Icon: Search },
   { href: "/create", key: "create", Icon: Plus },
   { href: "/review", key: "review", Icon: BookOpen },
   { href: "/profile", key: "profile", Icon: UserRound },

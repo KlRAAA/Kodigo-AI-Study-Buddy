@@ -7,7 +7,8 @@
     "home": "Home",
     "create": "Create",
     "review": "Review",
-    "profile": "Profile"
+    "profile": "Profile",
+    "search": "Search"
   },
   "language": {
     "label": "Language"
@@ -131,10 +132,8 @@
     "allowance": "{left}/{limit} left today",
     "dueToday": "Due today",
     "dueCount": "{count, plural, =0 {All caught up} one {# card} other {# cards}}",
-    "search": "Search your sets",
     "library": "Your sets",
     "empty": "No sets yet. Make your first one!",
-    "noResults": "No sets match your search.",
     "createFirst": "Create a set",
     "cardCount": "{count, plural, one {# card} other {# cards}}",
     "explore": "Explore public sets",
@@ -558,5 +557,14 @@
     "empty": "No public sets found yet.",
     "prev": "Previous",
     "next": "Next"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search your sets and public sets",
+    "hint": "Type a title or subject to search your library and public sets.",
+    "yourSets": "Your sets",
+    "publicSets": "Public sets",
+    "noneMine": "None of your sets match.",
+    "nonePublic": "No public sets match."
   }
 }

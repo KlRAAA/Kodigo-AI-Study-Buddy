@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, gt, inArray, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, inArray, like, or, sql } from "drizzle-orm";
 import { getDb } from "../client";
 import {
   bannedEmails,
@@ -11,7 +11,8 @@ import {
   type ModerationStatus,
   type ReportReason,
 } from "../schema";
-import { viewableSetWhere } from "./sharing";
+import { contentHash } from "@/server/moderation/content";
+import { loadShareContent, viewableSetWhere } from "./sharing";
 
 const AUTO_HIDE_REPORTS = 3;
 const SHARE_BLOCK_MS = 30 * 24 * 60 * 60 * 1000;
@@ -65,7 +66,7 @@ export type QueueItem = {
   cards: { term: string; definition: string }[];
 };
 
-/** Sets waiting for an admin: flagged by screening or reported. */
+/** Sets waiting for an admin: flagged by screening, reported, or blocked for involving minors. */
 export async function listModerationQueue(limit = 50): Promise<QueueItem[]> {
   const db = getDb();
   const rows = await db
@@ -80,7 +81,13 @@ export async function listModerationQueue(limit = 50): Promise<QueueItem[]> {
     })
     .from(studySets)
     .innerJoin(profiles, eq(profiles.userId, studySets.userId))
-    .where(or(eq(studySets.moderationStatus, "review"), gt(studySets.reportCount, 0)))
+    .where(
+      or(
+        eq(studySets.moderationStatus, "review"),
+        gt(studySets.reportCount, 0),
+        and(eq(studySets.moderationStatus, "blocked"), like(studySets.moderationReason, "%minors%")),
+      ),
+    )
     .orderBy(desc(studySets.reportCount), asc(studySets.updatedAt))
     .limit(limit);
   if (rows.length === 0) return [];
@@ -101,13 +108,28 @@ export async function listModerationQueue(limit = 50): Promise<QueueItem[]> {
   }));
 }
 
-export async function approveSet(setId: string) {
+/** Statuses an admin can approve; anything else (stale, blocked, none, taken down) can only be taken down. */
+export const APPROVABLE: readonly ModerationStatus[] = ["review", "approved"];
+
+/** Approves the set's current content and dismisses its reports. False when the set can't be approved. */
+export async function approveSet(setId: string): Promise<boolean> {
   const db = getDb();
-  await db.update(reports).set({ status: "dismissed" }).where(and(eq(reports.setId, setId), eq(reports.status, "open")));
-  await db
+  const [set] = await db
+    .select({ ownerId: studySets.userId, status: studySets.moderationStatus })
+    .from(studySets)
+    .where(eq(studySets.id, setId))
+    .limit(1);
+  if (!set || !APPROVABLE.includes(set.status)) return false;
+  const content = await loadShareContent(set.ownerId, setId);
+  if (!content) return false;
+  const [updated] = await db
     .update(studySets)
-    .set({ moderationStatus: "approved", moderationReason: null, reportCount: 0 })
-    .where(eq(studySets.id, setId));
+    .set({ moderationStatus: "approved", moderationReason: null, reportCount: 0, moderatedHash: contentHash(content) })
+    .where(and(eq(studySets.id, setId), inArray(studySets.moderationStatus, [...APPROVABLE])))
+    .returning({ id: studySets.id });
+  if (!updated) return false;
+  await db.update(reports).set({ status: "dismissed" }).where(and(eq(reports.setId, setId), eq(reports.status, "open")));
+  return true;
 }
 
 /** Removes a set, gives the owner a strike and applies the strike rules. */

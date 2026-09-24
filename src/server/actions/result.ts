@@ -27,6 +27,8 @@ export type ErrorCode =
   | "own_set"
   | "already_reported"
   | "cannot_follow"
+  | "taken_down"
+  | "community_limit"
   | "unknown";
 
 export type ActionResult<T = null> = { ok: true; data: T } | { ok: false; error: ErrorCode };

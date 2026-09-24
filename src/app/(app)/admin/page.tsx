@@ -5,7 +5,7 @@ import { Card } from "@/components/ui";
 import { isAdminEmail, requireUser } from "@/server/auth";
 import { usageToday } from "@/server/db/queries/admin";
 import { listModelStatus } from "@/server/db/queries/ai";
-import { listModerationQueue } from "@/server/db/queries/moderation";
+import { APPROVABLE, listModerationQueue } from "@/server/db/queries/moderation";
 import { getGlobalUsage } from "@/server/db/queries/usage";
 import { readLimits } from "@/server/limits/config";
 import { QueueActions } from "./queue-actions";
@@ -83,7 +83,7 @@ export default async function AdminPage() {
                     ))}
                   </ul>
                 </details>
-                <QueueActions setId={q.setId} />
+                <QueueActions setId={q.setId} canApprove={APPROVABLE.includes(q.status)} />
               </li>
             ))}
           </ul>

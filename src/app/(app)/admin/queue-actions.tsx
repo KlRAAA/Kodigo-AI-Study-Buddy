@@ -5,7 +5,8 @@ import { useTransition } from "react";
 import { Button } from "@/components/ui";
 import { approveSetAction, takeDownAction } from "@/server/actions/moderation";
 
-export function QueueActions({ setId }: { setId: string }) {
+/** Approve is only offered for sets in review or already approved; others can only be taken down. */
+export function QueueActions({ setId, canApprove }: { setId: string; canApprove: boolean }) {
   const t = useTranslations("admin");
   const [pending, startTransition] = useTransition();
 
@@ -18,9 +19,11 @@ export function QueueActions({ setId }: { setId: string }) {
 
   return (
     <div className="flex flex-wrap gap-2 [&>button]:whitespace-nowrap">
-      <Button size="sm" disabled={pending} onClick={() => startTransition(async () => void (await approveSetAction(setId)))}>
-        {t("approve")}
-      </Button>
+      {canApprove && (
+        <Button size="sm" disabled={pending} onClick={() => startTransition(async () => void (await approveSetAction(setId)))}>
+          {t("approve")}
+        </Button>
+      )}
       <Button size="sm" variant="secondary" disabled={pending} onClick={() => takeDown(false)}>
         {t("takeDown")}
       </Button>

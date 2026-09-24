@@ -28,7 +28,7 @@ export async function reportSetAction(setId: string, reason: string, note?: stri
   const r = reasonSchema.safeParse(reason);
   const n = z.string().trim().max(300).optional().safeParse(note);
   if (!uuid.safeParse(setId).success || !r.success || !n.success) return fail("invalid_input");
-  if ((await consumeDaily(me.user.id, "report", readLimits().daily.report)) === null) return fail("daily");
+  if ((await consumeDaily(me.user.id, "report", readLimits().daily.report)) === null) return fail("community_limit");
   const res = await createReport(me.user.id, setId, r.data, n.data || null);
   if (res === "duplicate") return fail("already_reported");
   if (res === "own_set") return fail("own_set");
@@ -52,7 +52,7 @@ async function admin() {
 export async function approveSetAction(setId: string): Promise<ActionResult> {
   if (!(await admin())) return fail("unauthorized");
   if (!uuid.safeParse(setId).success) return fail("invalid_input");
-  await approveSet(setId);
+  if (!(await approveSet(setId))) return fail("not_found");
   revalidatePath("/admin");
   return ok(null);
 }

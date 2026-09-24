@@ -26,6 +26,8 @@ export type ShareState = {
   moderatedHash: string | null;
   shareSlug: string | null;
   publishedAt: Date | null;
+  /** Open reports. */
+  reportCount: number;
 };
 
 const ownSet = (userId: string, setId: string) => and(eq(studySets.id, setId), eq(studySets.userId, userId));
@@ -39,6 +41,7 @@ export async function getShareState(userId: string, setId: string): Promise<Shar
       moderatedHash: studySets.moderatedHash,
       shareSlug: studySets.shareSlug,
       publishedAt: studySets.publishedAt,
+      reportCount: studySets.reportCount,
     })
     .from(studySets)
     .where(ownSet(userId, setId))
@@ -46,7 +49,7 @@ export async function getShareState(userId: string, setId: string): Promise<Shar
   return rows[0] ?? null;
 }
 
-export async function updateShareState(userId: string, setId: string, patch: Partial<ShareState>) {
+export async function updateShareState(userId: string, setId: string, patch: Partial<Omit<ShareState, "reportCount">>) {
   await getDb().update(studySets).set(patch).where(ownSet(userId, setId));
 }
 

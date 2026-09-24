@@ -50,8 +50,14 @@ export async function shareSet({ userId, profile, setId, visibility, screen, now
     await updateShareState(userId, setId, { visibility });
     return ok({ status: "review" });
   }
+  // Same content an admin removed: it has to change first.
+  if (state.moderatedHash === hash && state.moderationStatus === "taken_down") return fail("taken_down");
+  // Same content already blocked: the answer won't change.
+  if (state.moderatedHash === hash && state.moderationStatus === "blocked") {
+    return ok({ status: "blocked", categories: (state.moderationReason ?? "").split(",").filter(Boolean) });
+  }
 
-  if ((await consumeDaily(userId, "share", readLimits().daily.share, now)) === null) return fail("daily");
+  if ((await consumeDaily(userId, "share", readLimits().daily.share, now)) === null) return fail("community_limit");
 
   let result: ScreenResult;
   try {
@@ -63,6 +69,13 @@ export async function shareSet({ userId, profile, setId, visibility, screen, now
   }
 
   const reason = result.categories.join(",") || result.reason;
+  // A set an admin removed, one waiting for an admin, or one with open reports needs an admin to clear it.
+  const needsAdmin = state.moderationStatus === "taken_down" || state.moderationStatus === "review" || state.reportCount > 0;
+  if (result.verdict === "allow" && needsAdmin) {
+    const why = state.moderationStatus === "taken_down" ? "resubmitted" : (state.moderationReason ?? "reports");
+    await updateShareState(userId, setId, { visibility, moderationStatus: "review", moderationReason: why, moderatedHash: hash, shareSlug: slug });
+    return ok({ status: "review" });
+  }
   if (result.verdict === "allow") {
     await updateShareState(userId, setId, {
       visibility,

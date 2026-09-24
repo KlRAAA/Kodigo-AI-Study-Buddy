@@ -43,7 +43,7 @@ export async function followAction(handle: string): Promise<ActionResult> {
   if (!me) return fail("unauthorized");
   const target = await targetByHandle(handle);
   if (!target || target.bannedAt) return fail("not_found");
-  if ((await consumeDaily(me.user.id, "follow", readLimits().daily.follow)) === null) return fail("daily");
+  if ((await consumeDaily(me.user.id, "follow", readLimits().daily.follow)) === null) return fail("community_limit");
   const res = await followUser(me.user.id, target.userId);
   if (res !== "ok") return fail("cannot_follow");
   revalidatePath(`/u/${target.handle}`);

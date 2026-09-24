@@ -94,6 +94,8 @@
     "own_set": "Hindi mo ito magagawa sa sarili mong set.",
     "already_reported": "Na-report mo na ang set na ito. Salamat!",
     "cannot_follow": "Hindi mo ma-follow ang account na ito.",
+    "taken_down": "Tinanggal ang set na ito dahil lumabag ito sa Community Guidelines. I-edit muna ito bago i-share ulit.",
+    "community_limit": "Naabot mo na ang limit para dito ngayong araw. Subukan ulit bukas.",
     "unknown": "May nangyaring mali. Pakisubukan ulit."
   },
   "banners": {
@@ -457,7 +459,7 @@
         {
           "heading": "Hindi pinapayagan",
           "body": [
-            "Sexual na content, at anumang sexual na may kinalaman sa menor de edad (iuulat sa awtoridad).",
+            "Sexual na content, at anumang sexual na may kinalaman sa menor de edad (pwedeng agad na ma-ban ang account).",
             "Graphic na karahasan para manggulat, hate speech o harassment.",
             "Paghikayat sa pananakit sa sarili o suicide.",
             "Scam, malware o mapanganib na link, at pagbebenta ng sagot sa exam o cheating services.",

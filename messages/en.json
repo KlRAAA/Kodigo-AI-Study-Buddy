@@ -94,6 +94,8 @@
     "own_set": "You can't do that on your own set.",
     "already_reported": "You already reported this set. Thanks!",
     "cannot_follow": "You can't follow this account.",
+    "taken_down": "This set was removed for breaking the Community Guidelines. Edit it before sharing again.",
+    "community_limit": "You've reached today's limit for this. Try again tomorrow.",
     "unknown": "Something went wrong. Please try again."
   },
   "banners": {
@@ -457,7 +459,7 @@
         {
           "heading": "Not allowed",
           "body": [
-            "Sexual content, and anything sexual involving minors (reported to authorities).",
+            "Sexual content, and anything sexual involving minors (can lead to an immediate ban).",
             "Graphic violence meant to shock, hate speech or harassment.",
             "Encouraging self-harm or suicide.",
             "Scams, malware or harmful links, and selling exam answers or cheating services.",

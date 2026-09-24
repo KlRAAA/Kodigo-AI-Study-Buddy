@@ -14,9 +14,11 @@ import {
 } from "@/server/db/queries/moderation";
 import { getOrCreateProfile, setHandle } from "@/server/db/queries/profiles";
 import { createSet } from "@/server/db/queries/sets";
-import { getPublicSetBySlug, getShareState } from "@/server/db/queries/sharing";
+import { getPublicSetBySlug, getShareState, loadShareContent } from "@/server/db/queries/sharing";
 import { getDb } from "@/server/db/client";
-import { profiles } from "@/server/db/schema";
+import { profiles, studySets } from "@/server/db/schema";
+import { contentHash, type ShareContent } from "@/server/moderation/content";
+import type { ScreenResult } from "@/server/moderation/screen";
 import { shareSet } from "@/server/sharing/share";
 import { createTestDb } from "./helpers/db";
 
@@ -104,5 +106,110 @@ describe("strikes and bans", () => {
     expect((await profileOf(OWNER)).bannedAt).toBeNull();
     expect(await isEmailBanned("hash-2")).toBe(false);
     expect(await getPublicSetBySlug(slug)).toBeNull(); // sets were made private by the ban
+  });
+});
+
+describe("sharing again after moderation", () => {
+  const profile = { handle: "owner", shareBlockedUntil: null, bannedAt: null };
+  const share = (setId: string, screen: (c: ShareContent) => Promise<ScreenResult> = allow) => shareSet({ userId: OWNER, profile, setId, visibility: "public", screen });
+
+  beforeEach(async () => {
+    await createTestDb();
+    allow.mockClear();
+  });
+
+  it("a taken-down set can't be shared again unchanged", async () => {
+    const { setId } = await sharedSet();
+    await takeDownSet(setId, "admin", "hate", { ban: false, emailHash: null });
+    expect(await share(setId)).toEqual({ ok: false, error: "taken_down" });
+    expect(await getShareState(OWNER, setId)).toMatchObject({ visibility: "private", moderationStatus: "taken_down" });
+  });
+
+  it("an edited taken-down set goes to review, not straight to approved", async () => {
+    const { setId, slug } = await sharedSet();
+    await takeDownSet(setId, "admin", "hate", { ban: false, emailHash: null });
+    await replaceCards(OWNER, setId, [{ term: "t2", definition: "d2" }]);
+    const res = await share(setId);
+    expect(res.ok && res.data.status).toBe("review");
+    expect((await getShareState(OWNER, setId))?.moderationStatus).toBe("review");
+    expect(await getPublicSetBySlug(slug)).toBeNull();
+  });
+
+  it("a set hidden by reports goes to review after a small edit", async () => {
+    const { setId, slug } = await sharedSet();
+    for (const r of ["r1", "r2", "r3"]) await createReport(r, setId, "spam", null);
+    await replaceCards(OWNER, setId, [{ term: "t", definition: "d." }]);
+    const res = await share(setId);
+    expect(res.ok && res.data.status).toBe("review");
+    expect(await getPublicSetBySlug(slug)).toBeNull();
+    expect((await listModerationQueue()).map((q) => q.setId)).toContain(setId);
+  });
+
+  it("a set with an open report goes to review when its changes are published", async () => {
+    const { setId } = await sharedSet();
+    await createReport("r1", setId, "spam", null);
+    await replaceCards(OWNER, setId, [{ term: "t", definition: "d." }]);
+    const res = await share(setId);
+    expect(res.ok && res.data.status).toBe("review");
+  });
+
+  it("a blocked set shared again unchanged is not screened again", async () => {
+    await getOrCreateProfile(OWNER);
+    await setHandle(OWNER, "owner");
+    const setId = await createSet(OWNER, { title: "B", sourceType: "text", sourceText: "", outputLang: "en" });
+    await replaceCards(OWNER, setId, [{ term: "t", definition: "d" }]);
+    const block = vi.fn(async () => ({ verdict: "block" as const, categories: ["hate", "spam"], reason: "x" }));
+    await share(setId, block);
+    const again = await share(setId, block);
+    expect(again).toEqual({ ok: true, data: { status: "blocked", categories: ["hate", "spam"] } });
+    expect(block).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("admin approve and the queue", () => {
+  beforeEach(async () => {
+    await createTestDb();
+  });
+
+  it("approve is refused for stale and blocked sets", async () => {
+    const { setId } = await sharedSet();
+    await createReport("r1", setId, "spam", null);
+    await getDb().update(studySets).set({ moderationStatus: "stale" }).where(eq(studySets.id, setId));
+    expect(await approveSet(setId)).toBe(false);
+    expect((await getShareState(OWNER, setId))?.moderationStatus).toBe("stale");
+
+    await getDb().update(studySets).set({ moderationStatus: "blocked" }).where(eq(studySets.id, setId));
+    expect(await approveSet(setId)).toBe(false);
+    expect((await getShareState(OWNER, setId))?.moderationStatus).toBe("blocked");
+    expect(await approveSet("00000000-0000-0000-0000-000000000000")).toBe(false);
+  });
+
+  it("approving a set in review records its current content hash", async () => {
+    const { setId } = await sharedSet();
+    await replaceCards(OWNER, setId, [{ term: "new", definition: "content" }]);
+    await getDb().update(studySets).set({ moderationStatus: "review" }).where(eq(studySets.id, setId));
+    expect(await approveSet(setId)).toBe(true);
+    const state = await getShareState(OWNER, setId);
+    expect(state?.moderationStatus).toBe("approved");
+    expect(state?.moderatedHash).toBe(contentHash((await loadShareContent(OWNER, setId))!));
+  });
+
+  it("a set blocked for involving minors reaches the admin queue", async () => {
+    await getOrCreateProfile(OWNER);
+    await setHandle(OWNER, "owner");
+    const setId = await createSet(OWNER, { title: "M", sourceType: "text", sourceText: "", outputLang: "en" });
+    await replaceCards(OWNER, setId, [{ term: "t", definition: "d" }]);
+    const block = vi.fn(async () => ({ verdict: "block" as const, categories: ["sexual", "minors"], reason: "x" }));
+    const res = await shareSet({ userId: OWNER, profile: { handle: "owner", shareBlockedUntil: null, bannedAt: null }, setId, visibility: "public", screen: block });
+    expect(res.ok && res.data.status).toBe("blocked");
+    const queue = await listModerationQueue();
+    expect(queue).toHaveLength(1);
+    expect(queue[0]).toMatchObject({ setId, status: "blocked", reason: "sexual,minors" });
+
+    const other = await createSet(OWNER, { title: "H", sourceType: "text", sourceText: "", outputLang: "en" });
+    await replaceCards(OWNER, other, [{ term: "t", definition: "d" }]);
+    const hate = vi.fn(async () => ({ verdict: "block" as const, categories: ["hate"], reason: "x" }));
+    await shareSet({ userId: OWNER, profile: { handle: "owner", shareBlockedUntil: null, bannedAt: null }, setId: other, visibility: "public", screen: hate });
+    expect((await listModerationQueue()).map((q) => q.setId)).toEqual([setId]);
   });
 });

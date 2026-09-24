@@ -84,6 +84,16 @@
     "password_mismatch": "Hindi magkapareho ang mga password mo. Pakitype ulit.",
     "invalid_code": "Mali o expired na ang code. Subukan ulit o humingi ng bago.",
     "too_long": "Masyadong mahaba ang notes mo. Hatiin ito sa mas maliliit na set.",
+    "handle_invalid": "3–20 letters, numbers o _ lang ang username (walang space).",
+    "handle_taken": "May gumagamit na ng username na iyan. Subukan ang iba.",
+    "handle_too_soon": "Pwede mo lang palitan ang username mo isang beses kada 30 araw.",
+    "needs_handle": "Pumili muna ng username.",
+    "share_blocked": "Naka-pause muna ang pag-share sa account mo dahil sa paglabag sa rules.",
+    "not_shareable": "Magdagdag muna ng kahit isang card bago i-share.",
+    "banned": "Na-ban ang account na ito.",
+    "own_set": "Hindi mo ito magagawa sa sarili mong set.",
+    "already_reported": "Na-report mo na ang set na ito. Salamat!",
+    "cannot_follow": "Hindi mo ma-follow ang account na ito.",
     "unknown": "May nangyaring mali. Pakisubukan ulit."
   },
   "banners": {

@@ -84,6 +84,16 @@
     "password_mismatch": "Your passwords don’t match. Please type them again.",
     "invalid_code": "That code is wrong or expired. Try again or ask for a new one.",
     "too_long": "Your notes are too long. Split them into smaller sets.",
+    "handle_invalid": "Usernames are 3–20 letters, numbers or _ (no spaces).",
+    "handle_taken": "That username is taken. Try another one.",
+    "handle_too_soon": "You can change your username once every 30 days.",
+    "needs_handle": "Pick a username first.",
+    "share_blocked": "Sharing is paused on your account for now because of a rule violation.",
+    "not_shareable": "Add at least one card before sharing.",
+    "banned": "This account has been banned.",
+    "own_set": "You can't do that on your own set.",
+    "already_reported": "You already reported this set. Thanks!",
+    "cannot_follow": "You can't follow this account.",
     "unknown": "Something went wrong. Please try again."
   },
   "banners": {

@@ -17,6 +17,16 @@ export type ErrorCode =
   | "password_mismatch"
   | "invalid_code"
   | "too_long"
+  | "handle_invalid"
+  | "handle_taken"
+  | "handle_too_soon"
+  | "needs_handle"
+  | "share_blocked"
+  | "not_shareable"
+  | "banned"
+  | "own_set"
+  | "already_reported"
+  | "cannot_follow"
   | "unknown";
 
 export type ActionResult<T = null> = { ok: true; data: T } | { ok: false; error: ErrorCode };

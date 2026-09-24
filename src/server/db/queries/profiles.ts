@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { getDb } from "../client";
 import {
   cardReviews,
@@ -40,6 +40,39 @@ export async function updateProfile(
   patch: Partial<Pick<Profile, "displayName" | "locale" | "onboarded">>,
 ) {
   await getDb().update(profiles).set(patch).where(eq(profiles.userId, userId));
+}
+
+const HANDLE_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Claims or changes a handle (already validated by handleSchema). */
+export async function setHandle(
+  userId: string,
+  handle: string,
+  now = new Date(),
+): Promise<"ok" | "taken" | "too_soon"> {
+  const db = getDb();
+  const [me] = await db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1);
+  if (me?.handle === handle) return "ok";
+  if (me?.handle && me.handleChangedAt && now.getTime() - me.handleChangedAt.getTime() < HANDLE_COOLDOWN_MS) {
+    return "too_soon";
+  }
+  const [other] = await db
+    .select({ userId: profiles.userId })
+    .from(profiles)
+    .where(and(eq(profiles.handle, handle), ne(profiles.userId, userId)))
+    .limit(1);
+  if (other) return "taken";
+  try {
+    await db.update(profiles).set({ handle, handleChangedAt: now }).where(eq(profiles.userId, userId));
+    return "ok";
+  } catch {
+    return "taken"; // unique index race
+  }
+}
+
+export async function getProfileByHandle(handle: string): Promise<Profile | null> {
+  const rows = await getDb().select().from(profiles).where(eq(profiles.handle, handle.toLowerCase())).limit(1);
+  return rows[0] ?? null;
 }
 
 /** Deletes every row the user owns. Child rows cascade from study_sets/quizzes/cards. */

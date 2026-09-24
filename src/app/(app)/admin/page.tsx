@@ -5,8 +5,10 @@ import { Card } from "@/components/ui";
 import { isAdminEmail, requireUser } from "@/server/auth";
 import { usageToday } from "@/server/db/queries/admin";
 import { listModelStatus } from "@/server/db/queries/ai";
+import { listModerationQueue } from "@/server/db/queries/moderation";
 import { getGlobalUsage } from "@/server/db/queries/usage";
 import { readLimits } from "@/server/limits/config";
+import { QueueActions } from "./queue-actions";
 import { UserActions } from "./user-actions";
 
 export const metadata: Metadata = { title: "Admin", robots: { index: false } };
@@ -17,7 +19,7 @@ export default async function AdminPage() {
   const t = await getTranslations("admin");
   const format = await getFormatter();
   const limits = readLimits();
-  const [rows, models, globalUsed] = await Promise.all([usageToday(), listModelStatus(), getGlobalUsage()]);
+  const [rows, models, globalUsed, queue] = await Promise.all([usageToday(), listModelStatus(), getGlobalUsage(), listModerationQueue()]);
   const now = new Date();
 
   return (
@@ -54,6 +56,41 @@ export default async function AdminPage() {
       </Card>
 
       <Card className="space-y-3">
+        <h2 className="font-black">{t("queue", { count: queue.length })}</h2>
+        {queue.length === 0 ? (
+          <p className="text-sm text-muted">{t("queueEmpty")}</p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {queue.map((q) => (
+              <li key={q.setId} className="space-y-2 py-3">
+                <p className="font-bold break-words">{q.title}</p>
+                <p className="text-xs text-muted">
+                  @{q.ownerHandle ?? "?"} · {q.status} · {t("reportsCount", { count: q.reportCount })}
+                  {q.reason ? ` · ${q.reason}` : ""}
+                </p>
+                {q.reports.length > 0 && (
+                  <ul className="list-disc pl-5 text-sm">
+                    {q.reports.map((r, i) => (
+                      <li key={i}>{r.reason}{r.note ? `: ${r.note}` : ""}</li>
+                    ))}
+                  </ul>
+                )}
+                <details className="text-sm">
+                  <summary className="cursor-pointer text-primary">{t("viewCards", { count: q.cards.length })}</summary>
+                  <ul className="mt-1 space-y-1">
+                    {q.cards.map((c, i) => (
+                      <li key={i} className="break-words"><strong>{c.term}</strong>: {c.definition}</li>
+                    ))}
+                  </ul>
+                </details>
+                <QueueActions setId={q.setId} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
+
+      <Card className="space-y-3">
         <h2 className="font-black">{t("users")}</h2>
         <ul className="divide-y divide-border">
           {rows.map((r) => (
@@ -67,7 +104,7 @@ export default async function AdminPage() {
                 </div>
                 {r.isSuspended && <span className="shrink-0 rounded-full bg-danger-soft px-2 py-0.5 text-xs font-bold text-danger">{t("suspended")}</span>}
               </div>
-              <UserActions userId={r.userId} suspended={r.isSuspended} />
+              <UserActions userId={r.userId} suspended={r.isSuspended} banned={Boolean(r.bannedAt)} />
             </li>
           ))}
         </ul>

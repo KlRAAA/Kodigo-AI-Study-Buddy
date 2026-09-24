@@ -98,7 +98,31 @@
   },
   "banners": {
     "globalBudget": "Kodigo is very busy today, so new AI generations are paused until midnight. Studying still works!",
-    "suspended": "AI features are paused on your account. You can still study your sets."
+    "suspended": "AI features are paused on your account. You can still study your sets.",
+    "strike": "Your set “{title}” was removed for breaking the Community Guidelines ({reason}). More strikes can pause sharing or ban your account.",
+    "strikeOk": "I understand"
+  },
+  "report": {
+    "button": "Report",
+    "title": "Why are you reporting this set?",
+    "reasons": {
+      "inappropriate": "Inappropriate or offensive",
+      "harmful_link": "Harmful or suspicious link",
+      "personal_info": "Shares someone's personal info",
+      "spam": "Spam or ads",
+      "copyright": "Copied without permission",
+      "other": "Something else"
+    },
+    "notePlaceholder": "Add details (optional)",
+    "guidelines": "Read the Community Guidelines",
+    "send": "Send report",
+    "cancel": "Cancel",
+    "thanks": "Thanks for the report. An admin will look at it."
+  },
+  "banned": {
+    "title": "Your account is banned",
+    "body": "This account broke the Community Guidelines and can't be used anymore.",
+    "reason": "Reason: {reason}"
   },
   "home": {
     "hello": "Hello,",
@@ -302,7 +326,17 @@
     "suspended": "Suspended",
     "suspend": "Suspend",
     "unsuspend": "Unsuspend",
-    "resetCounters": "Reset today"
+    "resetCounters": "Reset today",
+    "queue": "Review queue ({count})",
+    "queueEmpty": "Nothing to review.",
+    "reportsCount": "{count, plural, one {# report} other {# reports}}",
+    "viewCards": "View {count} cards",
+    "approve": "Approve",
+    "takeDown": "Remove + strike",
+    "takeDownBan": "Remove + ban",
+    "reasonPrompt": "Reason (shown to the owner)",
+    "confirmBan": "Ban this user? Their sets become private and they can't log in.",
+    "unban": "Unban"
   },
   "offline": {
     "title": "You're offline",
@@ -360,6 +394,13 @@
           "body": [
             "You can delete your account anytime in Profile → Delete my account. This removes your account, sets, cards and progress."
           ]
+        },
+        {
+          "heading": "Shared sets and profiles",
+          "body": [
+            "If you share a set by link or publicly, anyone who can see it can view its title, summary, cards, your username and display name. Your email is never shown.",
+            "Shared sets are checked by our AI screener and Google Safe Browsing (links only). Reports you send are seen only by admins."
+          ]
         }
       ]
     },
@@ -395,6 +436,40 @@
           "heading": "No warranty",
           "body": [
             "Kodigo is provided as is, without guarantees of availability. We may change or discontinue features at any time."
+          ]
+        }
+      ]
+    },
+    "guidelinesPage": {
+      "title": "Community Guidelines",
+      "sections": [
+        {
+          "heading": "Share to help people study",
+          "body": [
+            "Kodigo is for study materials. Share sets that help classmates learn, and give credit when your notes are based on someone else's work."
+          ]
+        },
+        {
+          "heading": "Not allowed",
+          "body": [
+            "Sexual content, and anything sexual involving minors (reported to authorities).",
+            "Graphic violence meant to shock, hate speech or harassment.",
+            "Encouraging self-harm or suicide.",
+            "Scams, malware or harmful links, and selling exam answers or cheating services.",
+            "Personal information about private people, like phone numbers, home addresses or ID numbers."
+          ]
+        },
+        {
+          "heading": "School topics are fine",
+          "body": [
+            "History of wars, biology and health lessons, crime in social studies and similar topics are allowed when presented for learning."
+          ]
+        },
+        {
+          "heading": "How we enforce",
+          "body": [
+            "Every shared set is checked automatically before others can see it. People can report sets, and admins review reports.",
+            "1st violation: a warning. 2nd: sharing is paused for 30 days. 3rd: the account is banned. Severe cases can be banned right away."
           ]
         }
       ]

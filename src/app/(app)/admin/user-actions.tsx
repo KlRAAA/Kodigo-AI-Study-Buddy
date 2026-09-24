@@ -4,8 +4,9 @@ import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { Button } from "@/components/ui";
 import { resetCountersAction, setSuspendedAction } from "@/server/actions/admin";
+import { unbanAction } from "@/server/actions/moderation";
 
-export function UserActions({ userId, suspended }: { userId: string; suspended: boolean }) {
+export function UserActions({ userId, suspended, banned }: { userId: string; suspended: boolean; banned: boolean }) {
   const t = useTranslations("admin");
   const [pending, startTransition] = useTransition();
   return (
@@ -21,6 +22,11 @@ export function UserActions({ userId, suspended }: { userId: string; suspended: 
       <Button size="sm" variant="secondary" disabled={pending} onClick={() => startTransition(async () => void (await resetCountersAction(userId)))}>
         {t("resetCounters")}
       </Button>
+      {banned && (
+        <Button size="sm" variant="secondary" disabled={pending} onClick={() => startTransition(async () => void (await unbanAction(userId)))}>
+          {t("unban")}
+        </Button>
+      )}
     </div>
   );
 }

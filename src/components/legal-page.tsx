@@ -5,7 +5,7 @@ import { Logo } from "./logo";
 
 type Section = { heading: string; body: string[] };
 
-export async function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
+export async function LegalPage({ kind }: { kind: "privacy" | "terms" | "guidelines" }) {
   const t = await getTranslations(`legal.${kind}Page`);
   const common = await getTranslations("legal");
   const sections = t.raw("sections") as Section[];

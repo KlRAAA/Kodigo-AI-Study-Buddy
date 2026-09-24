@@ -98,7 +98,31 @@
   },
   "banners": {
     "globalBudget": "Sobrang busy ng Kodigo ngayon kaya naka-pause muna ang bagong AI generations hanggang hatinggabi. Pwede ka pa ring mag-aral!",
-    "suspended": "Naka-pause ang AI features sa account mo. Pwede mo pa ring pag-aralan ang mga set mo."
+    "suspended": "Naka-pause ang AI features sa account mo. Pwede mo pa ring pag-aralan ang mga set mo.",
+    "strike": "Tinanggal ang set mong “{title}” dahil lumabag ito sa Community Guidelines ({reason}). Kapag nadagdagan pa ang strikes, pwedeng ma-pause ang pag-share o ma-ban ang account mo.",
+    "strikeOk": "Naiintindihan ko"
+  },
+  "report": {
+    "button": "I-report",
+    "title": "Bakit mo nire-report ang set na ito?",
+    "reasons": {
+      "inappropriate": "Hindi angkop o nakakasakit",
+      "harmful_link": "Mapanganib o kahina-hinalang link",
+      "personal_info": "May personal na info ng ibang tao",
+      "spam": "Spam o ads",
+      "copyright": "Kinopya nang walang paalam",
+      "other": "Iba pa"
+    },
+    "notePlaceholder": "Magdagdag ng detalye (optional)",
+    "guidelines": "Basahin ang Community Guidelines",
+    "send": "Ipadala ang report",
+    "cancel": "Kanselahin",
+    "thanks": "Salamat sa report. Titingnan ito ng admin."
+  },
+  "banned": {
+    "title": "Na-ban ang account mo",
+    "body": "Lumabag ang account na ito sa Community Guidelines at hindi na ito magagamit.",
+    "reason": "Dahilan: {reason}"
   },
   "home": {
     "hello": "Hello,",
@@ -302,7 +326,17 @@
     "suspended": "Suspended",
     "suspend": "I-suspend",
     "unsuspend": "Alisin ang suspend",
-    "resetCounters": "I-reset ngayon"
+    "resetCounters": "I-reset ngayon",
+    "queue": "Review queue ({count})",
+    "queueEmpty": "Walang kailangang i-review.",
+    "reportsCount": "{count, plural, one {# report} other {# reports}}",
+    "viewCards": "Tingnan ang {count} cards",
+    "approve": "I-approve",
+    "takeDown": "Tanggalin + strike",
+    "takeDownBan": "Tanggalin + ban",
+    "reasonPrompt": "Dahilan (makikita ng may-ari)",
+    "confirmBan": "I-ban ang user na ito? Magiging private ang mga set nila at hindi na sila makakapag-log in.",
+    "unban": "Alisin ang ban"
   },
   "offline": {
     "title": "Offline ka",
@@ -360,6 +394,13 @@
           "body": [
             "Pwede mong burahin ang account mo anytime sa Profile → Burahin ang account ko. Mabubura ang account, sets, cards at progress mo."
           ]
+        },
+        {
+          "heading": "Mga shared set at profile",
+          "body": [
+            "Kapag nag-share ka ng set gamit ang link o publicly, makikita ng sinumang may access ang title, summary, cards, username at display name mo. Hindi kailanman ipapakita ang email mo.",
+            "Chine-check ang mga shared set ng AI screener namin at ng Google Safe Browsing (para sa mga link lang). Admin lang ang nakakakita ng mga report mo."
+          ]
         }
       ]
     },
@@ -395,6 +436,40 @@
           "heading": "Walang garantiya",
           "body": [
             "Ibinibigay ang Kodigo nang as is, at walang garantiya na laging available ito. Pwede naming baguhin o itigil ang mga feature anytime."
+          ]
+        }
+      ]
+    },
+    "guidelinesPage": {
+      "title": "Community Guidelines",
+      "sections": [
+        {
+          "heading": "Mag-share para makatulong mag-aral",
+          "body": [
+            "Para sa study materials ang Kodigo. I-share ang mga set na makakatulong sa mga kaklase, at bigyan ng credit kung galing sa gawa ng iba ang notes mo."
+          ]
+        },
+        {
+          "heading": "Hindi pinapayagan",
+          "body": [
+            "Sexual na content, at anumang sexual na may kinalaman sa menor de edad (iuulat sa awtoridad).",
+            "Graphic na karahasan para manggulat, hate speech o harassment.",
+            "Paghikayat sa pananakit sa sarili o suicide.",
+            "Scam, malware o mapanganib na link, at pagbebenta ng sagot sa exam o cheating services.",
+            "Personal na impormasyon ng ibang tao, tulad ng phone number, address o ID number."
+          ]
+        },
+        {
+          "heading": "Okay ang mga school topic",
+          "body": [
+            "Pinapayagan ang kasaysayan ng digmaan, biology at health lessons, krimen sa social studies at mga katulad nito kapag para sa pag-aaral."
+          ]
+        },
+        {
+          "heading": "Paano namin ipinapatupad",
+          "body": [
+            "Awtomatikong chine-check ang bawat shared set bago ito makita ng iba. Pwedeng mag-report ang mga user, at nire-review ito ng admin.",
+            "Unang paglabag: warning. Pangalawa: naka-pause ang pag-share nang 30 araw. Pangatlo: ban ang account. Ang malalang kaso ay pwedeng ma-ban agad."
           ]
         }
       ]

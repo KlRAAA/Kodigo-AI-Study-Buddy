@@ -5,7 +5,9 @@ import { getTranslations } from "next-intl/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PublicHeader } from "@/components/public/public-header";
+import { ReportButton } from "@/components/public/report-button";
 import { Flashcards } from "@/components/study/flashcards";
+import { getSessionUser } from "@/server/auth";
 import { getPublicSetBySlug } from "@/server/db/queries/sharing";
 
 const SLUG = /^[0-9A-Za-z]{10}$/;
@@ -25,6 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/s/[slug]">): Prom
 export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) {
   const view = await load((await params).slug);
   const t = await getTranslations("public");
+  const user = await getSessionUser();
 
   return (
     <main className="pt-safe pb-safe mx-auto min-h-dvh max-w-xl px-4 pb-10">
@@ -47,8 +50,9 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
             {view.copiedFromHandle && <p className="text-xs text-muted">{t("copiedFrom", { handle: view.copiedFromHandle })}</p>}
           </div>
 
-          {/* Task 11 adds: rating stars, copy, report, Learn buttons here */}
-          <div id="public-actions" />
+          <div id="public-actions" className="space-y-3">
+            {/* Task 11 adds rating, copy and Learn here */}
+          </div>
 
           <Flashcards cards={view.cards.map((c) => ({ ...c, starred: false }))} online={false} canStar={false} />
 
@@ -60,6 +64,8 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
               </div>
             </details>
           )}
+
+          <ReportButton setId={view.id} signedIn={Boolean(user?.emailVerified)} />
         </div>
       )}
     </main>

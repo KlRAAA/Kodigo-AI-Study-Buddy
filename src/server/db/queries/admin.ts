@@ -9,6 +9,7 @@ export type AdminUserRow = {
   email: string | null;
   displayName: string | null;
   isSuspended: boolean;
+  bannedAt: Date | null;
   generation: number;
   tutor: number;
   assist: number;
@@ -23,6 +24,7 @@ export async function usageToday(now = new Date(), limit = 100): Promise<AdminUs
       userId: profiles.userId,
       displayName: profiles.displayName,
       isSuspended: profiles.isSuspended,
+      bannedAt: profiles.bannedAt,
       generation: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'generation'), 0)::int`,
       tutor: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'tutor'), 0)::int`,
       assist: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'assist'), 0)::int`,

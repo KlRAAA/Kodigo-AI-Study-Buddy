@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { BottomNav } from "@/components/bottom-nav";
+import { StrikeBanner } from "@/components/strike-banner";
 import { Alert } from "@/components/ui";
 import { requireUser } from "@/server/auth";
 import { isGlobalBudgetLow } from "@/server/limits/limiter";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { profile } = await requireUser();
+  const { user, profile } = await requireUser();
   if (!profile.onboarded) redirect("/onboarding");
   const t = await getTranslations("banners");
   const budgetLow = await isGlobalBudgetLow().catch(() => false);
@@ -23,6 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Alert tone="info">{t("suspended")}</Alert>
         </div>
       )}
+      <StrikeBanner userId={user.id} />
       {children}
       <BottomNav />
     </div>

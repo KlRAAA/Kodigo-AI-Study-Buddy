@@ -1,10 +1,12 @@
-import { BookOpen, Camera, FileText, Presentation, Type } from "lucide-react";
+import { BookOpen, Camera, Compass, FileText, Presentation, Type } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AllowanceChip } from "@/components/allowance-chip";
+import { SetTile } from "@/components/public/set-tile";
 import { SetCardActions } from "@/components/set-card-actions";
 import { requireUser } from "@/server/auth";
+import { followFeed } from "@/server/db/queries/community";
 import { countDueCards, listSets } from "@/server/db/queries/sets";
 import type { SourceType } from "@/server/db/schema";
 import { SearchBox } from "./search-box";
@@ -28,7 +30,7 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
   const query = typeof q === "string" ? q.slice(0, 100) : "";
   const t = await getTranslations("home");
   const format = await getFormatter();
-  const [sets, due] = await Promise.all([listSets(user.id, query), countDueCards(user.id)]);
+  const [sets, due, feed] = await Promise.all([listSets(user.id, query), countDueCards(user.id), followFeed(user.id)]);
 
   return (
     <div className="space-y-5 py-4">
@@ -50,6 +52,16 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
         </span>
         <BookOpen aria-hidden className="size-10 opacity-80" />
       </Link>
+
+      <Link href="/explore" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-surface font-bold active:bg-surface-2">
+        <Compass aria-hidden className="size-5 text-primary" /> {t("explore")}
+      </Link>
+      {feed.length > 0 && !query && (
+        <section aria-labelledby="feed-heading" className="space-y-2">
+          <h2 id="feed-heading" className="text-lg font-black">{t("fromFollowing")}</h2>
+          <div className="space-y-2">{feed.map((s) => <SetTile key={s.slug} set={s} />)}</div>
+        </section>
+      )}
 
       <SearchBox initial={query} />
 

@@ -134,7 +134,9 @@
     "empty": "Wala ka pang set. Gawin na ang una mo!",
     "noResults": "Walang set na tugma sa hinanap mo.",
     "createFirst": "Gumawa ng set",
-    "cardCount": "{count, plural, one {# card} other {# cards}}"
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "explore": "Tuklasin ang public sets",
+    "fromFollowing": "Mula sa mga fina-follow mo"
   },
   "create": {
     "title": "Bagong set",
@@ -541,5 +543,16 @@
     "people": "Followers at fina-follow",
     "remove": "Tanggalin",
     "confirmRemove": "Tanggalin ang follower na ito? Hindi ka na nila ma-follow ulit."
+  },
+  "explore": {
+    "title": "Explore",
+    "search": "Maghanap ng public set",
+    "sortLabel": "Ayusin ayon sa",
+    "top": "Pinakamataas ang rating",
+    "new": "Pinakabago",
+    "copied": "Pinakamaraming kopya",
+    "empty": "Wala pang public set na nahanap.",
+    "prev": "Nakaraan",
+    "next": "Susunod"
   }
 }

@@ -134,7 +134,9 @@
     "empty": "No sets yet. Make your first one!",
     "noResults": "No sets match your search.",
     "createFirst": "Create a set",
-    "cardCount": "{count, plural, one {# card} other {# cards}}"
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "explore": "Explore public sets",
+    "fromFollowing": "From people you follow"
   },
   "create": {
     "title": "New set",
@@ -541,5 +543,16 @@
     "people": "Followers & following",
     "remove": "Remove",
     "confirmRemove": "Remove this follower? They won't be able to follow you again."
+  },
+  "explore": {
+    "title": "Explore",
+    "search": "Search public sets",
+    "sortLabel": "Sort",
+    "top": "Top rated",
+    "new": "Newest",
+    "copied": "Most copied",
+    "empty": "No public sets found yet.",
+    "prev": "Previous",
+    "next": "Next"
   }
 }

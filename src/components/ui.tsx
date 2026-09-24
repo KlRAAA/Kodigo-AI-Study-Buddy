@@ -7,7 +7,7 @@ const variants: Record<Variant, string> = {
   primary: "bg-primary text-on-primary active:bg-primary-strong",
   secondary: "bg-surface text-text border border-border active:bg-surface-2",
   ghost: "bg-transparent text-text active:bg-surface-2",
-  danger: "bg-danger text-white active:opacity-90",
+  danger: "bg-danger text-on-danger active:opacity-90",
   accent: "bg-accent text-[#2b1a03] active:opacity-90",
 };
 

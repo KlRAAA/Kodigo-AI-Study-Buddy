@@ -69,6 +69,8 @@ export async function signUpAction(_prev: ActionResult | null, formData: FormDat
     const locale = isLocale(parsed.data.locale) ? parsed.data.locale : "en";
     await getOrCreateProfile(userId, { displayName: name, locale });
   }
+  // Neon doesn't send the OTP on sign-up by default, so request it explicitly.
+  await sendVerificationCode(mail);
   redirect(`/auth/verify?email=${encodeURIComponent(mail)}`);
 }
 

@@ -433,5 +433,13 @@
       "personal_info": "personal information",
       "other": "other"
     }
+  },
+  "public": {
+    "myLibrary": "My library",
+    "joinFree": "Join free",
+    "updating": "This set is being updated. Check back soon.",
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "copiedFrom": "Copied from @{handle}",
+    "summary": "Summary"
   }
 }

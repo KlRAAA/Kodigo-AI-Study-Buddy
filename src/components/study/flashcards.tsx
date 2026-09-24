@@ -8,7 +8,15 @@ import { cn, shuffle } from "@/lib/utils";
 import { toggleStarAction, type StudyCard } from "@/server/actions/sets";
 import { SpeakButton } from "./speak-button";
 
-export function Flashcards({ cards: initial, online = true }: { cards: StudyCard[]; online?: boolean }) {
+export function Flashcards({
+  cards: initial,
+  online = true,
+  canStar = online,
+}: {
+  cards: StudyCard[];
+  online?: boolean;
+  canStar?: boolean;
+}) {
   const t = useTranslations("study");
   const [cards, setCards] = useState(initial);
   const [order, setOrder] = useState(() => initial.map((c) => c.id));
@@ -93,15 +101,19 @@ export function Flashcards({ cards: initial, online = true }: { cards: StudyCard
         <Button variant="secondary" size="lg" aria-label={t("previous")} onClick={() => go(-1)}>
           <ChevronLeft aria-hidden className="size-6" />
         </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          aria-label={card.starred ? t("unstar") : t("star")}
-          aria-pressed={card.starred}
-          onClick={() => toggleStar(card)}
-        >
-          <Star aria-hidden className={cn("size-6", card.starred && "fill-accent text-accent")} />
-        </Button>
+        {canStar ? (
+          <Button
+            variant="secondary"
+            size="lg"
+            aria-label={card.starred ? t("unstar") : t("star")}
+            aria-pressed={card.starred}
+            onClick={() => toggleStar(card)}
+          >
+            <Star aria-hidden className={cn("size-6", card.starred && "fill-accent text-accent")} />
+          </Button>
+        ) : (
+          <span aria-hidden />
+        )}
         <Button size="lg" aria-label={t("next")} onClick={() => go(1)}>
           <ChevronRight aria-hidden className="size-6" />
         </Button>
@@ -130,18 +142,20 @@ export function Flashcards({ cards: initial, online = true }: { cards: StudyCard
         >
           <RotateCcw aria-hidden className="size-4" /> {t("restart")}
         </Button>
-        <Button
-          variant={starredOnly ? "accent" : "ghost"}
-          size="sm"
-          aria-pressed={starredOnly}
-          onClick={() => {
-            setStarredOnly((s) => !s);
-            setIndex(0);
-            setFlipped(false);
-          }}
-        >
-          <Star aria-hidden className="size-4" /> {t("starredOnly")}
-        </Button>
+        {canStar && (
+          <Button
+            variant={starredOnly ? "accent" : "ghost"}
+            size="sm"
+            aria-pressed={starredOnly}
+            onClick={() => {
+              setStarredOnly((s) => !s);
+              setIndex(0);
+              setFlipped(false);
+            }}
+          >
+            <Star aria-hidden className="size-4" /> {t("starredOnly")}
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createNeonAuth } from "@neondatabase/auth/next/server";
 
 // Paths anyone can open. Everything else needs a session.
-const PUBLIC_PREFIXES = ["/auth", "/privacy", "/terms", "/offline", "/api/auth"];
+const PUBLIC_PREFIXES = ["/auth", "/privacy", "/terms", "/offline", "/api/auth", "/s", "/u", "/guidelines", "/banned"];
 
 function isPublic(pathname: string) {
   return pathname === "/" || PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));

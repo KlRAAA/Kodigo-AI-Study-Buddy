@@ -433,5 +433,13 @@
       "personal_info": "personal na impormasyon",
       "other": "iba pa"
     }
+  },
+  "public": {
+    "myLibrary": "Library ko",
+    "joinFree": "Sumali nang libre",
+    "updating": "Ina-update pa ang set na ito. Balikan mo mamaya.",
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "copiedFrom": "Kinopya mula kay @{handle}",
+    "summary": "Summary"
   }
 }

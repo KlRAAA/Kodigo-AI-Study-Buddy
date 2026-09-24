@@ -566,5 +566,8 @@
     "publicSets": "Public sets",
     "noneMine": "None of your sets match.",
     "nonePublic": "No public sets match."
+  },
+  "common": {
+    "loading": "Loading…"
   }
 }

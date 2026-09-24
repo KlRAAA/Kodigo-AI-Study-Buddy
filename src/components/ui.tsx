@@ -19,8 +19,9 @@ export const Button = forwardRef<
     <button
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-2xl font-bold transition-[transform,background-color,opacity] duration-100 select-none",
-        "active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100",
+        "inline-flex items-center justify-center gap-2 rounded-2xl font-bold transition-[transform,background-color,opacity,box-shadow] duration-150 select-none",
+        "hover:-translate-y-px hover:shadow-md active:translate-y-0 active:scale-[0.98] motion-reduce:hover:translate-y-0",
+        "disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none disabled:active:scale-100",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         size === "lg" && "min-h-14 px-6 text-lg",
         size === "md" && "min-h-12 px-5 text-base",
@@ -130,7 +131,7 @@ export function Segmented<T extends string>({
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "min-h-10 flex-1 rounded-xl px-2 text-sm font-bold transition-colors",
+            "min-h-10 flex-1 rounded-xl px-2 text-sm font-bold transition-colors hover:text-text",
             value === o.value ? "bg-surface text-primary shadow-sm" : "text-muted",
           )}
         >

@@ -45,7 +45,7 @@ export default async function ReviewPage() {
       ) : (
         <ul className="space-y-3">
           {sets.map((s) => (
-            <li key={s.id} className="space-y-3 rounded-2xl border border-border bg-surface p-4">
+            <li key={s.id} className="card-hover space-y-3 rounded-2xl border border-border bg-surface p-4">
               <div className="flex items-start gap-2">
                 <Link href={`/sets/${s.id}`} className="block min-w-0 flex-1">
                   <span className="block truncate font-bold">{s.title}</span>

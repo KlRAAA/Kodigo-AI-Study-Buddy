@@ -566,5 +566,8 @@
     "publicSets": "Public sets",
     "noneMine": "Walang tugma sa mga set mo.",
     "nonePublic": "Walang public set na tugma."
+  },
+  "common": {
+    "loading": "Naglo-load…"
   }
 }

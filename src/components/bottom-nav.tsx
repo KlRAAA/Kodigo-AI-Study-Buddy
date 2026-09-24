@@ -34,7 +34,7 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "flex min-h-16 flex-col items-center justify-center gap-0.5 text-xs font-bold",
-                  active ? "text-primary" : "text-muted",
+                  active ? "text-primary" : "text-muted hover:text-text",
                 )}
               >
                 {isCreate ? (

@@ -41,7 +41,7 @@ export default async function HomePage() {
 
       <Link
         href="/review"
-        className="flex items-center justify-between rounded-3xl bg-primary p-5 text-on-primary active:scale-[0.99]"
+        className="card-hover flex items-center justify-between rounded-3xl bg-primary p-5 text-on-primary active:scale-[0.99]"
       >
         <span>
           <span className="block text-sm font-bold opacity-80">{t("dueToday")}</span>
@@ -50,7 +50,7 @@ export default async function HomePage() {
         <BookOpen aria-hidden className="size-10 opacity-80" />
       </Link>
 
-      <Link href="/explore" className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-surface font-bold active:bg-surface-2">
+      <Link href="/explore" className="card-hover flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-surface font-bold active:bg-surface-2">
         <Compass aria-hidden className="size-5 text-primary" /> {t("explore")}
       </Link>
       {feed.length > 0 && (
@@ -59,7 +59,6 @@ export default async function HomePage() {
           <div className="space-y-2">{feed.map((s) => <SetTile key={s.slug} set={s} />)}</div>
         </section>
       )}
-
 
       <section aria-labelledby="library-heading" className="space-y-3">
         <h2 id="library-heading" className="text-lg font-black">
@@ -80,7 +79,7 @@ export default async function HomePage() {
             {sets.map((s) => {
               const Icon = sourceIcons[s.sourceType];
               return (
-                <li key={s.id} className="flex items-center gap-1 rounded-2xl border border-border bg-surface pr-1">
+                <li key={s.id} className="card-hover flex items-center gap-1 rounded-2xl border border-border bg-surface pr-1">
                   <Link
                     href={`/sets/${s.id}`}
                     className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl p-4 active:bg-surface-2"

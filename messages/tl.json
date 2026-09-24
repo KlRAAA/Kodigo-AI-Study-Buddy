@@ -311,7 +311,10 @@
     "theme": "Theme",
     "themeSystem": "System",
     "themeLight": "Light",
-    "themeDark": "Dark"
+    "themeDark": "Dark",
+    "community": "Community",
+    "noHandleYet": "Pumili ng username kapag nag-share ka ng unang set mo.",
+    "followersFollowing": "Followers at fina-follow"
   },
   "admin": {
     "title": "Admin",
@@ -515,6 +518,28 @@
     "updating": "Ina-update pa ang set na ito. Balikan mo mamaya.",
     "cardCount": "{count, plural, one {# card} other {# cards}}",
     "copiedFrom": "Kinopya mula kay @{handle}",
-    "summary": "Summary"
+    "summary": "Summary",
+    "rateThis": "I-rate ang set na ito",
+    "learnAfterCopy": "Kopyahin para magamit ang Learn mode at ma-edit ang sarili mong bersyon."
+  },
+  "community": {
+    "rate": "I-rate ang set na ito",
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "signInToRate": "Mag-log in para mag-rate",
+    "copy": "Kopyahin sa library ko",
+    "signUpToCopy": "Mag-sign up nang libre para makopya at mapag-aralan",
+    "follow": "I-follow",
+    "following": "Fina-follow",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "copies": "{count, plural, one {# kopya} other {# kopya}}",
+    "unavailable": "Hindi available ang account na ito.",
+    "joined": "Sumali noong {date}",
+    "followersLabel": "followers",
+    "followingLabel": "fina-follow",
+    "publicSets": "Mga public set",
+    "noPublicSets": "Wala pang public set.",
+    "people": "Followers at fina-follow",
+    "remove": "Tanggalin",
+    "confirmRemove": "Tanggalin ang follower na ito? Hindi ka na nila ma-follow ulit."
   }
 }

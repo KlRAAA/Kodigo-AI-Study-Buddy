@@ -311,7 +311,10 @@
     "theme": "Theme",
     "themeSystem": "System",
     "themeLight": "Light",
-    "themeDark": "Dark"
+    "themeDark": "Dark",
+    "community": "Community",
+    "noHandleYet": "Pick a username when you share your first set.",
+    "followersFollowing": "Followers & following"
   },
   "admin": {
     "title": "Admin",
@@ -515,6 +518,28 @@
     "updating": "This set is being updated. Check back soon.",
     "cardCount": "{count, plural, one {# card} other {# cards}}",
     "copiedFrom": "Copied from @{handle}",
-    "summary": "Summary"
+    "summary": "Summary",
+    "rateThis": "Rate this set",
+    "learnAfterCopy": "Copy it to use Learn mode and edit your own version."
+  },
+  "community": {
+    "rate": "Rate this set",
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "signInToRate": "Log in to rate",
+    "copy": "Copy to my library",
+    "signUpToCopy": "Sign up free to copy and study",
+    "follow": "Follow",
+    "following": "Following",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "copies": "{count, plural, one {# copy} other {# copies}}",
+    "unavailable": "This account isn't available.",
+    "joined": "Joined {date}",
+    "followersLabel": "followers",
+    "followingLabel": "following",
+    "publicSets": "Public sets",
+    "noPublicSets": "No public sets yet.",
+    "people": "Followers & following",
+    "remove": "Remove",
+    "confirmRemove": "Remove this follower? They won't be able to follow you again."
   }
 }

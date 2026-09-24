@@ -30,6 +30,20 @@ export default async function ProfilePage() {
         <p className="text-sm text-muted">{user.email}</p>
       </Card>
 
+      <Card className="space-y-2">
+        <h2 className="font-black">{t("community")}</h2>
+        {profile.handle ? (
+          <Link href={`/u/${profile.handle}`} className="block font-bold text-primary">
+            @{profile.handle}
+          </Link>
+        ) : (
+          <p className="text-sm text-muted">{t("noHandleYet")}</p>
+        )}
+        <Link href="/profile/people" className="block text-sm font-bold text-primary">
+          {t("followersFollowing")}
+        </Link>
+      </Card>
+
       <Card className="space-y-3">
         <h2 className="font-black">{t("language")}</h2>
         <LanguageSwitcher />

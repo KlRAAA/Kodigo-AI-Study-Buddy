@@ -4,10 +4,13 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CopyButton } from "@/components/public/copy-button";
 import { PublicHeader } from "@/components/public/public-header";
+import { RatingStars } from "@/components/public/rating-stars";
 import { ReportButton } from "@/components/public/report-button";
 import { Flashcards } from "@/components/study/flashcards";
 import { getSessionUser } from "@/server/auth";
+import { getMyRating } from "@/server/db/queries/community";
 import { getPublicSetBySlug } from "@/server/db/queries/sharing";
 
 const SLUG = /^[0-9A-Za-z]{10}$/;
@@ -28,6 +31,8 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
   const view = await load((await params).slug);
   const t = await getTranslations("public");
   const user = await getSessionUser();
+  const signedIn = Boolean(user?.emailVerified);
+  const myRating = signedIn && !("updating" in view) ? await getMyRating(user!.id, view.id) : null;
 
   return (
     <main className="pt-safe pb-safe mx-auto min-h-dvh max-w-xl px-4 pb-10">
@@ -51,7 +56,12 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
           </div>
 
           <div id="public-actions" className="space-y-3">
-            {/* Task 11 adds rating, copy and Learn here */}
+            <CopyButton setId={view.id} signedIn={signedIn} />
+            <p className="text-xs text-muted">{t("learnAfterCopy")}</p>
+            <div className="flex items-center justify-between rounded-2xl bg-surface p-3">
+              <span className="text-sm font-bold">{t("rateThis")}</span>
+              <RatingStars setId={view.id} initial={myRating} signedIn={signedIn} />
+            </div>
           </div>
 
           <Flashcards cards={view.cards.map((c) => ({ ...c, starred: false }))} online={false} canStar={false} />
@@ -65,7 +75,7 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
             </details>
           )}
 
-          <ReportButton setId={view.id} signedIn={Boolean(user?.emailVerified)} />
+          <ReportButton setId={view.id} signedIn={signedIn} />
         </div>
       )}
     </main>

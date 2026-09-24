@@ -399,5 +399,39 @@
         }
       ]
     }
+  },
+  "share": {
+    "title": "Share",
+    "pickHandle": "Pick a username so people know who made this set. Your email is never shown.",
+    "username": "Username",
+    "saveHandle": "Save",
+    "private": "Private",
+    "link": "Link only",
+    "public": "Public",
+    "privateHint": "Only you can see this set.",
+    "linkHint": "Anyone with the link can view it. It won't show on your profile or in Explore.",
+    "publicHint": "Shown on your profile, in Explore and to your followers.",
+    "apply": "Save",
+    "checking": "Checking your set…",
+    "rulesNote": "Shared sets must follow the <link>Community Guidelines</link>.",
+    "staleNotice": "You edited this set, so others see “being updated” until you publish your changes.",
+    "publishChanges": "Publish changes",
+    "reviewNotice": "An admin will check this set soon. It stays hidden until then.",
+    "blockedNotice": "This set can't be shared because it may break our rules:",
+    "takenDownNotice": "This set was removed for breaking the Community Guidelines.",
+    "shareLink": "Share link",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "categories": {
+      "harmful_link": "harmful link",
+      "sexual": "sexual content",
+      "minors": "content involving minors",
+      "violence": "graphic violence",
+      "hate": "hate or harassment",
+      "self_harm": "self-harm",
+      "scam": "scam or cheating service",
+      "personal_info": "personal information",
+      "other": "other"
+    }
   }
 }

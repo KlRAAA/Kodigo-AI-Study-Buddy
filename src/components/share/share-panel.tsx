@@ -1,0 +1,147 @@
+"use client";
+
+import { Check, Copy, Globe, Link2, Loader2, Lock, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { ErrorMessage } from "@/components/form";
+import { Alert, Button, Input, Label, Segmented } from "@/components/ui";
+import { setHandleAction, shareSetAction } from "@/server/actions/sharing";
+import type { ErrorCode } from "@/server/actions/result";
+import type { ModerationStatus, Visibility } from "@/server/db/schema";
+
+type Props = {
+  setId: string;
+  visibility: Visibility;
+  status: ModerationStatus;
+  reasonCategories: string[];
+  slug: string | null;
+  handle: string | null;
+};
+
+export function SharePanel({ setId, visibility, status, reasonCategories, slug, handle: initialHandle }: Props) {
+  const t = useTranslations("share");
+  const router = useRouter();
+  const [handle, setHandle] = useState(initialHandle);
+  const [handleDraft, setHandleDraft] = useState("");
+  const [choice, setChoice] = useState<Visibility>(visibility);
+  const [error, setError] = useState<ErrorCode | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  const link = slug && typeof window !== "undefined" ? `${window.location.origin}/s/${slug}` : null;
+  const isLive = visibility !== "private" && status === "approved";
+
+  function apply(next: Visibility) {
+    setError(null);
+    startTransition(async () => {
+      const res = await shareSetAction(setId, next);
+      if (!res.ok) setError(res.error);
+      router.refresh();
+    });
+  }
+
+  if (!handle) {
+    return (
+      <section className="space-y-3 rounded-3xl border border-border bg-surface p-5">
+        <h2 className="font-black">{t("title")}</h2>
+        <p className="text-sm text-muted">{t("pickHandle")}</p>
+        <form
+          className="space-y-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            startTransition(async () => {
+              const res = await setHandleAction(handleDraft);
+              if (res.ok) setHandle(res.data.handle);
+              else setError(res.error);
+            });
+          }}
+        >
+          <Label htmlFor="handle">{t("username")}</Label>
+          <div className="flex gap-2">
+            <Input id="handle" value={handleDraft} onChange={(e) => setHandleDraft(e.target.value)} placeholder="juan_dc" autoCapitalize="off" autoCorrect="off" maxLength={20} />
+            <Button type="submit" variant="secondary" className="shrink-0 whitespace-nowrap" disabled={pending || handleDraft.trim().length < 3}>
+              {t("saveHandle")}
+            </Button>
+          </div>
+        </form>
+        <ErrorMessage code={error} />
+      </section>
+    );
+  }
+
+  return (
+    <section className="space-y-3 rounded-3xl border border-border bg-surface p-5">
+      <div className="flex items-center justify-between">
+        <h2 className="font-black">{t("title")}</h2>
+        <span className="text-sm text-muted">@{handle}</span>
+      </div>
+      <Segmented
+        label={t("title")}
+        value={choice}
+        onChange={(v) => setChoice(v)}
+        options={[
+          { value: "private", label: t("private") },
+          { value: "link", label: t("link") },
+          { value: "public", label: t("public") },
+        ]}
+      />
+      <p className="flex items-start gap-2 text-sm text-muted">
+        {choice === "private" ? <Lock aria-hidden className="mt-0.5 size-4 shrink-0" /> : choice === "link" ? <Link2 aria-hidden className="mt-0.5 size-4 shrink-0" /> : <Globe aria-hidden className="mt-0.5 size-4 shrink-0" />}
+        {t(`${choice}Hint`)}
+      </p>
+      {choice !== visibility && (
+        <Button className="w-full" disabled={pending} onClick={() => apply(choice)}>
+          {pending ? <Loader2 aria-hidden className="size-5 animate-spin" /> : null}
+          {pending && choice !== "private" ? t("checking") : t("apply")}
+        </Button>
+      )}
+      {choice !== "private" && choice === visibility && (
+        <p className="text-xs text-muted">
+          {t.rich("rulesNote", { link: (c) => <Link href="/guidelines" className="underline">{c}</Link> })}
+        </p>
+      )}
+
+      {status === "stale" && visibility !== "private" && (
+        <div className="space-y-2">
+          <Alert tone="info">{t("staleNotice")}</Alert>
+          <Button variant="accent" className="w-full" disabled={pending} onClick={() => apply(visibility)}>
+            <RefreshCw aria-hidden className="size-5" /> {pending ? t("checking") : t("publishChanges")}
+          </Button>
+        </div>
+      )}
+      {status === "review" && visibility !== "private" && <Alert tone="info">{t("reviewNotice")}</Alert>}
+      {status === "blocked" && (
+        <Alert>
+          {t("blockedNotice")}{" "}
+          {reasonCategories.map((c) => (t.has(`categories.${c}`) ? t(`categories.${c}`) : c)).join(", ")}
+        </Alert>
+      )}
+      {status === "taken_down" && <Alert>{t("takenDownNotice")}</Alert>}
+
+      {isLive && link && (
+        <div className="flex gap-2">
+          <Input readOnly value={link} aria-label={t("shareLink")} onFocus={(e) => e.currentTarget.select()} />
+          <Button
+            variant="secondary"
+            className="shrink-0 whitespace-nowrap"
+            onClick={async () => {
+              try {
+                if (navigator.share) await navigator.share({ url: link });
+                else await navigator.clipboard.writeText(link);
+                setCopied(true);
+              } catch {
+                // user cancelled the share sheet
+              }
+            }}
+          >
+            {copied ? <Check aria-hidden className="size-5" /> : <Copy aria-hidden className="size-5" />}
+            {copied ? t("copied") : t("copyLink")}
+          </Button>
+        </div>
+      )}
+      <ErrorMessage code={error} />
+    </section>
+  );
+}

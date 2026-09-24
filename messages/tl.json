@@ -399,5 +399,39 @@
         }
       ]
     }
+  },
+  "share": {
+    "title": "I-share",
+    "pickHandle": "Pumili ng username para malaman ng iba kung sino ang gumawa ng set. Hindi kailanman ipapakita ang email mo.",
+    "username": "Username",
+    "saveHandle": "I-save",
+    "private": "Private",
+    "link": "Link lang",
+    "public": "Public",
+    "privateHint": "Ikaw lang ang makakakita ng set na ito.",
+    "linkHint": "Makikita ito ng kahit sinong may link. Hindi ito lalabas sa profile mo o sa Explore.",
+    "publicHint": "Lalabas sa profile mo, sa Explore at sa mga followers mo.",
+    "apply": "I-save",
+    "checking": "Chine-check ang set mo…",
+    "rulesNote": "Kailangang sumunod ang mga shared set sa <link>Community Guidelines</link>.",
+    "staleNotice": "In-edit mo ang set na ito, kaya “ina-update” ang makikita ng iba hanggang i-publish mo ang changes.",
+    "publishChanges": "I-publish ang changes",
+    "reviewNotice": "Titingnan muna ng admin ang set na ito. Nakatago muna ito hanggang doon.",
+    "blockedNotice": "Hindi ma-share ang set na ito dahil baka lumalabag ito sa rules:",
+    "takenDownNotice": "Tinanggal ang set na ito dahil lumabag ito sa Community Guidelines.",
+    "shareLink": "Share link",
+    "copyLink": "Kopyahin",
+    "copied": "Nakopya!",
+    "categories": {
+      "harmful_link": "mapanganib na link",
+      "sexual": "sexual na content",
+      "minors": "content tungkol sa menor de edad",
+      "violence": "graphic na karahasan",
+      "hate": "hate o harassment",
+      "self_harm": "pananakit sa sarili",
+      "scam": "scam o cheating service",
+      "personal_info": "personal na impormasyon",
+      "other": "iba pa"
+    }
   }
 }

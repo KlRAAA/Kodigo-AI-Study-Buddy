@@ -68,6 +68,15 @@ export async function deleteCard(userId: string, cardId: string) {
   return rows.length > 0;
 }
 
+export async function setIdForCard(userId: string, cardId: string): Promise<string | null> {
+  const rows = await getDb()
+    .select({ setId: cards.setId })
+    .from(cards)
+    .where(and(eq(cards.id, cardId), eq(cards.userId, userId)))
+    .limit(1);
+  return rows[0]?.setId ?? null;
+}
+
 async function ownsSet(userId: string, setId: string) {
   const rows = await getDb()
     .select({ id: studySets.id })

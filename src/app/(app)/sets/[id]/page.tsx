@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { SharePanel } from "@/components/share/share-panel";
 import { requireUser } from "@/server/auth";
 import { listCards } from "@/server/db/queries/cards";
 import { getSet } from "@/server/db/queries/sets";
@@ -15,10 +16,10 @@ const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 async function load(id: string) {
   if (!uuid.test(id)) notFound();
-  const { user } = await requireUser();
+  const { user, profile } = await requireUser();
   const set = await getSet(user.id, id);
   if (!set) notFound();
-  return { user, set };
+  return { user, profile, set };
 }
 
 export async function generateMetadata({ params }: PageProps<"/sets/[id]">): Promise<Metadata> {
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/sets/[id]">): Pro
 }
 
 export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
-  const { user, set } = await load((await params).id);
+  const { user, profile, set } = await load((await params).id);
   const cards = await listCards(user.id, set.id);
   const t = await getTranslations("set");
 
@@ -72,6 +73,15 @@ export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
           example: c.example,
           starred: c.starred,
         }))}
+      />
+
+      <SharePanel
+        setId={set.id}
+        visibility={set.visibility}
+        status={set.moderationStatus}
+        reasonCategories={(set.moderationReason ?? "").split(",").filter(Boolean)}
+        slug={set.shareSlug}
+        handle={profile.handle}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { addCard, deleteCard, listCards, replaceCards, updateCard } from "@/server/db/queries/cards";
+import { addCard, deleteCard, listCards, replaceCards, setIdForCard, updateCard } from "@/server/db/queries/cards";
 import { deleteAllUserData, getOrCreateProfile } from "@/server/db/queries/profiles";
 import { createSet, deleteSet, getSet, listSets, listSetsWithDue, updateSet } from "@/server/db/queries/sets";
 import { createTestDb } from "./helpers/db";
@@ -74,6 +74,12 @@ describe("per-user data isolation", () => {
     await createSet(B, { title: "B's biology", sourceType: "text", sourceText: "", outputLang: "en" });
     expect((await listSets(B, "bio")).map((s) => s.title)).toEqual(["B's biology"]);
     expect(await listSets(A, "%")).toEqual([]);
+  });
+
+  it("setIdForCard only resolves the owner's cards", async () => {
+    const { setId, cardId } = await seed();
+    expect(await setIdForCard(A, cardId)).toBe(setId);
+    expect(await setIdForCard(B, cardId)).toBeNull();
   });
 
   it("review list shows only the user's sets with due counts", async () => {

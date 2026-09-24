@@ -124,4 +124,12 @@ describe("follows, profiles, explore, feed", () => {
     await followUser(B, C);
     expect((await followFeed(B)).map((s) => s.title)).toEqual(["Cells"]);
   });
+
+  it("clamps non-finite or non-integer pages instead of throwing", async () => {
+    await publish(A, "alice", "Rocks");
+    await publish(C, "carol", "Cells");
+    const valid = await exploreSets({ sort: "new", page: 1 });
+    await expect(exploreSets({ sort: "new", page: Infinity })).resolves.toEqual(valid);
+    await expect(exploreSets({ sort: "new", page: 2.5 })).resolves.toBeDefined();
+  });
 });

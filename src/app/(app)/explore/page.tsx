@@ -17,7 +17,8 @@ export default async function ExplorePage({ searchParams }: PageProps<"/explore"
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q.slice(0, 100) : "";
   const sort = sp.sort === "new" || sp.sort === "copied" ? sp.sort : "top";
-  const page = Math.max(1, Number(sp.page) || 1);
+  const pageNum = Number(sp.page);
+  const page = Number.isInteger(pageNum) && pageNum >= 1 && pageNum <= 500 ? pageNum : 1;
   const sets = await exploreSets({ query: q, sort, page });
 
   return (

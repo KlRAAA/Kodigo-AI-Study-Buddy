@@ -3,7 +3,7 @@
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Input, Segmented } from "@/components/ui";
 
 type Sort = "top" | "new" | "copied";
@@ -12,15 +12,28 @@ export function ExploreSearch({ q, sort }: { q: string; sort: Sort }) {
   const t = useTranslations("explore");
   const router = useRouter();
   const [value, setValue] = useState(q);
-  const go = (query: string, s: Sort) =>
-    router.replace(`/explore?${new URLSearchParams({ ...(query.trim() ? { q: query.trim() } : {}), sort: s })}`);
+  const pendingId = useRef<number | null>(null);
+  const go = useCallback(
+    (query: string, s: Sort) => {
+      if (pendingId.current !== null) {
+        window.clearTimeout(pendingId.current);
+        pendingId.current = null;
+      }
+      router.replace(`/explore?${new URLSearchParams({ ...(query.trim() ? { q: query.trim() } : {}), sort: s })}`);
+    },
+    [router],
+  );
 
   useEffect(() => {
     if (value === q) return;
-    const id = window.setTimeout(() => go(value, sort), 300);
-    return () => window.clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+    pendingId.current = window.setTimeout(() => {
+      pendingId.current = null;
+      go(value, sort);
+    }, 300);
+    return () => {
+      if (pendingId.current !== null) window.clearTimeout(pendingId.current);
+    };
+  }, [value, sort, q, go]);
 
   return (
     <div className="space-y-3">

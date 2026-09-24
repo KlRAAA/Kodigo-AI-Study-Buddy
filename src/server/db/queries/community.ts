@@ -200,6 +200,13 @@ export async function getPublicProfile(handle: string): Promise<PublicProfile | 
 }
 
 const PAGE_SIZE = 20;
+const MAX_PAGE = 500;
+
+function safePage(page: number): number {
+  const n = Math.floor(page);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(n, MAX_PAGE);
+}
 
 export async function exploreSets(opts: { query?: string; sort: "top" | "new" | "copied"; page: number }): Promise<ListedSet[]> {
   const q = opts.query?.trim().slice(0, 100);
@@ -220,7 +227,7 @@ export async function exploreSets(opts: { query?: string; sort: "top" | "new" | 
     .where(where)
     .orderBy(...order, desc(studySets.publishedAt))
     .limit(PAGE_SIZE)
-    .offset((Math.max(1, opts.page) - 1) * PAGE_SIZE);
+    .offset((safePage(opts.page) - 1) * PAGE_SIZE);
 }
 
 export async function followFeed(userId: string, limit = 10): Promise<ListedSet[]> {

@@ -234,7 +234,10 @@
     "itemPlaceholder": "Item {n}",
     "missed": "Hindi mo nasagot:",
     "speak": "Basahin nang malakas",
-    "stopSpeaking": "Itigil ang pagbasa"
+    "stopSpeaking": "Itigil ang pagbasa",
+    "describesOther": "Ang definition na iyan ay para sa <strong>{term}</strong>.",
+    "termMeans": "Ang ibig sabihin ng <strong>{term}</strong>:",
+    "youPicked": "Ang pinili mo ay <strong>{term}</strong>, na ang ibig sabihin ay:"
   },
   "review": {
     "title": "Review",

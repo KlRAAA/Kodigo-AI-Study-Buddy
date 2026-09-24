@@ -22,7 +22,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { StudyCard } from "@/server/actions/sets";
 
-type Feedback = { correct: boolean; expected: string; missed?: string[] } | null;
+type Feedback = { correct: boolean; expected: string; missed?: string[]; picked?: string } | null;
 
 const STORAGE_KEY = "kodigo.learnTypes";
 
@@ -132,6 +132,33 @@ export function Learn({ cards }: { cards: StudyCard[] }) {
       onChangeTypes={() => setSession(null)}
     />
   );
+}
+
+/** Why an answer was wrong: what the terms involved actually mean. */
+function Explanation({ question, picked }: { question: Question; picked?: string }) {
+  const t = useTranslations("study");
+  const strong = (chunks: React.ReactNode) => <strong>{chunks}</strong>;
+
+  if (question.kind === "true_false") {
+    return (
+      <div className="space-y-2 rounded-2xl bg-surface/70 p-3 text-sm break-words">
+        {question.shownBelongsTo && <p>{t.rich("describesOther", { term: question.shownBelongsTo, strong })}</p>}
+        <p>{t.rich("termMeans", { term: question.term, strong })}</p>
+        <p className="font-semibold">{question.definition}</p>
+      </div>
+    );
+  }
+
+  if (question.kind === "mcq" && picked && picked !== question.answer) {
+    return (
+      <div className="space-y-2 rounded-2xl bg-surface/70 p-3 text-sm break-words">
+        <p>{t.rich("youPicked", { term: picked, strong })}</p>
+        <p className="font-semibold">{question.meanings[picked]}</p>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 function LearnSession({
@@ -247,7 +274,7 @@ function LearnSession({
                 key={choice}
                 type="button"
                 disabled={!!feedback}
-                onClick={() => submit({ correct: isAnswer, expected: question.answer })}
+                onClick={() => submit({ correct: isAnswer, expected: question.answer, picked: choice })}
                 className={cn(
                   "min-h-14 rounded-2xl border-2 bg-surface px-4 py-3 text-left font-bold break-words active:scale-[0.99]",
                   feedback && isAnswer ? "border-success bg-success-soft" : "border-border",
@@ -267,6 +294,7 @@ function LearnSession({
               key={String(value)}
               size="lg"
               variant="secondary"
+              className={cn(feedback && question.answer === value && "border-2 border-success bg-success-soft disabled:opacity-100")}
               disabled={!!feedback}
               onClick={() =>
                 submit({ correct: question.answer === value, expected: question.answer ? t("true") : t("false") })
@@ -373,6 +401,7 @@ function LearnSession({
                 {t("answerWas")} <strong>{feedback.expected}</strong>
               </p>
             ))}
+          {!feedback.correct && <Explanation question={question} picked={feedback.picked} />}
           <Button size="lg" className="w-full" onClick={next} autoFocus>
             {t("continue")}
           </Button>

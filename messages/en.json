@@ -234,7 +234,10 @@
     "itemPlaceholder": "Item {n}",
     "missed": "You missed:",
     "speak": "Read aloud",
-    "stopSpeaking": "Stop reading"
+    "stopSpeaking": "Stop reading",
+    "describesOther": "That definition describes <strong>{term}</strong>.",
+    "termMeans": "<strong>{term}</strong> means:",
+    "youPicked": "You picked <strong>{term}</strong>, which means:"
   },
   "review": {
     "title": "Review",

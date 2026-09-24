@@ -15,8 +15,26 @@ const RECOGNITION: QuestionType[] = ["mcq", "true_false"];
 const RECALL: QuestionType[] = ["identification", "enumeration"];
 
 export type Question =
-  | { kind: "mcq"; cardId: string; prompt: string; choices: string[]; answer: string }
-  | { kind: "true_false"; cardId: string; term: string; shownDefinition: string; answer: boolean }
+  | {
+      kind: "mcq";
+      cardId: string;
+      prompt: string;
+      choices: string[];
+      answer: string;
+      /** What each choice actually means, to explain a wrong pick. */
+      meanings: Record<string, string>;
+    }
+  | {
+      kind: "true_false";
+      cardId: string;
+      term: string;
+      shownDefinition: string;
+      answer: boolean;
+      /** The real definition of the term. */
+      definition: string;
+      /** When false: the term the shown definition really belongs to. */
+      shownBelongsTo: string | null;
+    }
   | { kind: "identification"; cardId: string; prompt: string; answer: string }
   | { kind: "enumeration"; cardId: string; prompt: string; items: string[] };
 
@@ -118,21 +136,28 @@ export function buildQuestion(
 
   switch (type) {
     case "mcq": {
-      const distractors = shuffle(others, random)
-        .slice(0, 3)
-        .map((c) => c.term);
+      const picked = shuffle(others, random).slice(0, 3);
       return {
         kind: "mcq",
         cardId: card.id,
         prompt: card.definition,
-        choices: shuffle([card.term, ...distractors], random),
+        choices: shuffle([card.term, ...picked.map((c) => c.term)], random),
         answer: card.term,
+        meanings: Object.fromEntries([card, ...picked].map((c) => [c.term, c.definition])),
       };
     }
     case "true_false": {
       const truthful = random() < 0.5;
-      const shown = truthful ? card.definition : shuffle(others, random)[0]!.definition;
-      return { kind: "true_false", cardId: card.id, term: card.term, shownDefinition: shown, answer: truthful };
+      const other = truthful ? null : shuffle(others, random)[0]!;
+      return {
+        kind: "true_false",
+        cardId: card.id,
+        term: card.term,
+        shownDefinition: other ? other.definition : card.definition,
+        answer: truthful,
+        definition: card.definition,
+        shownBelongsTo: other ? other.term : null,
+      };
     }
     case "enumeration":
       return { kind: "enumeration", cardId: card.id, prompt: card.term, items: parseListItems(card.definition)! };

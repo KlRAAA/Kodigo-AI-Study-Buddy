@@ -55,6 +55,22 @@ describe("learn mode", () => {
     expect(buildQuestion(cards[0]!, [cards[0]!], 0, ["mcq", "identification"]).kind).toBe("identification"); // nothing to compare
   });
 
+  it("true/false and MCQ carry what they need to explain a wrong answer", () => {
+    const tf = buildQuestion(cards[0]!, cards, 0, ["true_false"], seq(0.9)); // 0.9 ≥ 0.5 → a false statement
+    expect(tf.kind).toBe("true_false");
+    if (tf.kind !== "true_false") return;
+    expect(tf.answer).toBe(false);
+    expect(tf.definition).toBe("Basic unit of life");
+    const owner = cards.find((c) => c.definition === tf.shownDefinition);
+    expect(tf.shownBelongsTo).toBe(owner?.term);
+
+    const mcq = buildQuestion(cards[0]!, cards, 0, ["mcq"], seq(0.3));
+    if (mcq.kind !== "mcq") throw new Error("expected mcq");
+    for (const choice of mcq.choices) {
+      expect(mcq.meanings[choice]).toBe(cards.find((c) => c.term === choice)?.definition);
+    }
+  });
+
   it("asks list cards as enumeration and skips cards a type can't use", () => {
     const list = { id: "L", term: "Types of rocks", definition: "Igneous; Sedimentary; Metamorphic" };
     const all = [...cards, list];

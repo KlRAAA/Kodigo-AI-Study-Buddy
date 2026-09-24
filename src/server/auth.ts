@@ -1,6 +1,7 @@
 import "server-only";
 import { createNeonAuth, type NeonAuth } from "@neondatabase/auth/next/server";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
+import { connection } from "next/server";
 import { getOrCreateProfile } from "./db/queries/profiles";
 import type { Profile } from "./db/schema";
 
@@ -25,12 +26,16 @@ export type SessionUser = {
 };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
+  // Mark the render as per-request before touching cookies, so Next doesn't try
+  // (and fail noisily) to prerender session-dependent pages at build time.
+  await connection();
   try {
     const { data } = await getAuth().getSession();
     const user = data?.user;
     if (!user) return null;
     return { id: user.id, email: user.email, name: user.name, emailVerified: user.emailVerified };
-  } catch {
+  } catch (err) {
+    unstable_rethrow(err); // let Next's own control-flow errors through
     return null;
   }
 }

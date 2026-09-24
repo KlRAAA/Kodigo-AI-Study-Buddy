@@ -34,9 +34,20 @@ async function checkTurnstile(formData: FormData) {
   return verifyTurnstile(typeof token === "string" ? token : null, await clientIp());
 }
 
-const signUpSchema = z.object({ name: z.string().trim().min(1).max(60), email, password, locale: z.string().optional() });
+const signUpSchema = z.object({
+  name: z.string().trim().min(1).max(60),
+  email,
+  password,
+  confirmPassword: z.string().max(128),
+  locale: z.string().optional(),
+});
+
+function passwordsMatch(formData: FormData) {
+  return formData.get("password") === formData.get("confirmPassword");
+}
 
 export async function signUpAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  if (!passwordsMatch(formData)) return fail("password_mismatch");
   const parsed = signUpSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     const pw = formData.get("password");
@@ -123,15 +134,17 @@ export async function requestResetAction(_prev: ActionResult | null, formData: F
   redirect(`/auth/forgot-password?step=code&email=${encodeURIComponent(parsed.data)}`);
 }
 
-const resetSchema = z.object({ email, otp, password });
+const resetSchema = z.object({ email, otp, password, confirmPassword: z.string().max(128) });
 
 export async function resetPasswordAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
+  if (!passwordsMatch(formData)) return fail("password_mismatch");
   const parsed = resetSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     const pw = formData.get("password");
     return fail(typeof pw === "string" && pw.length < 8 ? "weak_password" : "invalid_code");
   }
-  const { error } = await getAuth().emailOtp.resetPassword(parsed.data);
+  const { email: mail, otp: code, password: pw } = parsed.data;
+  const { error } = await getAuth().emailOtp.resetPassword({ email: mail, otp: code, password: pw });
   if (error) return mapAuthError({ ...error, code: error.code ?? "INVALID_CODE" });
   redirect("/auth/sign-in?reset=1");
 }

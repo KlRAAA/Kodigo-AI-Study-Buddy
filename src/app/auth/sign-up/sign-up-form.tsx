@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { ErrorMessage, SubmitButton } from "@/components/form";
+import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Input, Label } from "@/components/ui";
 import { signUpAction } from "@/server/actions/auth";
@@ -12,6 +13,9 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const [state, formAction] = useActionState(signUpAction, null);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const mismatch = confirm.length > 0 && confirm !== password;
 
   return (
     <div className="space-y-6">
@@ -31,19 +35,39 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
         </div>
         <div>
           <Label htmlFor="password">{t("password")}</Label>
-          <Input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             autoComplete="new-password"
             minLength={8}
             maxLength={128}
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             aria-describedby="password-hint"
           />
           <p id="password-hint" className="mt-1 text-xs text-muted">
             {t("passwordHint")}
           </p>
+        </div>
+        <div>
+          <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
+          <PasswordInput
+            id="confirmPassword"
+            name="confirmPassword"
+            autoComplete="new-password"
+            maxLength={128}
+            required
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            aria-invalid={mismatch}
+            aria-describedby={mismatch ? "confirm-error" : undefined}
+          />
+          {mismatch && (
+            <p id="confirm-error" className="mt-1 text-xs font-bold text-danger">
+              {t("passwordMismatch")}
+            </p>
+          )}
         </div>
         <Turnstile siteKey={siteKey} language={locale} />
         {state && !state.ok && <ErrorMessage code={state.error} />}

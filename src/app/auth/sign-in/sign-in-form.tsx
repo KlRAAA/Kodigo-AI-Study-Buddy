@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { ErrorMessage, SubmitButton } from "@/components/form";
+import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Alert, Input, Label } from "@/components/ui";
 import { signInAction } from "@/server/actions/auth";
@@ -33,7 +34,7 @@ export function SignInForm({
         </div>
         <div>
           <Label htmlFor="password">{t("password")}</Label>
-          <Input id="password" name="password" type="password" autoComplete="current-password" required />
+          <PasswordInput id="password" name="password" autoComplete="current-password" required />
         </div>
         <Turnstile siteKey={siteKey} language={locale} />
         {state && !state.ok && <ErrorMessage code={state.error} />}

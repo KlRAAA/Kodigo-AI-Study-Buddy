@@ -14,6 +14,7 @@ export type ErrorCode =
   | "invalid_credentials"
   | "email_taken"
   | "weak_password"
+  | "password_mismatch"
   | "invalid_code"
   | "too_long"
   | "unknown";

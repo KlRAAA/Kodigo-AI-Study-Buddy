@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { ErrorMessage, SubmitButton } from "@/components/form";
+import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Input, Label } from "@/components/ui";
 import { requestResetAction, resetPasswordAction } from "@/server/actions/auth";
@@ -21,6 +22,9 @@ export function ForgotPasswordForm({
   const locale = useLocale();
   const [requestState, requestAction] = useActionState(requestResetAction, null);
   const [resetState, resetAction] = useActionState(resetPasswordAction, null);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const mismatch = confirm.length > 0 && confirm !== password;
 
   return (
     <div className="space-y-6">
@@ -59,15 +63,35 @@ export function ForgotPasswordForm({
           </div>
           <div>
             <Label htmlFor="password">{t("newPassword")}</Label>
-            <Input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="new-password"
               minLength={8}
               maxLength={128}
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+          </div>
+          <div>
+            <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
+            <PasswordInput
+              id="confirmPassword"
+              name="confirmPassword"
+              autoComplete="new-password"
+              maxLength={128}
+              required
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              aria-invalid={mismatch}
+              aria-describedby={mismatch ? "confirm-error" : undefined}
+            />
+            {mismatch && (
+              <p id="confirm-error" className="mt-1 text-xs font-bold text-danger">
+                {t("passwordMismatch")}
+              </p>
+            )}
           </div>
           {resetState && !resetState.ok && <ErrorMessage code={resetState.error} />}
           <SubmitButton>{t("resetPassword")}</SubmitButton>

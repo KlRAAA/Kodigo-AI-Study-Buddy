@@ -60,7 +60,11 @@
       "verified": "Your email is verified. You can log in now.",
       "reset": "Password changed. Log in with your new password.",
       "deleted": "Your account and all your data have been deleted."
-    }
+    },
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords don’t match.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "errors": {
     "invalid_input": "Something in the form doesn't look right. Please check and try again.",
@@ -77,6 +81,7 @@
     "invalid_credentials": "Wrong email or password.",
     "email_taken": "That email already has an account. Try logging in.",
     "weak_password": "Your password needs at least 8 characters.",
+    "password_mismatch": "Your passwords don’t match. Please type them again.",
     "invalid_code": "That code is wrong or expired. Try again or ask for a new one.",
     "too_long": "Your notes are too long. Split them into smaller sets.",
     "unknown": "Something went wrong. Please try again."

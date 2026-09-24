@@ -60,7 +60,11 @@
       "verified": "Verified na ang email mo. Pwede ka nang mag-log in.",
       "reset": "Napalitan na ang password. Mag-log in gamit ang bago mong password.",
       "deleted": "Nabura na ang account mo at lahat ng data mo."
-    }
+    },
+    "confirmPassword": "Kumpirmahin ang password",
+    "passwordMismatch": "Hindi magkapareho ang password.",
+    "showPassword": "Ipakita ang password",
+    "hidePassword": "Itago ang password"
   },
   "errors": {
     "invalid_input": "May mali sa form. Pakicheck at subukan ulit.",
@@ -77,6 +81,7 @@
     "invalid_credentials": "Mali ang email o password.",
     "email_taken": "May account na ang email na iyan. Subukang mag-log in.",
     "weak_password": "Kailangan ng hindi bababa sa 8 characters ang password mo.",
+    "password_mismatch": "Hindi magkapareho ang mga password mo. Pakitype ulit.",
     "invalid_code": "Mali o expired na ang code. Subukan ulit o humingi ng bago.",
     "too_long": "Masyadong mahaba ang notes mo. Hatiin ito sa mas maliliit na set.",
     "unknown": "May nangyaring mali. Pakisubukan ulit."

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 type TurnstileApi = {
   render: (el: HTMLElement, opts: Record<string, unknown>) => string;
+  reset: (id: string) => void;
   remove: (id: string) => void;
 };
 
@@ -32,7 +33,14 @@ export function Turnstile({ siteKey, language }: { siteKey: string | undefined; 
           sitekey: siteKey,
           language: language === "tl" ? "tl" : "en",
           appearance: "interaction-only",
+          size: "flexible",
           "response-field-name": "cf-turnstile-response",
+          "refresh-expired": "auto",
+          "retry": "auto",
+          "error-callback": (code: string) => {
+            // Code only (no user data). See Cloudflare's Turnstile error code list.
+            console.warn(`Turnstile error ${code}`);
+          },
         });
         window.clearInterval(timer);
       } else if (++tries > 100) {
@@ -46,5 +54,5 @@ export function Turnstile({ siteKey, language }: { siteKey: string | undefined; 
   }, [siteKey, language]);
 
   if (!siteKey) return null;
-  return <div ref={ref} className="min-h-0" />;
+  return <div ref={ref} className="w-full" />;
 }

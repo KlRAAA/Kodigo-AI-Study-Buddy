@@ -20,7 +20,7 @@ const listedColumns = {
   slug: sql<string>`${studySets.shareSlug}`,
   title: studySets.title,
   subject: studySets.subject,
-  cardCount: sql<number>`(select count(*)::int from ${cards} where ${cards.setId} = ${studySets.id})`,
+  cardCount: sql<number>`(select count(*)::int from ${cards} where ${cards.setId} = "study_sets"."id")`,
   ratingAvg: studySets.ratingAvg,
   ratingCount: studySets.ratingCount,
   copyCount: studySets.copyCount,

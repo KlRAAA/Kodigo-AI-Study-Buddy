@@ -25,7 +25,7 @@ export async function listSets(userId: string, search?: string): Promise<SetList
       sourceType: studySets.sourceType,
       status: studySets.status,
       updatedAt: studySets.updatedAt,
-      cardCount: sql<number>`(select count(*)::int from ${cards} where ${cards.setId} = ${studySets.id})`,
+      cardCount: sql<number>`(select count(*)::int from ${cards} where ${cards.setId} = "study_sets"."id")`,
     })
     .from(studySets)
     .where(filter)

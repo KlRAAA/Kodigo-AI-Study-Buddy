@@ -35,7 +35,7 @@ describe("per-user data isolation", () => {
     expect(await listSets(B)).toEqual([]);
     expect(await getSet(B, setId)).toBeNull();
     expect(await listCards(B, setId)).toEqual([]);
-    expect((await listSets(A)).map((s) => s.title)).toEqual(["A's biology"]);
+    expect((await listSets(A)).map((s) => [s.title, s.cardCount])).toEqual([["A's biology", 2]]);
   });
 
   it("B can't update or delete A's set", async () => {

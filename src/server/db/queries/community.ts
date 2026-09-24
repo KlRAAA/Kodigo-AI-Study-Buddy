@@ -83,15 +83,19 @@ export async function rateSet(userId: string, setId: string, stars: number | nul
       .values({ setId, userId, stars })
       .onConflictDoUpdate({ target: [setRatings.setId, setRatings.userId], set: { stars, updatedAt: new Date() } });
   }
-  // Neon HTTP has no interactive transactions: always recompute rather than increment.
-  await db
+  await recomputeRating(setId);
+  return "ok";
+}
+
+/** Neon HTTP has no interactive transactions: always recompute rather than increment. */
+export async function recomputeRating(setId: string) {
+  await getDb()
     .update(studySets)
     .set({
       ratingCount: sql`(select count(*)::int from ${setRatings} where ${setRatings.setId} = ${setId})`,
       ratingAvg: sql`coalesce((select avg(${setRatings.stars})::real from ${setRatings} where ${setRatings.setId} = ${setId}), 0)`,
     })
     .where(eq(studySets.id, setId));
-  return "ok";
 }
 
 export async function getMyRating(userId: string, setId: string): Promise<number | null> {

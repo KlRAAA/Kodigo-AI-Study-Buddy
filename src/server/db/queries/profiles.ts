@@ -1,14 +1,19 @@
 import "server-only";
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq, ne, or } from "drizzle-orm";
 import { getDb } from "../client";
 import {
   cardReviews,
   cards,
+  followBlocks,
+  follows,
   profiles,
   quizAttempts,
   quizQuestions,
   quizzes,
   rateEvents,
+  reports,
+  setRatings,
+  strikes,
   studySessions,
   studySets,
   tutorMessages,
@@ -16,6 +21,8 @@ import {
   type Locale,
   type Profile,
 } from "../schema";
+import { recomputeRating } from "./community";
+import { recomputeReportCount } from "./moderation";
 
 /** Returns the user's profile, creating it on first use. */
 export async function getOrCreateProfile(
@@ -98,5 +105,14 @@ export async function deleteAllUserData(userId: string) {
   await db.delete(studySets).where(eq(studySets.userId, userId));
   await db.delete(usageCounters).where(eq(usageCounters.userId, userId));
   await db.delete(rateEvents).where(eq(rateEvents.userId, userId));
+  // Community rows on other people's sets: remove them, then fix the counts they fed.
+  const rated = await db.delete(setRatings).where(eq(setRatings.userId, userId)).returning({ setId: setRatings.setId });
+  for (const setId of new Set(rated.map((r) => r.setId))) await recomputeRating(setId);
+  const reported = await db.delete(reports).where(eq(reports.reporterId, userId)).returning({ setId: reports.setId });
+  for (const setId of new Set(reported.map((r) => r.setId))) await recomputeReportCount(setId);
+  await db.delete(follows).where(or(eq(follows.followerId, userId), eq(follows.followeeId, userId)));
+  await db.delete(followBlocks).where(or(eq(followBlocks.userId, userId), eq(followBlocks.blockedId, userId)));
+  await db.delete(strikes).where(eq(strikes.userId, userId));
+  // banned_emails stays: a banned person can't come back by deleting their account.
   await db.delete(profiles).where(eq(profiles.userId, userId));
 }

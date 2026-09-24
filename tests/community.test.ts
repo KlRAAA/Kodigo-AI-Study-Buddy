@@ -12,9 +12,13 @@ import {
   rateSet,
   removeFollower,
 } from "@/server/db/queries/community";
-import { getOrCreateProfile, setHandle } from "@/server/db/queries/profiles";
+import { createReport } from "@/server/db/queries/moderation";
+import { deleteAllUserData, getOrCreateProfile, setHandle } from "@/server/db/queries/profiles";
 import { createSet, getSet, updateSet } from "@/server/db/queries/sets";
+import { getDb } from "@/server/db/client";
+import { followBlocks, follows, reports, setRatings, strikes, studySets } from "@/server/db/schema";
 import { shareSet } from "@/server/sharing/share";
+import { eq, or } from "drizzle-orm";
 import { createTestDb } from "./helpers/db";
 
 const A = "alice-id";
@@ -131,5 +135,37 @@ describe("follows, profiles, explore, feed", () => {
     const valid = await exploreSets({ sort: "new", page: 1 });
     await expect(exploreSets({ sort: "new", page: Infinity })).resolves.toEqual(valid);
     await expect(exploreSets({ sort: "new", page: 2.5 })).resolves.toBeDefined();
+  });
+});
+
+describe("account deletion", () => {
+  beforeEach(async () => {
+    await createTestDb();
+  });
+
+  it("removes the user's community rows and fixes counts on other people's sets", async () => {
+    const setId = await publish(A, "alice", "Cells");
+    await getOrCreateProfile(B);
+    await getOrCreateProfile(C);
+    await rateSet(B, setId, 5);
+    await rateSet(C, setId, 3);
+    await createReport(B, setId, "spam", null);
+    await createReport(C, setId, "other", null);
+    await followUser(B, A);
+    await followUser(A, B);
+    await removeFollower(A, B);
+    await removeFollower(B, A);
+    await getDb().insert(strikes).values({ userId: B, reason: "spam", adminId: "admin" });
+
+    await deleteAllUserData(B);
+
+    const [set] = await getDb().select().from(studySets).where(eq(studySets.id, setId));
+    expect(set).toMatchObject({ ratingCount: 1, ratingAvg: 3, reportCount: 1 });
+    const db = getDb();
+    expect(await db.select().from(setRatings).where(eq(setRatings.userId, B))).toEqual([]);
+    expect(await db.select().from(reports).where(eq(reports.reporterId, B))).toEqual([]);
+    expect(await db.select().from(follows).where(or(eq(follows.followerId, B), eq(follows.followeeId, B)))).toEqual([]);
+    expect(await db.select().from(followBlocks).where(or(eq(followBlocks.userId, B), eq(followBlocks.blockedId, B)))).toEqual([]);
+    expect(await db.select().from(strikes).where(eq(strikes.userId, B))).toEqual([]);
   });
 });

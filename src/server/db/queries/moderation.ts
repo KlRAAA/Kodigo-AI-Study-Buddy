@@ -17,6 +17,14 @@ import { loadShareContent, viewableSetWhere } from "./sharing";
 const AUTO_HIDE_REPORTS = 3;
 const SHARE_BLOCK_MS = 30 * 24 * 60 * 60 * 1000;
 
+const openReportCount = (setId: string) =>
+  sql<number>`(select count(*)::int from ${reports} where ${reports.setId} = ${setId} and ${reports.status} = 'open')`;
+
+/** report_count is always recomputed from the open reports. */
+export async function recomputeReportCount(setId: string) {
+  await getDb().update(studySets).set({ reportCount: openReportCount(setId) }).where(eq(studySets.id, setId));
+}
+
 export async function createReport(
   reporterId: string,
   setId: string,
@@ -39,10 +47,9 @@ export async function createReport(
     .returning({ id: reports.id });
   if (inserted.length === 0) return "duplicate";
 
-  const openCount = sql<number>`(select count(*)::int from ${reports} where ${reports.setId} = ${setId} and ${reports.status} = 'open')`;
   const [updated] = await db
     .update(studySets)
-    .set({ reportCount: openCount })
+    .set({ reportCount: openReportCount(setId) })
     .where(eq(studySets.id, setId))
     .returning({ reportCount: studySets.reportCount });
   if ((updated?.reportCount ?? 0) >= AUTO_HIDE_REPORTS) {

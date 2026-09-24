@@ -206,7 +206,35 @@
     "continue": "Continue",
     "allMastered": "You mastered every card!",
     "accuracy": "{accuracy}% correct across {answered} answers.",
-    "again": "Study again"
+    "again": "Study again",
+    "setupTitle": "Choose question types",
+    "setupSubtitle": "Pick how you want to be quizzed. You can change this anytime.",
+    "types": {
+      "mcq": "Multiple choice",
+      "true_false": "True or false",
+      "identification": "Identification",
+      "enumeration": "Enumeration"
+    },
+    "typeHints": {
+      "mcq": "Pick the right term from 4 choices",
+      "true_false": "Decide if a definition matches the term",
+      "identification": "Read the definition, type the term",
+      "enumeration": "List every item, in any order"
+    },
+    "typeUnavailable": {
+      "mcq": "Needs at least 3 cards",
+      "true_false": "Needs at least 2 cards",
+      "identification": "",
+      "enumeration": "No list cards in this set yet (like \"Types of…\"). New sets include them."
+    },
+    "start": "Start",
+    "pickOne": "Pick at least one type",
+    "changeTypes": "Change question types",
+    "enumeratePrompt": "{count, plural, other {List all # items}}",
+    "itemPlaceholder": "Item {n}",
+    "missed": "You missed:",
+    "speak": "Read aloud",
+    "stopSpeaking": "Stop reading"
   },
   "review": {
     "title": "Review",
@@ -236,7 +264,11 @@
     "deleteWord": "DELETE",
     "deleteConfirm": "Type {word} to confirm",
     "deleteForever": "Delete forever",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark"
   },
   "admin": {
     "title": "Admin",

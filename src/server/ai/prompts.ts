@@ -21,7 +21,7 @@ export function summaryAndCardsMessages(notes: string, lang: Lang, cardCount: nu
         LANGUAGE[lang],
         "Reply with ONLY a JSON object, no markdown fences, with this shape:",
         '{"title": string (short set title, max 8 words), "summary": string (markdown with ## headings, bullet points, and **bold** key terms), "cards": [{"term": string, "definition": string, "example": string or null}]}',
-        `Make about ${cardCount} flashcards covering the most important terms, concepts, dates, people and formulas. Definitions must be accurate to the notes, 1–3 sentences. Do not invent facts that are not in the notes.${partNote}`,
+        `Make about ${cardCount} flashcards covering the most important terms, concepts, dates, people and formulas. Definitions must be accurate to the notes, 1–3 sentences. Do not invent facts that are not in the notes. When the notes contain a list (types, parts, steps, causes, examples), also make a list card: the term names the list (e.g. "Types of rocks") and the definition lists only the items separated by semicolons (e.g. "Igneous; Sedimentary; Metamorphic").${partNote}`,
       ].join("\n"),
     },
     { role: "user", content: `<notes>\n${notes}\n</notes>` },

@@ -206,7 +206,35 @@
     "continue": "Tuloy",
     "allMastered": "Na-master mo lahat ng cards!",
     "accuracy": "{accuracy}% tama sa {answered} na sagot.",
-    "again": "Mag-aral ulit"
+    "again": "Mag-aral ulit",
+    "setupTitle": "Pumili ng uri ng tanong",
+    "setupSubtitle": "Piliin kung paano ka gustong i-quiz. Pwede mo itong palitan anytime.",
+    "types": {
+      "mcq": "Multiple choice",
+      "true_false": "Tama o mali",
+      "identification": "Identification",
+      "enumeration": "Enumeration"
+    },
+    "typeHints": {
+      "mcq": "Piliin ang tamang term sa 4 na choices",
+      "true_false": "Alamin kung tugma ang definition sa term",
+      "identification": "Basahin ang definition, i-type ang term",
+      "enumeration": "Ilista lahat ng items, kahit anong ayos"
+    },
+    "typeUnavailable": {
+      "mcq": "Kailangan ng hindi bababa sa 3 cards",
+      "true_false": "Kailangan ng hindi bababa sa 2 cards",
+      "identification": "",
+      "enumeration": "Wala pang list cards sa set na ito (tulad ng \"Mga uri ng…\"). Meron na nito ang mga bagong set."
+    },
+    "start": "Simulan",
+    "pickOne": "Pumili ng kahit isang uri",
+    "changeTypes": "Palitan ang uri ng tanong",
+    "enumeratePrompt": "{count, plural, other {Ilista ang # items}}",
+    "itemPlaceholder": "Item {n}",
+    "missed": "Hindi mo nasagot:",
+    "speak": "Basahin nang malakas",
+    "stopSpeaking": "Itigil ang pagbasa"
   },
   "review": {
     "title": "Review",
@@ -236,7 +264,11 @@
     "deleteWord": "BURAHIN",
     "deleteConfirm": "I-type ang {word} para kumpirmahin",
     "deleteForever": "Burahin nang tuluyan",
-    "cancel": "Kanselahin"
+    "cancel": "Kanselahin",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark"
   },
   "admin": {
     "title": "Admin",

@@ -2,7 +2,10 @@ import { Shield } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 import { Card } from "@/components/ui";
 import { isAdminEmail, requireUser } from "@/server/auth";
 import { remainingAllowance } from "@/server/limits/limiter";
@@ -30,6 +33,11 @@ export default async function ProfilePage() {
       <Card className="space-y-3">
         <h2 className="font-black">{t("language")}</h2>
         <LanguageSwitcher />
+      </Card>
+
+      <Card className="space-y-3">
+        <h2 className="font-black">{t("theme")}</h2>
+        <ThemeSwitcher initial={parseTheme((await cookies()).get(THEME_COOKIE)?.value)} />
       </Card>
 
       <Card className="space-y-2">

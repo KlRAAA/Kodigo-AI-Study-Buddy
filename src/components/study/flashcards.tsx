@@ -6,6 +6,7 @@ import { useMemo, useRef, useState } from "react";
 import { Button, ProgressBar } from "@/components/ui";
 import { cn, shuffle } from "@/lib/utils";
 import { toggleStarAction, type StudyCard } from "@/server/actions/sets";
+import { SpeakButton } from "./speak-button";
 
 export function Flashcards({ cards: initial, online = true }: { cards: StudyCard[]; online?: boolean }) {
   const t = useTranslations("study");
@@ -54,7 +55,7 @@ export function Flashcards({ cards: initial, online = true }: { cards: StudyCard
       </div>
 
       <div
-        className="flip-card"
+        className="flip-card relative"
         onTouchStart={(e) => (touchX.current = e.touches[0]?.clientX ?? null)}
         onTouchEnd={(e) => {
           const start = touchX.current;
@@ -81,6 +82,10 @@ export function Flashcards({ cards: initial, online = true }: { cards: StudyCard
             {card.example && <span className="mt-3 text-sm break-words italic">{card.example}</span>}
           </span>
         </button>
+        <SpeakButton
+          text={flipped ? [card.definition, card.example].filter(Boolean).join(". ") : card.term}
+          className="absolute top-3 right-3 z-10"
+        />
       </div>
       <p className="text-center text-xs text-muted">{t("tapToFlip")}</p>
 

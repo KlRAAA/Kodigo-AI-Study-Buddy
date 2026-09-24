@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { ServiceWorkerRegister } from "@/components/sw-register";
+import { parseTheme, THEME_COOKIE } from "@/lib/theme";
 import "./globals.css";
 
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"], display: "swap" });
@@ -31,8 +33,13 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
   return (
-    <html lang={locale === "tl" ? "fil" : "en"} className={`${nunito.variable} antialiased`}>
+    <html
+      lang={locale === "tl" ? "fil" : "en"}
+      data-theme={theme === "system" ? undefined : theme}
+      className={`${nunito.variable} antialiased`}
+    >
       <body className="min-h-dvh">
         <NextIntlClientProvider>
           {children}

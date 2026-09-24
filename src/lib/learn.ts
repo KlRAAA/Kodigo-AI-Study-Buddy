@@ -1,15 +1,24 @@
+import { parseListItems } from "./enumeration";
 import { shuffle } from "./utils";
 
-// Learn mode: each card needs two correct answers to be mastered: first a
-// recognition question (multiple choice or true/false), then typing the term.
-// A miss resets that card and brings it back a few questions later.
+// Learn mode: each card needs two correct answers to be mastered. The first
+// prefers a recognition question (multiple choice / true-false), the second a
+// recall question (identification / enumeration), limited to the types the
+// student picked. A miss resets that card and brings it back a few questions later.
 
 export type LearnCard = { id: string; term: string; definition: string };
+
+export const QUESTION_TYPES = ["mcq", "true_false", "identification", "enumeration"] as const;
+export type QuestionType = (typeof QUESTION_TYPES)[number];
+
+const RECOGNITION: QuestionType[] = ["mcq", "true_false"];
+const RECALL: QuestionType[] = ["identification", "enumeration"];
 
 export type Question =
   | { kind: "mcq"; cardId: string; prompt: string; choices: string[]; answer: string }
   | { kind: "true_false"; cardId: string; term: string; shownDefinition: string; answer: boolean }
-  | { kind: "typed"; cardId: string; prompt: string; answer: string };
+  | { kind: "identification"; cardId: string; prompt: string; answer: string }
+  | { kind: "enumeration"; cardId: string; prompt: string; items: string[] };
 
 export type LearnState = {
   queue: string[]; // card ids, front is next
@@ -20,6 +29,27 @@ export type LearnState = {
 
 export const MASTERY_STEPS = 2;
 const REQUEUE_GAP = 3;
+
+/** Which of the chosen question types can be asked about this card. */
+export function typesForCard(card: LearnCard, all: LearnCard[], chosen: readonly QuestionType[]) {
+  const others = all.filter((c) => c.id !== card.id && c.definition !== card.definition);
+  return chosen.filter((type) => {
+    if (type === "mcq") return others.length >= 2;
+    if (type === "true_false") return others.length >= 1;
+    if (type === "enumeration") return parseListItems(card.definition) !== null;
+    return true;
+  });
+}
+
+/** True if at least one card in the set can be asked with this type. */
+export function isTypeAvailable(type: QuestionType, cards: LearnCard[]) {
+  return cards.some((c) => typesForCard(c, cards, [type]).length > 0);
+}
+
+/** Cards that can be asked with at least one chosen type. */
+export function eligibleCards(cards: LearnCard[], chosen: readonly QuestionType[]) {
+  return cards.filter((c) => typesForCard(c, cards, chosen).length > 0);
+}
 
 export function startLearn(cards: LearnCard[], random: () => number = Math.random): LearnState {
   const ids = shuffle(
@@ -67,33 +97,46 @@ export function answer(state: LearnState, wasCorrect: boolean): LearnState {
   };
 }
 
-/** Builds the question for a card at its current step. */
+/** Builds the question for a card at its current step, using only the chosen types. */
 export function buildQuestion(
   card: LearnCard,
   all: LearnCard[],
   step: number,
+  chosen: readonly QuestionType[] = QUESTION_TYPES,
   random: () => number = Math.random,
 ): Question {
+  const possible = typesForCard(card, all, chosen);
+  const preferred = possible.filter((t) => (step >= 1 ? RECALL : RECOGNITION).includes(t));
+  const pool = preferred.length > 0 ? preferred : possible;
+  // A list card asked for recall should be enumerated when that's allowed.
+  const type: QuestionType =
+    pool.includes("enumeration") && step >= 1
+      ? "enumeration"
+      : (pool[Math.floor(random() * pool.length)] ?? "identification");
+
   const others = all.filter((c) => c.id !== card.id && c.definition !== card.definition);
 
-  if (step >= 1 || others.length === 0) {
-    return { kind: "typed", cardId: card.id, prompt: card.definition, answer: card.term };
+  switch (type) {
+    case "mcq": {
+      const distractors = shuffle(others, random)
+        .slice(0, 3)
+        .map((c) => c.term);
+      return {
+        kind: "mcq",
+        cardId: card.id,
+        prompt: card.definition,
+        choices: shuffle([card.term, ...distractors], random),
+        answer: card.term,
+      };
+    }
+    case "true_false": {
+      const truthful = random() < 0.5;
+      const shown = truthful ? card.definition : shuffle(others, random)[0]!.definition;
+      return { kind: "true_false", cardId: card.id, term: card.term, shownDefinition: shown, answer: truthful };
+    }
+    case "enumeration":
+      return { kind: "enumeration", cardId: card.id, prompt: card.term, items: parseListItems(card.definition)! };
+    default:
+      return { kind: "identification", cardId: card.id, prompt: card.definition, answer: card.term };
   }
-
-  if (others.length >= 2 && random() < 0.7) {
-    const distractors = shuffle(others, random)
-      .slice(0, 3)
-      .map((c) => c.term);
-    return {
-      kind: "mcq",
-      cardId: card.id,
-      prompt: card.definition,
-      choices: shuffle([card.term, ...distractors], random),
-      answer: card.term,
-    };
-  }
-
-  const truthful = random() < 0.5;
-  const shown = truthful ? card.definition : shuffle(others, random)[0]!.definition;
-  return { kind: "true_false", cardId: card.id, term: card.term, shownDefinition: shown, answer: truthful };
 }

@@ -21,8 +21,9 @@
   color-scheme: light;
 }
 
+/* Dark theme: follows the system unless the user picked Light or Dark in Profile. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #111716;
     --surface: #1a2220;
     --surface-2: #232d2b;
@@ -41,6 +42,26 @@
     --success-soft: #1b3525;
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #111716;
+  --surface: #1a2220;
+  --surface-2: #232d2b;
+  --text: #e9eeec;
+  --muted: #9aa8a4;
+  --border: #2e3a37;
+  --primary: #3fb8ab;
+  --primary-strong: #5fcabe;
+  --primary-soft: #183b37;
+  --on-primary: #0b1614;
+  --accent: #f6b458;
+  --accent-soft: #3d2f1a;
+  --danger: #ef7b73;
+  --danger-soft: #3d1f1d;
+  --success: #6fcf8c;
+  --success-soft: #1b3525;
+  color-scheme: dark;
 }
 
 @theme inline {

@@ -7,7 +7,7 @@ import { extractedTextSchema, summaryAndCardsSchema, type SummaryAndCards } from
 export type Generated = SummaryAndCards & { cached: boolean };
 
 export function generationCacheKey(notes: string, lang: Lang) {
-  return cacheKey("summary_cards:v1", lang, normalizeText(notes));
+  return cacheKey("summary_cards:v2", lang, normalizeText(notes));
 }
 
 export async function getCachedGeneration(notes: string, lang: Lang) {

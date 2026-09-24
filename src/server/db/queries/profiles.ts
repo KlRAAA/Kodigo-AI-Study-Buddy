@@ -44,6 +44,14 @@ export async function updateProfile(
 
 const HANDLE_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000;
 
+/** True for a Postgres unique-violation (23505), including when Drizzle wraps the driver error in `cause`. */
+export function isUniqueViolation(err: unknown): boolean {
+  const code = (err as { code?: unknown })?.code;
+  if (code === "23505") return true;
+  const causeCode = (err as { cause?: { code?: unknown } })?.cause?.code;
+  return causeCode === "23505";
+}
+
 /** Claims or changes a handle (already validated by handleSchema). */
 export async function setHandle(
   userId: string,
@@ -65,8 +73,9 @@ export async function setHandle(
   try {
     await db.update(profiles).set({ handle, handleChangedAt: now }).where(eq(profiles.userId, userId));
     return "ok";
-  } catch {
-    return "taken"; // unique index race
+  } catch (err) {
+    if (isUniqueViolation(err)) return "taken"; // unique index race
+    throw err;
   }
 }
 

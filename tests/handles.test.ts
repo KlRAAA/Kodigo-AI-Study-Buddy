@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { handleSchema } from "@/lib/handle";
-import { getOrCreateProfile, getProfileByHandle, setHandle } from "@/server/db/queries/profiles";
+import { getOrCreateProfile, getProfileByHandle, isUniqueViolation, setHandle } from "@/server/db/queries/profiles";
 import { createTestDb } from "./helpers/db";
 
 describe("handle format", () => {
@@ -11,6 +11,22 @@ describe("handle format", () => {
     expect(handleSchema.safeParse("bad-name").success).toBe(false);
     expect(handleSchema.safeParse("admin").success).toBe(false);
     expect(handleSchema.safeParse("Explore").success).toBe(false);
+  });
+});
+
+describe("isUniqueViolation", () => {
+  it("recognizes a 23505 code directly on the error", () => {
+    expect(isUniqueViolation({ code: "23505" })).toBe(true);
+  });
+
+  it("recognizes a 23505 code wrapped in err.cause (Drizzle's driver-error wrapping)", () => {
+    expect(isUniqueViolation({ cause: { code: "23505" } })).toBe(true);
+  });
+
+  it("does not treat other errors as a unique violation", () => {
+    expect(isUniqueViolation({ code: "08006" })).toBe(false); // connection failure
+    expect(isUniqueViolation(new Error("connection dropped"))).toBe(false);
+    expect(isUniqueViolation(null)).toBe(false);
   });
 });
 

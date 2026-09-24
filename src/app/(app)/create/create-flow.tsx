@@ -117,13 +117,13 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
       </div>
 
       {source === "pdf" && (
-        <FilePicker accept="application/pdf,.pdf" label={t("pickPdf")} hint={t("pdfHint")} onFile={(f) => onFile(f, "pdf")} />
+        <FilePicker accept="application/pdf,.pdf" label={t("pickPdf")} hint={t("pdfHint", { mb: UPLOAD_LIMITS.maxPdfBytes / 1024 / 1024, pages: UPLOAD_LIMITS.maxPdfPages })} onFile={(f) => onFile(f, "pdf")} />
       )}
       {source === "pptx" && (
         <FilePicker
           accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation"
           label={t("pickPptx")}
-          hint={t("pptxHint")}
+          hint={t("pptxHint", { mb: UPLOAD_LIMITS.maxPptxBytes / 1024 / 1024 })}
           onFile={(f) => onFile(f, "pptx")}
         />
       )}
@@ -195,6 +195,7 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
       )}
 
       {error && <ErrorMessage code={error} />}
+      {tooLong && !error && <ErrorMessage code="too_long" />}
       {generating ? (
         <GeneratingProgress />
       ) : (

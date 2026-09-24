@@ -41,9 +41,10 @@ export function readLimits(env: Record<string, string | undefined> = process.env
 // Upload caps, shared by the browser (before parsing) and the server (on the text/images we receive).
 export const UPLOAD_LIMITS = {
   maxPhotos: 4,
-  maxPdfBytes: 10 * 1024 * 1024,
-  maxPdfPages: 30,
-  maxPptxBytes: 10 * 1024 * 1024,
+  // Files are parsed on the phone and never uploaded; only the text (capped by MAX_INPUT_CHARS) is sent.
+  maxPdfBytes: 50 * 1024 * 1024,
+  maxPdfPages: 60,
+  maxPptxBytes: 50 * 1024 * 1024,
   maxImageDimension: 1600,
   /** Base64 JPEG after compression; ~1.5 MB per photo is plenty at 1600px. */
   maxImageDataUrlChars: 2_000_000,

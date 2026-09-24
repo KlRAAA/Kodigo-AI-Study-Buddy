@@ -20,7 +20,7 @@ All counters live in Postgres (`usage_counters`, `rate_events`, `global_usage`) 
 - If every model fails, the unit is **refunded**.
 - Suspended users (admin page) can still study but can't use AI.
 
-Upload caps (checked in the browser and again on the server): 4 photos per generation (≤1600px JPEG), PDF ≤ 10 MB and 30 pages, PPTX ≤ 10 MB.
+Upload caps (checked in the browser and again on the server): 4 photos per generation (≤1600px JPEG), PDF ≤ 50 MB and 60 pages, PPTX ≤ 50 MB. Files are parsed on the phone and never uploaded, so these caps only protect the phone; the text sent to the server is capped by `MAX_INPUT_CHARS`. Change them in `UPLOAD_LIMITS` (`src/server/limits/config.ts`).
 
 ## Global budget
 

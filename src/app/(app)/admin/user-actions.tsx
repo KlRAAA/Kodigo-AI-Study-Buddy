@@ -9,7 +9,7 @@ export function UserActions({ userId, suspended }: { userId: string; suspended: 
   const t = useTranslations("admin");
   const [pending, startTransition] = useTransition();
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2 [&>button]:whitespace-nowrap">
       <Button
         size="sm"
         variant={suspended ? "secondary" : "danger"}

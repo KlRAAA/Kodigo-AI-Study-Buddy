@@ -32,7 +32,12 @@ export function DisplayNameForm({ initial }: { initial: string }) {
       <Label htmlFor="display-name">{t("name")}</Label>
       <div className="flex gap-2">
         <Input id="display-name" value={name} maxLength={60} onChange={(e) => { setName(e.target.value); setSaved(false); }} />
-        <Button type="submit" variant="secondary" disabled={pending || !name.trim() || name === initial}>
+        <Button
+          type="submit"
+          variant="secondary"
+          className="shrink-0 whitespace-nowrap"
+          disabled={pending || !name.trim() || name === initial}
+        >
           {t("save")}
         </Button>
       </div>

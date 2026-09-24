@@ -19,3 +19,9 @@ export type GeneratedCard = z.infer<typeof cardSchema>;
 export const extractedTextSchema = z.object({
   text: z.string().max(20000),
 });
+
+export const moderationSchema = z.object({
+  verdict: z.enum(["allow", "review", "block"]),
+  categories: z.array(z.string()).max(10).catch([]),
+  reason: z.string().max(300).nullish().transform((r) => r ?? null),
+});

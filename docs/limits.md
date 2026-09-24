@@ -14,6 +14,9 @@ All counters live in Postgres (`usage_counters`, `rate_events`, `global_usage`) 
 | Requests per minute | `REQUESTS_PER_MINUTE_PER_USER` | 5 | Any AI action (sliding 60-second window) |
 | Max input size | `MAX_INPUT_CHARS` | 60,000 | Characters of notes per generation |
 | Sign-ups per IP per hour | `SIGNUPS_PER_IP_PER_HOUR` | 3 | On top of Turnstile; IPs are stored hashed |
+| Shares per day | `DAILY_SHARES_PER_USER` | 10 | Sharing a set by link or publishing it publicly |
+| Reports per day | `DAILY_REPORTS_PER_USER` | 20 | Reporting a shared set |
+| Follows per day | `DAILY_FOLLOWS_PER_USER` | 100 | Following another user |
 
 - The day resets at **midnight Asia/Manila** (UTC+8).
 - **Cached results are free.** The cache key is sha256(task + language + normalized notes). The same notes in the same language return the stored result without calling the AI or using allowance.
@@ -21,6 +24,18 @@ All counters live in Postgres (`usage_counters`, `rate_events`, `global_usage`) 
 - Suspended users (admin page) can still study but can't use AI.
 
 Upload caps (checked in the browser and again on the server): 4 photos per generation (≤1600px JPEG), PDF ≤ 50 MB and 60 pages, PPTX ≤ 50 MB. Files are parsed on the phone and never uploaded, so these caps only protect the phone; the text sent to the server is capped by `MAX_INPUT_CHARS`. Change them in `UPLOAD_LIMITS` (`src/server/limits/config.ts`).
+
+## Moderation
+
+Sharing a set by link or publishing it publicly runs it through automatic screening: links are checked against Google Safe Browsing first (cheap, decisive), then the text is sent to the AI moderator chunk by chunk, worst verdict wins. Screening counts against the global AI budget below and is cached by content hash (sha256 of title + subject + summary + cards), so re-screening unchanged content is free. If Safe Browsing or every AI model is unavailable, the set isn't published.
+
+A set that reaches **3 open reports** is automatically hidden from Explore and pulled for admin review. An admin can approve it (clears its reports) or take it down, which gives the owner a strike:
+
+- **1st strike:** set removed.
+- **2nd strike:** set removed, sharing blocked for 30 days.
+- **3rd strike:** the user is banned (sets made private, sessions revoked, email hash blocklisted against re-sign-up).
+
+An admin can also ban directly on take-down regardless of strike count.
 
 ## Global budget
 

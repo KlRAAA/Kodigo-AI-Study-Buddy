@@ -20,6 +20,15 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - PWA: installable, offline page, recently opened sets study offline
 - Delete my account, Privacy and Terms (EN/TL)
 
+**Community**
+- Share a set by link, or publish it publicly after automatic screening
+- Copy a shared set into your own library
+- Star ratings on shared sets
+- Public profiles at `/u/handle`
+- Follow other users, and a follow feed on Home
+- Explore page to browse and search public sets
+- Report a set, admin strikes and bans, Community Guidelines
+
 **Coming next:** practice tests, spaced repetition (SM-2), AI tutor, explain/example buttons (Phase 2) · match game, streaks, Pomodoro, exam countdown (Phase 3) · Quizlet-style import, sharing, export, dark-mode toggle (Phase 4).
 
 ## Stack
@@ -126,6 +135,8 @@ Scripts:
    - `GROQ_API_KEY`: console.groq.com → API Keys
    - `OPENROUTER_API_KEY`: openrouter.ai → Keys
    - `AI_TEXT_CHAIN`, `AI_VISION_CHAIN`, limits, `ADMIN_EMAILS`, and `NEXT_PUBLIC_APP_URL` (your Vercel URL)
+   - `SAFE_BROWSING_API_KEY`: Google Cloud console → enable the Safe Browsing API → Credentials → API key restricted to that API
+   - `DAILY_SHARES_PER_USER`, `DAILY_REPORTS_PER_USER`, `DAILY_FOLLOWS_PER_USER`: community limits (see [docs/limits.md](docs/limits.md))
 4. **Allow your domain:**
    - Cloudflare Turnstile → your widget → **Hostnames**: add `your-app.vercel.app` (and any custom domain)
    - Neon console → Auth → **Trusted domains / redirect URLs**: add `https://your-app.vercel.app`

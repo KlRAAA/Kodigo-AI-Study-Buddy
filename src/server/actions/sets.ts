@@ -112,7 +112,11 @@ export async function updateSetMetaAction(input: z.input<typeof metaSchema>): Pr
   const parsed = metaSchema.safeParse(input);
   if (!parsed.success) return fail("invalid_input");
   const { setId, title, subject } = parsed.data;
-  const found = await updateSet(me.user.id, setId, { title, subject: subject || null });
+  // Omitted subject = keep it (rename from list cards only sends a title).
+  const found = await updateSet(me.user.id, setId, {
+    title,
+    ...(subject === undefined ? {} : { subject: subject || null }),
+  });
   if (!found) return fail("not_found");
   revalidatePath(`/sets/${setId}`);
   return ok(null);

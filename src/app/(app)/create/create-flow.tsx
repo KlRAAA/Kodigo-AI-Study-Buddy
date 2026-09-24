@@ -94,6 +94,11 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
 
   return (
     <div className="space-y-5">
+      <div>
+        <Label htmlFor="title">{t("setTitle")}</Label>
+        <Input id="title" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t("setTitlePlaceholder")} />
+      </div>
+
       <div role="tablist" aria-label={t("sourceLabel")} className="grid grid-cols-4 gap-2">
         {sources.map(({ value, Icon }) => (
           <button
@@ -170,10 +175,6 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
 
       {text && (
         <div className="space-y-4 rounded-3xl bg-surface p-4">
-          <div>
-            <Label htmlFor="title">{t("setTitle")}</Label>
-            <Input id="title" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t("setTitlePlaceholder")} />
-          </div>
           <div>
             <Label htmlFor="subject">{t("subject")}</Label>
             <Input id="subject" value={subject} maxLength={80} onChange={(e) => setSubject(e.target.value)} placeholder={t("subjectPlaceholder")} />

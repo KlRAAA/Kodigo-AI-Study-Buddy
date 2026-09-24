@@ -2,6 +2,7 @@ import { Brain, CalendarClock, Layers } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { SetCardActions } from "@/components/set-card-actions";
 import { requireUser } from "@/server/auth";
 import { listSetsWithDue } from "@/server/db/queries/sets";
 
@@ -45,13 +46,16 @@ export default async function ReviewPage() {
         <ul className="space-y-3">
           {sets.map((s) => (
             <li key={s.id} className="space-y-3 rounded-2xl border border-border bg-surface p-4">
-              <Link href={`/sets/${s.id}`} className="block">
-                <span className="block truncate font-bold">{s.title}</span>
-                <span className="block text-sm text-muted">
-                  {t("setDue", { due: s.dueCount, total: s.cardCount })}
-                  {s.subject ? ` · ${s.subject}` : ""}
-                </span>
-              </Link>
+              <div className="flex items-start gap-2">
+                <Link href={`/sets/${s.id}`} className="block min-w-0 flex-1">
+                  <span className="block truncate font-bold">{s.title}</span>
+                  <span className="block text-sm text-muted">
+                    {t("setDue", { due: s.dueCount, total: s.cardCount })}
+                    {s.subject ? ` · ${s.subject}` : ""}
+                  </span>
+                </Link>
+                <SetCardActions setId={s.id} title={s.title} />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <Link
                   href={`/sets/${s.id}/flashcards`}

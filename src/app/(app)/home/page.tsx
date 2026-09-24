@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AllowanceChip } from "@/components/allowance-chip";
+import { SetCardActions } from "@/components/set-card-actions";
 import { requireUser } from "@/server/auth";
 import { countDueCards, listSets } from "@/server/db/queries/sets";
 import type { SourceType } from "@/server/db/schema";
@@ -73,10 +74,10 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
             {sets.map((s) => {
               const Icon = sourceIcons[s.sourceType];
               return (
-                <li key={s.id}>
+                <li key={s.id} className="flex items-center gap-1 rounded-2xl border border-border bg-surface pr-1">
                   <Link
                     href={`/sets/${s.id}`}
-                    className="flex items-center gap-3 rounded-2xl border border-border bg-surface p-4 active:bg-surface-2"
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl p-4 active:bg-surface-2"
                   >
                     <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
                       <Icon aria-hidden className="size-5" />
@@ -89,6 +90,7 @@ export default async function HomePage({ searchParams }: PageProps<"/home">) {
                       </span>
                     </span>
                   </Link>
+                  <SetCardActions setId={s.id} title={s.title} />
                 </li>
               );
             })}

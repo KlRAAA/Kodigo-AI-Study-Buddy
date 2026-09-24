@@ -36,6 +36,8 @@ describe("readLimits", () => {
     expect(l.daily.share).toBe(4);
     expect(l.daily.report).toBe(20);
     expect(l.daily.follow).toBe(100);
+    expect(l.daily.copy).toBe(30);
+    expect(readLimits({ DAILY_COPIES_PER_USER: "5" }).daily.copy).toBe(5);
   });
 });
 

@@ -1,6 +1,7 @@
 import {
   type AnyPgColumn,
   boolean,
+  check,
   date,
   index,
   integer,
@@ -15,6 +16,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // User ids come from Neon Auth (neon_auth schema). We store them as text and
 // never add a cross-schema FK so Drizzle only manages the `public` schema.
@@ -24,7 +26,7 @@ export const outputLangEnum = pgEnum("output_lang", ["auto", "en", "tl"]);
 export const sourceTypeEnum = pgEnum("source_type", ["text", "pdf", "pptx", "photo", "quizlet"]);
 export const setStatusEnum = pgEnum("set_status", ["draft", "generating", "ready", "failed"]);
 export const questionTypeEnum = pgEnum("question_type", ["mcq", "true_false", "short"]);
-export const usageKindEnum = pgEnum("usage_kind", ["generation", "tutor", "assist", "share", "report", "follow"]);
+export const usageKindEnum = pgEnum("usage_kind", ["generation", "tutor", "assist", "share", "report", "follow", "copy"]);
 export const tutorRoleEnum = pgEnum("tutor_role", ["user", "assistant"]);
 export const visibilityEnum = pgEnum("visibility", ["private", "link", "public"]);
 export const moderationStatusEnum = pgEnum("moderation_status", [
@@ -297,7 +299,11 @@ export const setRatings = pgTable(
     stars: smallint("stars").notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [primaryKey({ columns: [t.setId, t.userId] }), index("set_ratings_user_idx").on(t.userId)],
+  (t) => [
+    primaryKey({ columns: [t.setId, t.userId] }),
+    index("set_ratings_user_idx").on(t.userId),
+    check("set_ratings_stars_check", sql`${t.stars} between 1 and 5`),
+  ],
 );
 
 export const follows = pgTable(
@@ -307,7 +313,11 @@ export const follows = pgTable(
     followeeId: text("followee_id").notNull(),
     createdAt: createdAt(),
   },
-  (t) => [primaryKey({ columns: [t.followerId, t.followeeId] }), index("follows_followee_idx").on(t.followeeId)],
+  (t) => [
+    primaryKey({ columns: [t.followerId, t.followeeId] }),
+    index("follows_followee_idx").on(t.followeeId),
+    check("follows_not_self_check", sql`${t.followerId} <> ${t.followeeId}`),
+  ],
 );
 
 export const followBlocks = pgTable(

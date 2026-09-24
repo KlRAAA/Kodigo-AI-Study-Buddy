@@ -16,6 +16,7 @@ export async function copySetAction(setId: string): Promise<ActionResult<{ id: s
   const me = await actionUser();
   if (!me) return fail("unauthorized");
   if (!uuid.safeParse(setId).success) return fail("invalid_input");
+  if ((await consumeDaily(me.user.id, "copy", readLimits().daily.copy)) === null) return fail("community_limit");
   const res = await copySet(me.user.id, setId);
   if (res === "not_found") return fail("not_found");
   if (res === "own_set") return fail("own_set");

@@ -47,7 +47,7 @@ export async function getDailyUsage(userId: string, now = new Date()) {
     .select({ kind: usageCounters.kind, count: usageCounters.count })
     .from(usageCounters)
     .where(and(eq(usageCounters.userId, userId), eq(usageCounters.day, manilaDay(now))));
-  const used: Record<UsageKind, number> = { generation: 0, tutor: 0, assist: 0, share: 0, report: 0, follow: 0 };
+  const used: Record<UsageKind, number> = { generation: 0, tutor: 0, assist: 0, share: 0, report: 0, follow: 0, copy: 0 };
   for (const r of rows) used[r.kind] = r.count;
   return used;
 }

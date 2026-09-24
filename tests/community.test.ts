@@ -53,6 +53,30 @@ describe("copy", () => {
     expect((await getSet(B, copy.id))?.title).toBe("Rocks");
     expect((await getSet(A, setId))?.copyCount).toBe(1);
   });
+
+  it("counts each person's copies once", async () => {
+    const setId = await publish(A, "alice", "Rocks");
+    await getOrCreateProfile(B);
+    await getOrCreateProfile(C);
+    await copySet(B, setId);
+    await copySet(B, setId);
+    expect((await getSet(A, setId))?.copyCount).toBe(1);
+    await copySet(C, setId);
+    expect((await getSet(A, setId))?.copyCount).toBe(2);
+  });
+});
+
+describe("database checks", () => {
+  beforeEach(async () => {
+    await createTestDb();
+  });
+
+  it("rejects out-of-range stars and self-follows at the database level", async () => {
+    const setId = await publish(A, "alice", "Rocks");
+    await expect(getDb().insert(setRatings).values({ setId, userId: B, stars: 6 })).rejects.toThrow();
+    await expect(getDb().insert(setRatings).values({ setId, userId: B, stars: 0 })).rejects.toThrow();
+    await expect(getDb().insert(follows).values({ followerId: A, followeeId: A })).rejects.toThrow();
+  });
 });
 
 describe("ratings", () => {

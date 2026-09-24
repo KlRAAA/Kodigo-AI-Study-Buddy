@@ -43,6 +43,12 @@ export async function copySet(userId: string, setId: string): Promise<{ id: stri
   if (!src) return "not_found";
   if (src.ownerId === userId) return "own_set";
   const db = getDb();
+  // copy_count counts people, not copies: only a user's first copy counts.
+  const earlier = await db
+    .select({ id: studySets.id })
+    .from(studySets)
+    .where(and(eq(studySets.userId, userId), eq(studySets.copiedFromSetId, src.id)))
+    .limit(1);
   const [created] = await db
     .insert(studySets)
     .values({
@@ -65,7 +71,9 @@ export async function copySet(userId: string, setId: string): Promise<{ id: stri
   if (srcCards.length > 0) {
     await db.insert(cards).values(srcCards.map((c) => ({ ...c, setId: created!.id, userId })));
   }
-  await db.update(studySets).set({ copyCount: sql`${studySets.copyCount} + 1` }).where(eq(studySets.id, src.id));
+  if (earlier.length === 0) {
+    await db.update(studySets).set({ copyCount: sql`${studySets.copyCount} + 1` }).where(eq(studySets.id, src.id));
+  }
   return { id: created!.id };
 }
 

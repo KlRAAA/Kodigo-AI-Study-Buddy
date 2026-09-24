@@ -580,5 +580,20 @@
     "email": "Enter a valid email address, like juan@gmail.com.",
     "password": "Use at least 8 characters.",
     "code": "Enter the code from your email (numbers only)."
+  },
+  "camera": {
+    "title": "Camera",
+    "close": "Close camera",
+    "switch": "Switch camera",
+    "count": "{taken} of {max} photos",
+    "snap": "Take photo",
+    "done": "Done",
+    "starting": "Starting camera…",
+    "fallback": "Use your phone's camera app instead",
+    "error": {
+      "denied": "Camera permission was blocked. Allow the camera for this site in your browser settings, or use your phone's camera app.",
+      "unavailable": "No camera was found on this device.",
+      "failed": "The camera couldn't start. Try again or use your phone's camera app."
+    }
   }
 }

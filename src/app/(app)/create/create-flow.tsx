@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { ErrorMessage } from "@/components/form";
 import { Alert, Button, Input, Label, ProgressBar, Segmented, Textarea } from "@/components/ui";
+import { CameraCapture, canUseLiveCamera } from "@/components/camera-capture";
 import { compressImage } from "@/lib/image-compress";
 import { cn } from "@/lib/utils";
 import { createSetAction, extractPhotoTextAction } from "@/server/actions/sets";
@@ -250,6 +251,13 @@ function PhotoPicker({ busy, onExtract }: { busy: boolean; onExtract: (images: s
   const [images, setImages] = useState<string[]>([]);
   const [compressing, setCompressing] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
+
+  function takePhoto() {
+    // Live camera when the browser supports it; otherwise the phone's own camera picker.
+    if (canUseLiveCamera()) setCameraOpen(true);
+    else cameraRef.current?.click();
+  }
 
   async function add(files: FileList | null) {
     if (!files) return;
@@ -275,7 +283,7 @@ function PhotoPicker({ busy, onExtract }: { busy: boolean; onExtract: (images: s
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="sr-only" aria-label={t("takePhoto")} onChange={(e) => { void add(e.target.files); e.target.value = ""; }} />
       <input ref={galleryRef} type="file" accept="image/*" multiple className="sr-only" aria-label={t("choosePhotos")} onChange={(e) => { void add(e.target.files); e.target.value = ""; }} />
       <div className="grid grid-cols-2 gap-2">
-        <Button variant="secondary" disabled={full || compressing} onClick={() => cameraRef.current?.click()}>
+        <Button variant="secondary" disabled={full || compressing} onClick={takePhoto}>
           <Camera aria-hidden className="size-5" /> {t("takePhoto")}
         </Button>
         <Button variant="secondary" disabled={full || compressing} onClick={() => galleryRef.current?.click()}>
@@ -283,6 +291,17 @@ function PhotoPicker({ busy, onExtract }: { busy: boolean; onExtract: (images: s
         </Button>
       </div>
       <p className="text-center text-xs text-muted">{t("photoHint", { max: UPLOAD_LIMITS.maxPhotos })}</p>
+      {cameraOpen && (
+        <CameraCapture
+          remaining={UPLOAD_LIMITS.maxPhotos - images.length}
+          onCapture={(url) => setImages((prev) => [...prev, url].slice(0, UPLOAD_LIMITS.maxPhotos))}
+          onClose={() => setCameraOpen(false)}
+          onFallback={() => {
+            setCameraOpen(false);
+            cameraRef.current?.click();
+          }}
+        />
+      )}
       {failed && <Alert tone="info">{t("photoFailed")}</Alert>}
       {images.length > 0 && (
         <ul className="grid grid-cols-4 gap-2">

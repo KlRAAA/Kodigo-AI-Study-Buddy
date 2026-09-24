@@ -580,5 +580,20 @@
     "email": "Maglagay ng tamang email, tulad ng juan@gmail.com.",
     "password": "Gumamit ng hindi bababa sa 8 characters.",
     "code": "Ilagay ang code mula sa email mo (numero lang)."
+  },
+  "camera": {
+    "title": "Camera",
+    "close": "Isara ang camera",
+    "switch": "Palitan ang camera",
+    "count": "{taken} sa {max} na photos",
+    "snap": "Kumuha ng picture",
+    "done": "Tapos na",
+    "starting": "Binubuksan ang camera…",
+    "fallback": "Gamitin na lang ang camera app ng phone mo",
+    "error": {
+      "denied": "Naka-block ang pahintulot sa camera. Payagan ang camera para sa site na ito sa settings ng browser mo, o gamitin ang camera app ng phone mo.",
+      "unavailable": "Walang nakitang camera sa device na ito.",
+      "failed": "Hindi mabuksan ang camera. Subukan ulit o gamitin ang camera app ng phone mo."
+    }
   }
 }

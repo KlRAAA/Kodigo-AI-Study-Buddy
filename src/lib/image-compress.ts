@@ -6,9 +6,9 @@ export function fitWithin(width: number, height: number, max: number) {
   return { width: Math.round(width * scale), height: Math.round(height * scale) };
 }
 
-/** Compresses a photo in the browser to a ≤1600px JPEG data URL. The browser applies EXIF orientation. */
+/** Compresses a photo (file or camera snapshot) to a ≤1600px JPEG data URL. The browser applies EXIF orientation. */
 export async function compressImage(
-  file: File,
+  file: Blob,
   max: number = UPLOAD_LIMITS.maxImageDimension,
 ): Promise<string> {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });

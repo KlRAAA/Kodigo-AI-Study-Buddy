@@ -13,8 +13,10 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - AI summary (markdown) + 10–60 flashcards, with an output-language override (Auto / English / Tagalog)
 - Edit, add, delete and star cards
 - **Flashcards**: tap to flip, swipe, shuffle, starred only
-- **Learn**: multiple choice, true/false and type-the-answer with lenient matching; missed cards come back until mastered
+- **Learn**: multiple choice, true/false, identification and enumeration questions with explanations, lenient answer matching; missed cards come back until mastered
 - Library with search, "due today" count and remaining AI allowance
+- Read-aloud
+- Dark mode
 - AI router with automatic fallback across Gemini, Groq and OpenRouter, a result cache, and per-user + global limits
 - Admin page: usage, model health, suspend and reset
 - PWA: installable, offline page, recently opened sets study offline
@@ -29,7 +31,7 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - Explore page to browse and search public sets
 - Report a set, admin strikes and bans, Community Guidelines
 
-**Coming next:** practice tests, spaced repetition (SM-2), AI tutor, explain/example buttons (Phase 2) · match game, streaks, Pomodoro, exam countdown (Phase 3) · Quizlet-style import, sharing, export, dark-mode toggle (Phase 4).
+**Coming next:** practice tests, spaced repetition (SM-2), AI tutor, explain/example buttons (Phase 2) · match game, streaks, Pomodoro, exam countdown (Phase 3) · Quizlet-style import, export (Phase 4).
 
 ## Stack
 
@@ -136,7 +138,7 @@ Scripts:
    - `OPENROUTER_API_KEY`: openrouter.ai → Keys
    - `AI_TEXT_CHAIN`, `AI_VISION_CHAIN`, limits, `ADMIN_EMAILS`, and `NEXT_PUBLIC_APP_URL` (your Vercel URL)
    - `SAFE_BROWSING_API_KEY`: Google Cloud console → enable the Safe Browsing API → Credentials → API key restricted to that API
-   - `DAILY_SHARES_PER_USER`, `DAILY_REPORTS_PER_USER`, `DAILY_FOLLOWS_PER_USER`: community limits (see [docs/limits.md](docs/limits.md))
+   - `DAILY_SHARES_PER_USER`, `DAILY_REPORTS_PER_USER`, `DAILY_FOLLOWS_PER_USER`, `DAILY_COPIES_PER_USER`: community limits (see [docs/limits.md](docs/limits.md))
 4. **Allow your domain:**
    - Cloudflare Turnstile → your widget → **Hostnames**: add `your-app.vercel.app` (and any custom domain)
    - Neon console → Auth → **Trusted domains / redirect URLs**: add `https://your-app.vercel.app`
@@ -145,6 +147,11 @@ Scripts:
    DATABASE_URL="<production pooled url>" npm run db:migrate
    ```
    Then redeploy in Vercel so the new env vars take effect.
+
+   **Upgrading an existing deployment** (one that runs the version before community sharing): migration `0002` drops the old `is_public` column that the previous version still reads, so apply the migrations in two steps:
+   1. Apply `0001` only: in a local checkout, temporarily remove the `0002` and `0003` entries from `drizzle/meta/_journal.json` (don't commit this), then run `npm run db:migrate`.
+   2. Deploy the new code.
+   3. Restore the journal (`git checkout drizzle/meta/_journal.json`) and run `npm run db:migrate` again to apply `0002` and `0003`.
 6. **Install on iPhone.** Open the site in **Safari** → tap **Share** → **Add to Home Screen** → **Add**. Kodigo now opens full screen like a native app.
 
 ## Changing AI models or limits

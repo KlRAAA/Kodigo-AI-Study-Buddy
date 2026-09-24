@@ -17,6 +17,7 @@ All counters live in Postgres (`usage_counters`, `rate_events`, `global_usage`) 
 | Shares per day | `DAILY_SHARES_PER_USER` | 10 | Sharing a set by link or publishing it publicly |
 | Reports per day | `DAILY_REPORTS_PER_USER` | 20 | Reporting a shared set |
 | Follows per day | `DAILY_FOLLOWS_PER_USER` | 100 | Following another user |
+| Copies per day | `DAILY_COPIES_PER_USER` | 30 | Copying someone else's shared set |
 
 - The day resets at **midnight Asia/Manila** (UTC+8).
 - **Cached results are free.** The cache key is sha256(task + language + normalized notes). The same notes in the same language return the stored result without calling the AI or using allowance.
@@ -31,7 +32,7 @@ Sharing a set by link or publishing it publicly runs it through automatic screen
 
 A set that reaches **3 open reports** is automatically hidden from Explore and pulled for admin review. An admin can approve it (clears its reports) or take it down, which gives the owner a strike:
 
-- **1st strike:** set removed.
+- **1st strike:** set removed + warning.
 - **2nd strike:** set removed, sharing blocked for 30 days.
 - **3rd strike:** the user is banned (sets made private, sessions revoked, email hash blocklisted against re-sign-up).
 

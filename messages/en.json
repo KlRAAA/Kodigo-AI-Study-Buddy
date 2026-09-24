@@ -237,7 +237,8 @@
     "stopSpeaking": "Stop reading",
     "describesOther": "That definition describes <strong>{term}</strong>.",
     "termMeans": "<strong>{term}</strong> means:",
-    "youPicked": "You picked <strong>{term}</strong>, which means:"
+    "youPicked": "You picked <strong>{term}</strong>, which means:",
+    "choices": "Choices"
   },
   "review": {
     "title": "Review",

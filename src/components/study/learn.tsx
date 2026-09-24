@@ -21,6 +21,7 @@ import {
 } from "@/lib/learn";
 import { cn } from "@/lib/utils";
 import type { StudyCard } from "@/server/actions/sets";
+import { SpeakButton } from "./speak-button";
 
 type Feedback = { correct: boolean; expected: string; missed?: string[]; picked?: string } | null;
 
@@ -132,6 +133,18 @@ export function Learn({ cards }: { cards: StudyCard[] }) {
       onChangeTypes={() => setSession(null)}
     />
   );
+}
+
+/** Everything a listener needs to answer the question, as one sentence stream. */
+function questionSpeech(question: Question, label: string, choicesLabel: string) {
+  switch (question.kind) {
+    case "mcq":
+      return `${label}. ${question.prompt}. ${choicesLabel}: ${question.choices.join(", ")}.`;
+    case "true_false":
+      return `${question.term}. ${question.shownDefinition}. ${label}`;
+    default:
+      return `${label}. ${question.prompt}.`;
+  }
 }
 
 /** Why an answer was wrong: what the terms involved actually mean. */
@@ -251,7 +264,8 @@ function LearnSession({
         </button>
       </div>
 
-      <div className="rounded-3xl border border-border bg-surface p-6">
+      <div className="relative rounded-3xl border border-border bg-surface p-6 pr-16">
+        <SpeakButton text={questionSpeech(question, label, t("choices"))} className="absolute top-3 right-3" />
         <p className="text-xs font-bold tracking-wide text-muted uppercase">{label}</p>
         {question.kind === "true_false" ? (
           <>
@@ -382,10 +396,22 @@ function LearnSession({
 
       {feedback && (
         <div role="status" className={cn("space-y-3 rounded-3xl p-5", feedback.correct ? "bg-success-soft" : "bg-danger-soft")}>
-          <p className={cn("flex items-center gap-2 text-lg font-black", feedback.correct ? "text-success" : "text-danger")}>
-            {feedback.correct ? <Check aria-hidden className="size-6" /> : <X aria-hidden className="size-6" />}
-            {feedback.correct ? t("correct") : t("notQuite")}
-          </p>
+          <div className="flex items-start justify-between gap-2">
+            <p className={cn("flex items-center gap-2 text-lg font-black", feedback.correct ? "text-success" : "text-danger")}>
+              {feedback.correct ? <Check aria-hidden className="size-6" /> : <X aria-hidden className="size-6" />}
+              {feedback.correct ? t("correct") : t("notQuite")}
+            </p>
+            <SpeakButton
+              text={
+                feedback.correct
+                  ? t("correct")
+                  : feedback.missed
+                    ? `${t("notQuite")}. ${t("missed")} ${feedback.missed.join(", ")}`
+                    : `${t("notQuite")}. ${t("answerWas")} ${feedback.expected}`
+              }
+              className="-mt-1 shrink-0"
+            />
+          </div>
           {!feedback.correct &&
             (feedback.missed ? (
               <div className="break-words">

@@ -8,5 +8,6 @@ export async function actionUser(): Promise<{ user: SessionUser; profile: Profil
   const user = await getSessionUser();
   if (!user || !user.emailVerified) return null;
   const profile = await getOrCreateProfile(user.id, { displayName: user.name });
+  if (profile.bannedAt) return null;
   return { user, profile };
 }

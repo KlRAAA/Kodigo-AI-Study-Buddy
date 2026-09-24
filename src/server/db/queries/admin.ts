@@ -42,6 +42,10 @@ export async function setSuspended(userId: string, suspended: boolean) {
   await getDb().update(profiles).set({ isSuspended: suspended }).where(eq(profiles.userId, userId));
 }
 
+export async function emailForUser(userId: string): Promise<string | null> {
+  return (await emailsFor([userId])).get(userId) ?? null;
+}
+
 /** Emails live in Neon Auth's own schema. If it's unavailable we just show ids. */
 async function emailsFor(userIds: string[]): Promise<Map<string, string>> {
   const map = new Map<string, string>();

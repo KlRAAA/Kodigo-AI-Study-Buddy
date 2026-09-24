@@ -46,6 +46,7 @@ export async function requireUser(): Promise<{ user: SessionUser; profile: Profi
   if (!user) redirect("/auth/sign-in");
   if (!user.emailVerified) redirect(`/auth/verify?email=${encodeURIComponent(user.email)}`);
   const profile = await getOrCreateProfile(user.id, { displayName: user.name });
+  if (profile.bannedAt) redirect("/banned");
   return { user, profile };
 }
 

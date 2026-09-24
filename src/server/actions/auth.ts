@@ -4,10 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getAuth } from "../auth";
+import { isEmailBanned } from "../db/queries/moderation";
 import { getOrCreateProfile } from "../db/queries/profiles";
 import { consumeSignup } from "../db/queries/usage";
 import { readLimits } from "../limits/config";
 import { log } from "../log";
+import { hashEmail } from "../moderation/bans";
 import { clientIp, hashIp } from "../request";
 import { verifyTurnstile } from "../turnstile";
 import { isLocale, LOCALE_COOKIE } from "@/i18n/config";
@@ -54,6 +56,7 @@ export async function signUpAction(_prev: ActionResult | null, formData: FormDat
     return fail(typeof pw === "string" && pw.length < 8 ? "weak_password" : "invalid_input");
   }
   if (!(await checkTurnstile(formData))) return fail("captcha");
+  if (await isEmailBanned(hashEmail(parsed.data.email))) return fail("banned");
 
   const ip = await clientIp();
   if (ip && !(await consumeSignup(hashIp(ip), readLimits().signupsPerIpPerHour))) return fail("signup_throttled");

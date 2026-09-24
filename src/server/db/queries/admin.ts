@@ -1,5 +1,5 @@
 import "server-only";
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, eq, isNotNull, isNull, sql, type SQL } from "drizzle-orm";
 import { getDb } from "../client";
 import { profiles, usageCounters } from "../schema";
 import { manilaDay } from "@/lib/day";
@@ -16,25 +16,37 @@ export type AdminUserRow = {
   total: number;
 };
 
-/** Today's usage per user, heaviest users first. Admin-only (checked by the caller). */
+/**
+ * Today's usage per user: every banned user first (so they can always be unbanned),
+ * then the heaviest `limit` other users. Admin-only (checked by the caller).
+ */
 export async function usageToday(now = new Date(), limit = 100): Promise<AdminUserRow[]> {
   const day = manilaDay(now);
-  const rows = await getDb()
-    .select({
-      userId: profiles.userId,
-      displayName: profiles.displayName,
-      isSuspended: profiles.isSuspended,
-      bannedAt: profiles.bannedAt,
-      generation: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'generation'), 0)::int`,
-      tutor: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'tutor'), 0)::int`,
-      assist: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'assist'), 0)::int`,
-      total: sql<number>`coalesce(sum(${usageCounters.count}), 0)::int`,
-    })
-    .from(profiles)
-    .leftJoin(usageCounters, sql`${usageCounters.userId} = ${profiles.userId} and ${usageCounters.day} = ${day}`)
-    .groupBy(profiles.userId)
-    .orderBy(desc(sql`coalesce(sum(${usageCounters.count}), 0)`), desc(profiles.createdAt))
-    .limit(limit);
+  const total = sql`coalesce(sum(${usageCounters.count}), 0)`;
+  const query = (where: SQL) =>
+    getDb()
+      .select({
+        userId: profiles.userId,
+        displayName: profiles.displayName,
+        isSuspended: profiles.isSuspended,
+        bannedAt: profiles.bannedAt,
+        generation: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'generation'), 0)::int`,
+        tutor: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'tutor'), 0)::int`,
+        assist: sql<number>`coalesce(sum(${usageCounters.count}) filter (where ${usageCounters.kind} = 'assist'), 0)::int`,
+        total: sql<number>`coalesce(sum(${usageCounters.count}), 0)::int`,
+      })
+      .from(profiles)
+      .leftJoin(
+        usageCounters,
+        sql`${usageCounters.userId} = ${profiles.userId} and ${usageCounters.day} = ${day}`,
+      )
+      .where(where)
+      .groupBy(profiles.userId);
+  const [banned, active] = await Promise.all([
+    query(isNotNull(profiles.bannedAt)).orderBy(desc(profiles.bannedAt)),
+    query(isNull(profiles.bannedAt)).orderBy(desc(total), desc(profiles.createdAt)).limit(limit),
+  ]);
+  const rows = [...banned, ...active];
 
   const emails = await emailsFor(rows.map((r) => r.userId));
   return rows.map((r) => ({ ...r, email: emails.get(r.userId) ?? null }));

@@ -331,6 +331,7 @@
     "users": "Usage today",
     "usageLine": "Sets {generation} · Assist {assist} · Tutor {tutor}",
     "suspended": "Suspended",
+    "banned": "Banned",
     "suspend": "Suspend",
     "unsuspend": "Unsuspend",
     "resetCounters": "Reset today",
@@ -524,7 +525,8 @@
     "copiedFrom": "Copied from @{handle}",
     "summary": "Summary",
     "rateThis": "Rate this set",
-    "learnAfterCopy": "Copy it to use Learn mode and edit your own version."
+    "learnAfterCopy": "Copy it to use Learn mode and edit your own version.",
+    "yourSet": "This is your set. <link>Open it in your library</link> to edit or study it."
   },
   "community": {
     "rate": "Rate this set",

@@ -11,7 +11,7 @@ import { SpeakButton } from "./speak-button";
 export function Flashcards({
   cards: initial,
   online = true,
-  canStar = online,
+  canStar = true,
 }: {
   cards: StudyCard[];
   online?: boolean;

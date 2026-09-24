@@ -9,6 +9,7 @@ import { SharePanel } from "@/components/share/share-panel";
 import { requireUser } from "@/server/auth";
 import { listCards } from "@/server/db/queries/cards";
 import { getSet } from "@/server/db/queries/sets";
+import { appOrigin } from "@/server/request";
 import { CardEditor } from "./card-editor";
 import { SetHeader } from "./set-header";
 
@@ -31,6 +32,7 @@ export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
   const { user, profile, set } = await load((await params).id);
   const cards = await listCards(user.id, set.id);
   const t = await getTranslations("set");
+  const shareUrl = set.shareSlug ? `${await appOrigin()}/s/${set.shareSlug}` : null;
 
   return (
     <div className="space-y-5 py-4">
@@ -55,6 +57,15 @@ export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
         </Link>
       </div>
 
+      <SharePanel
+        setId={set.id}
+        visibility={set.visibility}
+        status={set.moderationStatus}
+        reasonCategories={(set.moderationReason ?? "").split(",").filter(Boolean)}
+        shareUrl={shareUrl}
+        handle={profile.handle}
+      />
+
       {set.summary && (
         <details open className="rounded-3xl border border-border bg-surface p-5">
           <summary className="cursor-pointer text-lg font-black">{t("summary")}</summary>
@@ -73,15 +84,6 @@ export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
           example: c.example,
           starred: c.starred,
         }))}
-      />
-
-      <SharePanel
-        setId={set.id}
-        visibility={set.visibility}
-        status={set.moderationStatus}
-        reasonCategories={(set.moderationReason ?? "").split(",").filter(Boolean)}
-        slug={set.shareSlug}
-        handle={profile.handle}
       />
     </div>
   );

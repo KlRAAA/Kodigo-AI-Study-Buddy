@@ -16,11 +16,12 @@ type Props = {
   visibility: Visibility;
   status: ModerationStatus;
   reasonCategories: string[];
-  slug: string | null;
+  /** Absolute share link, built on the server so it renders the same on both sides. */
+  shareUrl: string | null;
   handle: string | null;
 };
 
-export function SharePanel({ setId, visibility, status, reasonCategories, slug, handle: initialHandle }: Props) {
+export function SharePanel({ setId, visibility, status, reasonCategories, shareUrl: link, handle: initialHandle }: Props) {
   const t = useTranslations("share");
   const router = useRouter();
   const [handle, setHandle] = useState(initialHandle);
@@ -30,7 +31,6 @@ export function SharePanel({ setId, visibility, status, reasonCategories, slug, 
   const [copied, setCopied] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  const link = slug && typeof window !== "undefined" ? `${window.location.origin}/s/${slug}` : null;
   const isLive = visibility !== "private" && status === "approved";
 
   function apply(next: Visibility) {

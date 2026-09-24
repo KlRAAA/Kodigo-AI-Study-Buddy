@@ -102,7 +102,10 @@ export default async function AdminPage() {
                     {t("usageLine", { generation: r.generation, assist: r.assist, tutor: r.tutor })}
                   </p>
                 </div>
-                {r.isSuspended && <span className="shrink-0 rounded-full bg-danger-soft px-2 py-0.5 text-xs font-bold text-danger">{t("suspended")}</span>}
+                <div className="flex shrink-0 gap-1">
+                  {r.bannedAt && <span className="rounded-full bg-danger-soft px-2 py-0.5 text-xs font-bold text-danger">{t("banned")}</span>}
+                  {r.isSuspended && <span className="rounded-full bg-danger-soft px-2 py-0.5 text-xs font-bold text-danger">{t("suspended")}</span>}
+                </div>
               </div>
               <UserActions userId={r.userId} suspended={r.isSuspended} banned={Boolean(r.bannedAt)} />
             </li>

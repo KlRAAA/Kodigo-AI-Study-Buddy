@@ -49,6 +49,11 @@ export async function getShareState(userId: string, setId: string): Promise<Shar
   return rows[0] ?? null;
 }
 
+export async function isSetOwner(userId: string, setId: string): Promise<boolean> {
+  const rows = await getDb().select({ id: studySets.id }).from(studySets).where(ownSet(userId, setId)).limit(1);
+  return rows.length > 0;
+}
+
 export async function updateShareState(userId: string, setId: string, patch: Partial<Omit<ShareState, "reportCount">>) {
   await getDb().update(studySets).set(patch).where(ownSet(userId, setId));
 }

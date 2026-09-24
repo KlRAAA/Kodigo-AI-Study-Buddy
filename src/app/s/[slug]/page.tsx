@@ -11,7 +11,7 @@ import { ReportButton } from "@/components/public/report-button";
 import { Flashcards } from "@/components/study/flashcards";
 import { getSessionUser } from "@/server/auth";
 import { getMyRating } from "@/server/db/queries/community";
-import { getPublicSetBySlug } from "@/server/db/queries/sharing";
+import { getPublicSetBySlug, isSetOwner } from "@/server/db/queries/sharing";
 
 const SLUG = /^[0-9A-Za-z]{10}$/;
 
@@ -32,7 +32,8 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
   const t = await getTranslations("public");
   const user = await getSessionUser();
   const signedIn = Boolean(user?.emailVerified);
-  const myRating = signedIn && !("updating" in view) ? await getMyRating(user!.id, view.id) : null;
+  const isOwner = Boolean(user) && !("updating" in view) && (await isSetOwner(user!.id, view.id));
+  const myRating = signedIn && !isOwner && !("updating" in view) ? await getMyRating(user!.id, view.id) : null;
 
   return (
     <main className="pt-safe pb-safe mx-auto min-h-dvh max-w-xl px-4 pb-10">
@@ -55,14 +56,26 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
             {view.copiedFromHandle && <p className="text-xs text-muted">{t("copiedFrom", { handle: view.copiedFromHandle })}</p>}
           </div>
 
-          <div id="public-actions" className="space-y-3">
-            <CopyButton setId={view.id} signedIn={signedIn} />
-            <p className="text-xs text-muted">{t("learnAfterCopy")}</p>
-            <div className="flex items-center justify-between rounded-2xl bg-surface p-3">
-              <span className="text-sm font-bold">{t("rateThis")}</span>
-              <RatingStars setId={view.id} initial={myRating} signedIn={signedIn} />
+          {isOwner ? (
+            <p className="rounded-2xl bg-surface p-3 text-sm">
+              {t.rich("yourSet", {
+                link: (c) => (
+                  <Link href={`/sets/${view.id}`} className="font-bold text-primary underline">
+                    {c}
+                  </Link>
+                ),
+              })}
+            </p>
+          ) : (
+            <div id="public-actions" className="space-y-3">
+              <CopyButton setId={view.id} signedIn={signedIn} />
+              <p className="text-xs text-muted">{t("learnAfterCopy")}</p>
+              <div className="flex items-center justify-between rounded-2xl bg-surface p-3">
+                <span className="text-sm font-bold">{t("rateThis")}</span>
+                <RatingStars setId={view.id} initial={myRating} signedIn={signedIn} />
+              </div>
             </div>
-          </div>
+          )}
 
           <Flashcards cards={view.cards.map((c) => ({ ...c, starred: false }))} online={false} canStar={false} />
 
@@ -75,7 +88,7 @@ export default async function PublicSetPage({ params }: PageProps<"/s/[slug]">) 
             </details>
           )}
 
-          <ReportButton setId={view.id} signedIn={signedIn} />
+          {!isOwner && <ReportButton setId={view.id} signedIn={signedIn} />}
         </div>
       )}
     </main>

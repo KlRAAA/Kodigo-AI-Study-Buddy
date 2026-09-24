@@ -14,7 +14,9 @@ import {
 } from "@/server/db/queries/moderation";
 import { getOrCreateProfile, setHandle } from "@/server/db/queries/profiles";
 import { createSet } from "@/server/db/queries/sets";
-import { getPublicSetBySlug, getShareState, loadShareContent } from "@/server/db/queries/sharing";
+import { getPublicSetBySlug, getShareState, isSetOwner, loadShareContent } from "@/server/db/queries/sharing";
+import { usageToday } from "@/server/db/queries/admin";
+import { consumeDaily } from "@/server/db/queries/usage";
 import { getDb } from "@/server/db/client";
 import { profiles, studySets } from "@/server/db/schema";
 import { contentHash, type ShareContent } from "@/server/moderation/content";
@@ -211,5 +213,33 @@ describe("admin approve and the queue", () => {
     const hate = vi.fn(async () => ({ verdict: "block" as const, categories: ["hate"], reason: "x" }));
     await shareSet({ userId: OWNER, profile: { handle: "owner", shareBlockedUntil: null, bannedAt: null }, setId: other, visibility: "public", screen: hate });
     expect((await listModerationQueue()).map((q) => q.setId)).toEqual([setId]);
+  });
+});
+
+describe("admin user list", () => {
+  beforeEach(async () => {
+    await createTestDb();
+  });
+
+  it("always includes banned users, even past the row limit", async () => {
+    for (const id of ["u1", "u2", "u3"]) await getOrCreateProfile(id);
+    await consumeDaily("u1", "generation", 20);
+    await consumeDaily("u2", "generation", 20);
+    await banUser("u3", "severe", null);
+    const rows = await usageToday(new Date(), 1);
+    expect(rows.map((r) => r.userId)).toEqual(["u3", expect.any(String)]);
+    expect(rows[0]!.bannedAt).not.toBeNull();
+  });
+});
+
+describe("public page ownership", () => {
+  beforeEach(async () => {
+    await createTestDb();
+  });
+
+  it("isSetOwner is true only for the owner", async () => {
+    const { setId } = await sharedSet();
+    expect(await isSetOwner(OWNER, setId)).toBe(true);
+    expect(await isSetOwner("someone", setId)).toBe(false);
   });
 });

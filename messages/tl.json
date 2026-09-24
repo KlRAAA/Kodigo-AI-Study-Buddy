@@ -331,6 +331,7 @@
     "users": "Paggamit ngayon",
     "usageLine": "Sets {generation} · Assist {assist} · Tutor {tutor}",
     "suspended": "Suspended",
+    "banned": "Na-ban",
     "suspend": "I-suspend",
     "unsuspend": "Alisin ang suspend",
     "resetCounters": "I-reset ngayon",
@@ -524,7 +525,8 @@
     "copiedFrom": "Kinopya mula kay @{handle}",
     "summary": "Summary",
     "rateThis": "I-rate ang set na ito",
-    "learnAfterCopy": "Kopyahin para magamit ang Learn mode at ma-edit ang sarili mong bersyon."
+    "learnAfterCopy": "Kopyahin para magamit ang Learn mode at ma-edit ang sarili mong bersyon.",
+    "yourSet": "Set mo ito. <link>Buksan ito sa library mo</link> para i-edit o pag-aralan."
   },
   "community": {
     "rate": "I-rate ang set na ito",

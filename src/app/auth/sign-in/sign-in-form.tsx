@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useActionState } from "react";
-import { ErrorMessage, SubmitButton } from "@/components/form";
+import { ErrorMessage, SubmitButton, useFormChecks } from "@/components/form";
 import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Alert, Input, Label } from "@/components/ui";
@@ -19,6 +19,7 @@ export function SignInForm({
   const t = useTranslations("auth");
   const locale = useLocale();
   const [state, formAction] = useActionState(signInAction, null);
+  const checks = useFormChecks({ email: ["required", "email"], password: ["required"] });
 
   return (
     <div className="space-y-6">
@@ -27,14 +28,16 @@ export function SignInForm({
         <p className="mt-1 text-muted">{t("signInSubtitle")}</p>
       </div>
       {notice && <Alert tone="success">{t(`notice.${notice}`)}</Alert>}
-      <form action={formAction} className="space-y-4">
+      <form action={formAction} noValidate onSubmit={checks.onSubmit} className="space-y-4">
         <div>
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required />
+          <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required {...checks.field("email")} />
+          {checks.message("email")}
         </div>
         <div>
           <Label htmlFor="password">{t("password")}</Label>
-          <PasswordInput id="password" name="password" autoComplete="current-password" required />
+          <PasswordInput id="password" name="password" autoComplete="current-password" required {...checks.field("password")} />
+          {checks.message("password")}
         </div>
         <Turnstile siteKey={siteKey} language={locale} />
         {state && !state.ok && <ErrorMessage code={state.error} />}

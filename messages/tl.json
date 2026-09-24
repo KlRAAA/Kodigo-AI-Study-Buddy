@@ -210,7 +210,9 @@
     "unstar": "Tanggalin ang star",
     "editCard": "I-edit ang card",
     "deleteCard": "Burahin ang card",
-    "confirmDeleteCard": "Burahin ang card na ito?"
+    "confirmDeleteCard": "Burahin ang card na ito?",
+    "renameTitle": "Palitan ang pangalan",
+    "deleteConfirmButton": "Burahin"
   },
   "study": {
     "flashcards": "Flashcards",
@@ -343,7 +345,8 @@
     "takeDownBan": "Tanggalin + ban",
     "reasonPrompt": "Dahilan (makikita ng may-ari)",
     "confirmBan": "I-ban ang user na ito? Magiging private ang mga set nila at hindi na sila makakapag-log in.",
-    "unban": "Alisin ang ban"
+    "unban": "Alisin ang ban",
+    "continue": "Tuloy"
   },
   "offline": {
     "title": "Offline ka",
@@ -568,6 +571,14 @@
     "nonePublic": "Walang public set na tugma."
   },
   "common": {
-    "loading": "Naglo-load…"
+    "loading": "Naglo-load…",
+    "ok": "OK",
+    "cancel": "Kanselahin"
+  },
+  "validation": {
+    "required": "Pakisagutan ito.",
+    "email": "Maglagay ng tamang email, tulad ng juan@gmail.com.",
+    "password": "Gumamit ng hindi bababa sa 8 characters.",
+    "code": "Ilagay ang code mula sa email mo (numero lang)."
   }
 }

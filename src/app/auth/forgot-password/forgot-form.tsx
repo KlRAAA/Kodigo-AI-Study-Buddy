@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
-import { ErrorMessage, SubmitButton } from "@/components/form";
+import { ErrorMessage, SubmitButton, useFormChecks } from "@/components/form";
 import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Input, Label } from "@/components/ui";
@@ -22,6 +22,8 @@ export function ForgotPasswordForm({
   const locale = useLocale();
   const [requestState, requestAction] = useActionState(requestResetAction, null);
   const [resetState, resetAction] = useActionState(resetPasswordAction, null);
+  const requestChecks = useFormChecks({ email: ["required", "email"] });
+  const resetChecks = useFormChecks({ otp: ["required", "code"], password: ["required", "password"], confirmPassword: ["required"] });
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const mismatch = confirm.length > 0 && confirm !== password;
@@ -36,17 +38,18 @@ export function ForgotPasswordForm({
       </div>
 
       {step === "email" ? (
-        <form action={requestAction} className="space-y-4">
+        <form action={requestAction} noValidate onSubmit={requestChecks.onSubmit} className="space-y-4">
           <div>
             <Label htmlFor="email">{t("email")}</Label>
-            <Input id="email" name="email" type="email" autoComplete="email" defaultValue={email} required />
+            <Input id="email" name="email" type="email" autoComplete="email" defaultValue={email} required {...requestChecks.field("email")} />
+            {requestChecks.message("email")}
           </div>
           <Turnstile siteKey={siteKey} language={locale} />
           {requestState && !requestState.ok && <ErrorMessage code={requestState.error} />}
           <SubmitButton>{t("sendCode")}</SubmitButton>
         </form>
       ) : (
-        <form action={resetAction} className="space-y-4">
+        <form action={resetAction} noValidate onSubmit={resetChecks.onSubmit} className="space-y-4">
           <input type="hidden" name="email" value={email} />
           <div>
             <Label htmlFor="otp">{t("code")}</Label>
@@ -59,7 +62,9 @@ export function ForgotPasswordForm({
               maxLength={8}
               required
               className="text-center text-2xl font-black tracking-[0.4em]"
+              {...resetChecks.field("otp")}
             />
+            {resetChecks.message("otp")}
           </div>
           <div>
             <Label htmlFor="password">{t("newPassword")}</Label>
@@ -72,7 +77,9 @@ export function ForgotPasswordForm({
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              {...resetChecks.field("password")}
             />
+            {resetChecks.message("password")}
           </div>
           <div>
             <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
@@ -87,6 +94,7 @@ export function ForgotPasswordForm({
               aria-invalid={mismatch}
               aria-describedby={mismatch ? "confirm-error" : undefined}
             />
+            {resetChecks.message("confirmPassword")}
             {mismatch && (
               <p id="confirm-error" className="mt-1 text-xs font-bold text-danger">
                 {t("passwordMismatch")}

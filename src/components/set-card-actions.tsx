@@ -4,6 +4,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { useDialogs } from "@/components/dialog";
 import { ErrorMessage } from "@/components/form";
 import { deleteSetAction, updateSetMetaAction } from "@/server/actions/sets";
 import type { ErrorCode } from "@/server/actions/result";
@@ -14,9 +15,10 @@ export function SetCardActions({ setId, title }: { setId: string; title: string 
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<ErrorCode | null>(null);
+  const { confirm, prompt, dialog } = useDialogs();
 
-  function rename() {
-    const next = window.prompt(t("renamePrompt"), title)?.trim();
+  async function rename() {
+    const next = await prompt({ title: t("renameTitle"), label: t("renamePrompt"), initial: title, maxLength: 120, confirmLabel: t("save") });
     if (!next || next === title) return;
     startTransition(async () => {
       const res = await updateSetMetaAction({ setId, title: next.slice(0, 120) });
@@ -25,8 +27,9 @@ export function SetCardActions({ setId, title }: { setId: string; title: string 
     });
   }
 
-  function remove() {
-    if (!window.confirm(t("confirmDeleteSet"))) return;
+  async function remove() {
+    const yes = await confirm({ title: t("deleteSet"), message: t("confirmDeleteSet"), confirmLabel: t("deleteConfirmButton"), danger: true });
+    if (!yes) return;
     startTransition(async () => {
       const res = await deleteSetAction(setId);
       if (res.ok) router.refresh();
@@ -36,6 +39,7 @@ export function SetCardActions({ setId, title }: { setId: string; title: string 
 
   return (
     <div className="flex shrink-0 flex-col items-end gap-1">
+      {dialog}
       <div className="flex">
         <button
           type="button"

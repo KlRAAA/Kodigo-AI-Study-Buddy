@@ -3,6 +3,7 @@
 import { Pencil, Plus, Star, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
+import { useDialogs } from "@/components/dialog";
 import { ErrorMessage } from "@/components/form";
 import { Button, Input, Label, Textarea } from "@/components/ui";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ export function CardEditor({ setId, initial }: { setId: string; initial: StudyCa
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [error, setError] = useState<ErrorCode | null>(null);
   const [pending, startTransition] = useTransition();
+  const { confirm, dialog } = useDialogs();
 
   function startEdit(card: StudyCard | null) {
     setError(null);
@@ -61,8 +63,9 @@ export function CardEditor({ setId, initial }: { setId: string; initial: StudyCa
     });
   }
 
-  function remove(card: StudyCard) {
-    if (!window.confirm(t("confirmDeleteCard"))) return;
+  async function remove(card: StudyCard) {
+    const yes = await confirm({ title: t("deleteCard"), message: t("confirmDeleteCard"), confirmLabel: t("deleteConfirmButton"), danger: true });
+    if (!yes) return;
     startTransition(async () => {
       const res = await deleteCardAction(card.id);
       if (res.ok) setCards((prev) => prev.filter((c) => c.id !== card.id));
@@ -97,6 +100,7 @@ export function CardEditor({ setId, initial }: { setId: string; initial: StudyCa
 
   return (
     <section aria-labelledby="cards-heading" className="space-y-3">
+      {dialog}
       <div className="flex items-center justify-between">
         <h2 id="cards-heading" className="text-lg font-black">
           {t("cards", { count: cards.length })}

@@ -2,13 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { useActionState, useState, useTransition } from "react";
-import { ErrorMessage, SubmitButton } from "@/components/form";
+import { ErrorMessage, SubmitButton, useFormChecks } from "@/components/form";
 import { Alert, Button, Input, Label } from "@/components/ui";
 import { resendCodeAction, verifyEmailAction } from "@/server/actions/auth";
 
 export function VerifyForm({ email: initialEmail }: { email: string }) {
   const t = useTranslations("auth");
   const [state, formAction] = useActionState(verifyEmailAction, null);
+  const checks = useFormChecks({ email: ["required", "email"], otp: ["required", "code"] });
   const [email, setEmail] = useState(initialEmail);
   const [resent, setResent] = useState<"ok" | "fail" | null>(null);
   const [resending, startResend] = useTransition();
@@ -19,7 +20,7 @@ export function VerifyForm({ email: initialEmail }: { email: string }) {
         <h1 className="text-3xl font-black">{t("verifyTitle")}</h1>
         <p className="mt-1 text-muted">{t("verifySubtitle", { email: email || "…" })}</p>
       </div>
-      <form action={formAction} className="space-y-4">
+      <form action={formAction} noValidate onSubmit={checks.onSubmit} className="space-y-4">
         {initialEmail ? (
           <input type="hidden" name="email" value={email} />
         ) : (
@@ -33,7 +34,9 @@ export function VerifyForm({ email: initialEmail }: { email: string }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              {...checks.field("email")}
             />
+            {checks.message("email")}
           </div>
         )}
         <div>
@@ -47,7 +50,9 @@ export function VerifyForm({ email: initialEmail }: { email: string }) {
             maxLength={8}
             required
             className="text-center text-2xl font-black tracking-[0.4em]"
+            {...checks.field("otp")}
           />
+          {checks.message("otp")}
         </div>
         {state && !state.ok && <ErrorMessage code={state.error} />}
         {resent === "ok" && <Alert tone="success">{t("codeResent")}</Alert>}

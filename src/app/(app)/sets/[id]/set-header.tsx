@@ -4,6 +4,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { useDialogs } from "@/components/dialog";
 import { ErrorMessage } from "@/components/form";
 import { Button, Input, Label } from "@/components/ui";
 import { deleteSetAction, updateSetMetaAction } from "@/server/actions/sets";
@@ -16,6 +17,7 @@ export function SetHeader({ setId, title, subject }: { setId: string; title: str
   const [draft, setDraft] = useState({ title, subject });
   const [error, setError] = useState<ErrorCode | null>(null);
   const [pending, startTransition] = useTransition();
+  const { confirm, dialog } = useDialogs();
 
   if (!editing) {
     return (
@@ -33,6 +35,7 @@ export function SetHeader({ setId, title, subject }: { setId: string; title: str
 
   return (
     <div className="space-y-3 rounded-3xl bg-surface p-4">
+      {dialog}
       <div>
         <Label htmlFor="set-title">{t("title")}</Label>
         <Input id="set-title" value={draft.title} maxLength={120} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
@@ -66,8 +69,9 @@ export function SetHeader({ setId, title, subject }: { setId: string; title: str
         variant="ghost"
         className="w-full text-danger"
         disabled={pending}
-        onClick={() => {
-          if (!window.confirm(t("confirmDeleteSet"))) return;
+        onClick={async () => {
+          const yes = await confirm({ title: t("deleteSet"), message: t("confirmDeleteSet"), confirmLabel: t("deleteConfirmButton"), danger: true });
+          if (!yes) return;
           startTransition(async () => {
             const res = await deleteSetAction(setId);
             if (res.ok) router.replace("/home");

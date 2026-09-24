@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
-import { ErrorMessage, SubmitButton } from "@/components/form";
+import { ErrorMessage, SubmitButton, useFormChecks } from "@/components/form";
 import { PasswordInput } from "@/components/password-input";
 import { Turnstile } from "@/components/turnstile";
 import { Input, Label } from "@/components/ui";
@@ -16,6 +16,12 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const mismatch = confirm.length > 0 && confirm !== password;
+  const checks = useFormChecks({
+    name: ["required"],
+    email: ["required", "email"],
+    password: ["required", "password"],
+    confirmPassword: ["required"],
+  });
 
   return (
     <div className="space-y-6">
@@ -23,15 +29,17 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
         <h1 className="text-3xl font-black">{t("signUpTitle")}</h1>
         <p className="mt-1 text-muted">{t("signUpSubtitle")}</p>
       </div>
-      <form action={formAction} className="space-y-4">
+      <form action={formAction} noValidate onSubmit={checks.onSubmit} className="space-y-4">
         <input type="hidden" name="locale" value={locale} />
         <div>
           <Label htmlFor="name">{t("name")}</Label>
-          <Input id="name" name="name" autoComplete="given-name" maxLength={60} required />
+          <Input id="name" name="name" autoComplete="given-name" maxLength={60} required {...checks.field("name")} />
+          {checks.message("name")}
         </div>
         <div>
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required />
+          <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required {...checks.field("email")} />
+          {checks.message("email")}
         </div>
         <div>
           <Label htmlFor="password">{t("password")}</Label>
@@ -44,8 +52,9 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            aria-describedby="password-hint"
+            {...checks.field("password", "password-hint")}
           />
+          {checks.message("password")}
           <p id="password-hint" className="mt-1 text-xs text-muted">
             {t("passwordHint")}
           </p>
@@ -63,6 +72,7 @@ export function SignUpForm({ siteKey }: { siteKey: string | undefined }) {
             aria-invalid={mismatch}
             aria-describedby={mismatch ? "confirm-error" : undefined}
           />
+          {checks.message("confirmPassword")}
           {mismatch && (
             <p id="confirm-error" className="mt-1 text-xs font-bold text-danger">
               {t("passwordMismatch")}

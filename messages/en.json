@@ -210,7 +210,9 @@
     "unstar": "Unstar card",
     "editCard": "Edit card",
     "deleteCard": "Delete card",
-    "confirmDeleteCard": "Delete this card?"
+    "confirmDeleteCard": "Delete this card?",
+    "renameTitle": "Rename set",
+    "deleteConfirmButton": "Delete"
   },
   "study": {
     "flashcards": "Flashcards",
@@ -343,7 +345,8 @@
     "takeDownBan": "Remove + ban",
     "reasonPrompt": "Reason (shown to the owner)",
     "confirmBan": "Ban this user? Their sets become private and they can't log in.",
-    "unban": "Unban"
+    "unban": "Unban",
+    "continue": "Continue"
   },
   "offline": {
     "title": "You're offline",
@@ -568,6 +571,14 @@
     "nonePublic": "No public sets match."
   },
   "common": {
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "ok": "OK",
+    "cancel": "Cancel"
+  },
+  "validation": {
+    "required": "Please fill this in.",
+    "email": "Enter a valid email address, like juan@gmail.com.",
+    "password": "Use at least 8 characters.",
+    "code": "Enter the code from your email (numbers only)."
   }
 }

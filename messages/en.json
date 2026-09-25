@@ -607,6 +607,12 @@
     "code": "Enter the code from your email (numbers only)."
   },
   "camera": {
+    "retake": "Retake",
+    "usePhoto": "Use photo",
+    "zoom": "Tap to zoom and check the text",
+    "fit": "Fit to screen",
+    "reviewAlt": "The photo you just took",
+    "blurry": "This photo looks blurry. Retake it so Kodigo can read the text.",
     "title": "Camera",
     "close": "Close camera",
     "switch": "Switch camera",

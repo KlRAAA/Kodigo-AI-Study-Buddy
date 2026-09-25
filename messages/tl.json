@@ -607,6 +607,12 @@
     "code": "Ilagay ang code mula sa email mo (numero lang)."
   },
   "camera": {
+    "retake": "Kunan ulit",
+    "usePhoto": "Gamitin ito",
+    "zoom": "I-tap para i-zoom at tingnan ang text",
+    "fit": "Ibalik sa sukat",
+    "reviewAlt": "Ang litratong kakakuha mo lang",
+    "blurry": "Mukhang malabo ang litrato. Kunan ulit para mabasa ni Kodigo ang text.",
     "title": "Camera",
     "close": "Isara ang camera",
     "switch": "Palitan ang camera",

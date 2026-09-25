@@ -21,7 +21,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t("label")}
-      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur"
+      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur lg:hidden"
     >
       <ul className="mx-auto flex max-w-xl">
         {tabs.map(({ href, key, Icon }) => {

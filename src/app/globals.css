@@ -118,6 +118,11 @@ select {
 .pb-nav {
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
 }
+@media (min-width: 64rem) {
+  .pb-nav {
+    padding-bottom: 2.5rem;
+  }
+}
 
 /* Flashcard flip. */
 .flip-card {

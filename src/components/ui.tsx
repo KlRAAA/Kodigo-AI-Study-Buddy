@@ -8,7 +8,7 @@ const variants: Record<Variant, string> = {
   secondary: "bg-surface text-text border border-border active:bg-surface-2",
   ghost: "bg-transparent text-text active:bg-surface-2",
   danger: "bg-danger text-on-danger active:opacity-90",
-  accent: "bg-accent text-[#2b1a03] active:opacity-90",
+  accent: "bg-accent text-on-accent active:opacity-90",
 };
 
 export const Button = forwardRef<

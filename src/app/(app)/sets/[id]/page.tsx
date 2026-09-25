@@ -52,7 +52,7 @@ export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
         </Link>
         <Link
           href={`/sets/${set.id}/learn`}
-          className="flex min-h-20 flex-col items-center justify-center gap-1 rounded-3xl bg-accent font-bold text-[#2b1a03] active:scale-[0.98]"
+          className="flex min-h-20 flex-col items-center justify-center gap-1 rounded-3xl bg-accent font-bold text-on-accent active:scale-[0.98]"
         >
           <Brain aria-hidden className="size-6" /> {t("learn")}
         </Link>

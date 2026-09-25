@@ -22,7 +22,8 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - Sign up / log in with email + password, 6-digit email verification, password reset by code, Cloudflare Turnstile
 - English ⇄ Tagalog UI, saved to your profile
 - Create a set from pasted text, **PDF** (read in the browser), **PPTX** (slides + speaker notes, read in the browser), or **photos** (compressed in the browser, read once by a vision model, never stored)
-- AI summary (markdown) + 10–150 flashcards (about one per 200 characters of notes), with an output-language override (Auto / English / Tagalog)
+- AI summary (markdown) + 10–150 flashcards (about one per 200 characters of notes). Reviewer language: **Auto** (same as your notes, Taglish stays Taglish), **English**, or **Tagalog** (everything in Filipino, technical terms kept)
+- Notes over the length limit can be split at paragraph breaks into several sets in one tap, or trimmed to the first part
 - Edit, add, delete and star cards
 - **Flashcards**: tap to flip, swipe, shuffle, starred only
 - **Learn**: multiple choice, true/false, identification and enumeration questions with explanations, lenient answer matching; missed cards come back until mastered
@@ -30,10 +31,10 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - **Spaced repetition review** (SM-2) across all sets with Again / Hard / Good / Easy
 - **Hints** in Learn: multiple choice hides two wrong answers, identification shows the first letter
 - **Trash**: deleted sets can be restored for 30 days
-- Take photos with the camera or pick from the gallery
+- Take photos with the live camera or pick from the gallery; each camera shot is shown for review (tap to zoom) with a blur warning before it's used
 - Side navigation on desktop, bottom tabs on phones
 - Read-aloud
-- Dark mode
+- Matcha theme: light mode, or a soft dark mode (System / Dark)
 - AI router with automatic fallback across Gemini, Groq and OpenRouter, a result cache, and per-user + global limits
 - Admin page: usage, model health, suspend and reset
 - PWA: installable, offline page, recently opened sets study offline
@@ -41,6 +42,7 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 
 **Community**
 - Share a set by link, or publish it publicly after automatic screening
+- Every shared set has a short **set code**; paste it (or the link) into "Have a set code?" on Home or Explore to open it
 - Copy a shared set into your own library
 - Star ratings on shared sets
 - Public profiles at `/u/handle`

@@ -5,7 +5,7 @@ import { createTestDb } from "./helpers/db";
 
 describe("handle format", () => {
   it("accepts 3–20 lowercase letters, numbers, underscore; lowercases input", () => {
-    expect(handleSchema.safeParse("Xyrus_01").data).toBe("xyrus_01");
+    expect(handleSchema.safeParse("Juan_01").data).toBe("juan_01");
     expect(handleSchema.safeParse("ab").success).toBe(false);
     expect(handleSchema.safeParse("a".repeat(21)).success).toBe(false);
     expect(handleSchema.safeParse("bad-name").success).toBe(false);
@@ -38,13 +38,13 @@ describe("setHandle", () => {
   });
 
   it("claims a free handle and finds the profile by it", async () => {
-    expect(await setHandle("u1", "xyrus")).toBe("ok");
-    expect((await getProfileByHandle("xyrus"))?.userId).toBe("u1");
+    expect(await setHandle("u1", "juan")).toBe("ok");
+    expect((await getProfileByHandle("juan"))?.userId).toBe("u1");
   });
 
   it("refuses a taken handle", async () => {
-    await setHandle("u1", "xyrus");
-    expect(await setHandle("u2", "xyrus")).toBe("taken");
+    await setHandle("u1", "juan");
+    expect(await setHandle("u2", "juan")).toBe("taken");
   });
 
   it("allows one change per 30 days", async () => {

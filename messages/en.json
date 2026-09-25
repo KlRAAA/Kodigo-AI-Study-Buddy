@@ -1,4 +1,10 @@
 {
+  "shareCode": {
+    "label": "Have a set code?",
+    "placeholder": "Paste a code or link",
+    "open": "Open",
+    "invalid": "That doesn't look like a set code. Codes are 10 letters and numbers, like AbC123xyz9."
+  },
   "app": {
     "tagline": "Ang kodigong pwedeng dalhin."
   },
@@ -522,6 +528,8 @@
     }
   },
   "share": {
+    "codeLabel": "Set code",
+    "copyCode": "Copy code",
     "title": "Share",
     "pickHandle": "Pick a username so people know who made this set. Your email is never shown.",
     "username": "Username",

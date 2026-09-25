@@ -1,4 +1,5 @@
 import { BookOpen, Camera, Compass, FileText, Presentation, Type } from "lucide-react";
+import { AddByCode } from "@/components/public/add-by-code";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -53,6 +54,7 @@ export default async function HomePage() {
       <Link href="/explore" className="card-hover flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-surface font-bold active:bg-surface-2">
         <Compass aria-hidden className="size-5 text-primary" /> {t("explore")}
       </Link>
+      <AddByCode />
       {feed.length > 0 && (
         <section aria-labelledby="feed-heading" className="space-y-2">
           <h2 id="feed-heading" className="text-lg font-black">{t("fromFollowing")}</h2>

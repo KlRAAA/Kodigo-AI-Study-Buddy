@@ -1,4 +1,10 @@
 {
+  "shareCode": {
+    "label": "May code ka ng set?",
+    "placeholder": "I-paste ang code o link",
+    "open": "Buksan",
+    "invalid": "Mukhang hindi ito code ng set. Ang code ay 10 letra at numero, gaya ng AbC123xyz9."
+  },
   "app": {
     "tagline": "Ang kodigong pwedeng dalhin."
   },
@@ -522,6 +528,8 @@
     }
   },
   "share": {
+    "codeLabel": "Code ng set",
+    "copyCode": "Kopyahin",
     "title": "I-share",
     "pickHandle": "Pumili ng username para malaman ng iba kung sino ang gumawa ng set. Hindi kailanman ipapakita ang email mo.",
     "username": "Username",

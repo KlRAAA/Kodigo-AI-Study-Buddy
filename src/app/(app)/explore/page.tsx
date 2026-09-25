@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { AddByCode } from "@/components/public/add-by-code";
 import { SetTile } from "@/components/public/set-tile";
 import { requireUser } from "@/server/auth";
 import { exploreSets } from "@/server/db/queries/community";
@@ -25,6 +26,7 @@ export default async function ExplorePage({ searchParams }: PageProps<"/explore"
     <div className="space-y-5 py-4">
       <h1 className="text-2xl font-black">{t("title")}</h1>
       <ExploreSearch q={q} sort={sort} />
+      <AddByCode />
       {sets.length === 0 ? (
         <p className="rounded-3xl bg-surface p-8 text-center font-bold">{t("empty")}</p>
       ) : (

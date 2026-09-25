@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, Globe, Link2, Loader2, Lock, RefreshCw } from "lucide-react";
+import { Check, Copy, Globe, KeyRound, Link2, Loader2, Lock, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -32,6 +32,8 @@ export function SharePanel({ setId, visibility, status, reasonCategories, shareU
   const [pending, startTransition] = useTransition();
 
   const isLive = visibility !== "private" && status === "approved";
+  const code = link ? link.slice(link.lastIndexOf("/") + 1) : null;
+  const [codeCopied, setCodeCopied] = useState(false);
 
   function apply(next: Visibility) {
     setError(null);
@@ -145,6 +147,32 @@ export function SharePanel({ setId, visibility, status, reasonCategories, shareU
             {copied ? <Check aria-hidden className="size-5" /> : <Copy aria-hidden className="size-5" />}
             {copied ? t("copied") : t("copyLink")}
           </Button>
+          {code && (
+            // Short code people can paste into "Add by code" on Home or Explore.
+            <div className="flex items-center gap-2 rounded-2xl border border-border bg-surface-2 p-2 pl-4">
+              <KeyRound aria-hidden className="size-4 shrink-0 text-primary" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-xs font-bold text-muted">{t("codeLabel")}</span>
+                <span className="font-mono text-lg font-bold tracking-wider select-all">{code}</span>
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="shrink-0"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(code);
+                    setCodeCopied(true);
+                  } catch {
+                    // clipboard blocked; the code is selectable
+                  }
+                }}
+              >
+                {codeCopied ? <Check aria-hidden className="size-4" /> : <Copy aria-hidden className="size-4" />}
+                {codeCopied ? t("copied") : t("copyCode")}
+              </Button>
+            </div>
+          )}
         </div>
       )}
       <ErrorMessage code={error} />

@@ -165,3 +165,16 @@ export function buildQuestion(
       return { kind: "identification", cardId: card.id, prompt: card.definition, answer: card.term };
   }
 }
+
+/** "Get a hint" for multiple choice: two wrong choices to remove (none if there aren't enough). */
+export function choicesToHide(choices: string[], answer: string, random: () => number = Math.random): string[] {
+  const wrong = choices.filter((c) => c !== answer);
+  if (wrong.length < 3) return [];
+  return shuffle(wrong, random).slice(0, 2);
+}
+
+/** "Get a hint" for typed answers: the first letter and how many letters the answer has. */
+export function letterHint(answer: string): { letter: string; count: number } {
+  const letters = answer.match(/[\p{L}\p{N}]/gu) ?? [];
+  return { letter: (letters[0] ?? "").toUpperCase(), count: letters.length };
+}

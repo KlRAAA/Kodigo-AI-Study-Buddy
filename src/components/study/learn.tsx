@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, PartyPopper, Settings2, X } from "lucide-react";
+import { Check, Lightbulb, PartyPopper, Settings2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import { Button, Input, ProgressBar } from "@/components/ui";
@@ -11,9 +11,11 @@ import {
   QUESTION_TYPES,
   answer,
   buildQuestion,
+  choicesToHide,
   eligibleCards,
   isFinished,
   isTypeAvailable,
+  letterHint,
   progress,
   startLearn,
   type LearnState,
@@ -196,6 +198,8 @@ function LearnSession({
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [typed, setTyped] = useState("");
   const [items, setItems] = useState<string[]>([]);
+  // "Get a hint" for the current question: removed choices (MCQ) or a letter clue (typed).
+  const [hint, setHint] = useState<{ hidden: string[] } | null>(null);
   const byId = useMemo(() => new Map(cards.map((c) => [c.id, c])), [cards]);
 
   const currentId = state.queue[0];
@@ -250,6 +254,7 @@ function LearnSession({
     setFeedback(null);
     setTyped("");
     setItems([]);
+    setHint(null);
   }
 
   const label =
@@ -290,9 +295,21 @@ function LearnSession({
         )}
       </div>
 
+      {!feedback && !hint && (question.kind === "identification" || (question.kind === "mcq" && question.choices.length >= 4)) && (
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setHint({ hidden: question.kind === "mcq" ? choicesToHide(question.choices, question.answer) : [] })}
+          >
+            <Lightbulb aria-hidden className="size-4 text-accent" /> {t("hint")}
+          </Button>
+        </div>
+      )}
+
       {question.kind === "mcq" && (
         <div className="grid gap-2">
-          {question.choices.map((choice) => {
+          {question.choices.filter((choice) => !hint?.hidden.includes(choice)).map((choice) => {
             const isAnswer = choice === question.answer;
             return (
               <button
@@ -329,6 +346,13 @@ function LearnSession({
             </Button>
           ))}
         </div>
+      )}
+
+      {question.kind === "identification" && hint && !feedback && (
+        <p className="flex items-center gap-2 rounded-2xl bg-accent-soft px-4 py-3 text-sm font-semibold" role="status">
+          <Lightbulb aria-hidden className="size-4 shrink-0 text-accent" />
+          {t("hintLetter", letterHint(question.answer))}
+        </p>
       )}
 
       {question.kind === "identification" && (

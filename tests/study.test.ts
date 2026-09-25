@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { editDistance, isAnswerCorrect, normalizeAnswer } from "@/lib/answer-match";
 import { checkEnumeration, parseListItems } from "@/lib/enumeration";
-import { answer, buildQuestion, eligibleCards, isFinished, isTypeAvailable, progress, startLearn, type LearnCard } from "@/lib/learn";
+import { answer, buildQuestion, choicesToHide, eligibleCards, isFinished, isTypeAvailable, progress, startLearn, letterHint, type LearnCard } from "@/lib/learn";
 
 describe("answer matching", () => {
   it("ignores case, accents, punctuation and articles", () => {
@@ -116,5 +116,24 @@ describe("enumeration", () => {
     const items = ["Igneous", "Sedimentary", "Metamorphic"];
     expect(checkEnumeration(["metamorphic", "igneus", "Sedimentary"], items)).toEqual({ correct: true, missed: [] });
     expect(checkEnumeration(["Igneous", "Igneous", ""], items)).toEqual({ correct: false, missed: ["Sedimentary", "Metamorphic"] });
+  });
+});
+
+describe("learn hints", () => {
+  it("hides exactly two wrong choices, never the answer", () => {
+    const choices = ["Cell", "Nucleus", "Ribosome", "Membrane"];
+    for (let i = 0; i < 20; i++) {
+      const hidden = choicesToHide(choices, "Cell");
+      expect(hidden).toHaveLength(2);
+      expect(hidden).not.toContain("Cell");
+      expect(new Set(hidden).size).toBe(2);
+    }
+    expect(choicesToHide(["Cell", "Nucleus"], "Cell")).toEqual([]); // too few to help
+  });
+
+  it("gives the first letter and letter count for typed answers", () => {
+    expect(letterHint("photosynthesis")).toEqual({ letter: "P", count: 14 });
+    expect(letterHint("  José Rizal ")).toEqual({ letter: "J", count: 9 });
+    expect(letterHint("(OLAP) Analytical")).toEqual({ letter: "O", count: 14 });
   });
 });

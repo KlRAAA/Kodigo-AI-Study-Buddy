@@ -37,7 +37,7 @@ export default async function TrashPage() {
             const deletedAt = new Date(s.deletedAt);
             return (
               <li key={s.id} className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-surface p-4">
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-[1_1_14rem]">
                   <p className="truncate font-bold">{s.title}</p>
                   <p className="text-sm text-muted">
                     {t("cards", { count: s.cardCount })} · {t("deletedAgo", { when: format.relativeTime(deletedAt) })} ·{" "}

@@ -243,14 +243,12 @@ export async function exploreSets(opts: { query?: string; sort: "top" | "new" | 
 }
 
 export async function followFeed(userId: string, limit = 10): Promise<ListedSet[]> {
-  const db = getDb();
-  const followed = await db.select({ id: follows.followeeId }).from(follows).where(eq(follows.followerId, userId));
-  if (followed.length === 0) return [];
-  return db
+  const followed = getDb().select({ id: follows.followeeId }).from(follows).where(eq(follows.followerId, userId));
+  return getDb()
     .select(listedColumns)
     .from(studySets)
     .innerJoin(profiles, eq(profiles.userId, studySets.userId))
-    .where(and(listedSetWhere(), inArray(studySets.userId, followed.map((f) => f.id))))
+    .where(and(listedSetWhere(), inArray(studySets.userId, followed)))
     .orderBy(desc(studySets.publishedAt))
     .limit(limit);
 }

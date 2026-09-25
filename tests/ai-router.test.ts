@@ -80,7 +80,7 @@ describe("runChain fallback", () => {
     expect(bench).toHaveBeenCalledWith("gemini:g-flash", new Date("2026-09-25T00:00:00Z"), "daily_quota");
   });
 
-  it("falls back on 5xx, timeout and network errors without benching", async () => {
+  it("falls back on 5xx, timeout and network errors, benching only slow models briefly", async () => {
     const complete = scripted({
       "gemini:g-flash": [new ProviderError("server", "boom", 503)],
       "groq:openai/gpt-oss-120b": [new ProviderError("timeout", "timeout")],
@@ -89,7 +89,9 @@ describe("runChain fallback", () => {
     const { d, bench } = deps(complete);
     const res = await runChain({ task: "t", chain, messages, schema }, d);
     expect(res.model).toBe("openrouter:vendor/model:free");
-    expect(bench).not.toHaveBeenCalled();
+    // A timeout costs every user the full wait, so skip that model for 5 minutes.
+    expect(bench).toHaveBeenCalledTimes(1);
+    expect(bench).toHaveBeenCalledWith("groq:openai/gpt-oss-120b", new Date("2026-09-24T10:05:00Z"), "timeout");
   });
 
   it("retries once with a JSON nudge on invalid output, then moves on", async () => {

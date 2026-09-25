@@ -39,6 +39,8 @@ export type RunChainResult<T> = { data: T; model: string };
 const JSON_NUDGE =
   "Your previous reply was not valid JSON in the required format. Reply again with ONLY the JSON object, no extra text.";
 
+const TIMEOUT_BENCH_MS = 5 * 60 * 1000;
+
 /**
  * Walks the model chain until one model returns a usable answer.
  * Falls back on 429, 5xx, timeouts, network errors, empty replies and output
@@ -98,6 +100,9 @@ export async function runChain<T = string>(
         } else if (e.kind === "client" && (e.status === 401 || e.status === 403 || e.status === 404)) {
           // Bad key or the model disappeared: stop hammering it for a while.
           await deps.bench(target.id, benchUntil(e, now()), `http_${e.status}`).catch(() => {});
+        } else if (e.kind === "timeout") {
+          // A slow model makes every user wait the full timeout; skip it for a bit.
+          await deps.bench(target.id, new Date(now().getTime() + TIMEOUT_BENCH_MS), "timeout").catch(() => {});
         }
         break; // any provider error: next model
       }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { FollowButton } from "@/components/public/follow-button";
@@ -8,13 +9,14 @@ import { handleSchema } from "@/lib/handle";
 import { getSessionUser } from "@/server/auth";
 import { getPublicProfile, isFollowing } from "@/server/db/queries/community";
 
-async function load(raw: string) {
+// Cached so generateMetadata and the page share one lookup.
+const load = cache(async (raw: string) => {
   const h = handleSchema.safeParse(raw);
   if (!h.success) notFound();
   const profile = await getPublicProfile(h.data);
   if (!profile) notFound();
   return profile;
-}
+});
 
 export async function generateMetadata({ params }: PageProps<"/u/[handle]">): Promise<Metadata> {
   const p = await load((await params).handle);

@@ -1,4 +1,5 @@
 import { ArrowLeft, Brain, Layers } from "lucide-react";
+import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,13 +16,14 @@ import { SetHeader } from "./set-header";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-async function load(id: string) {
+// Cached so generateMetadata and the page share one lookup.
+const load = cache(async (id: string) => {
   if (!uuid.test(id)) notFound();
   const { user, profile } = await requireUser();
   const set = await getSet(user.id, id);
   if (!set) notFound();
   return { user, profile, set };
-}
+});
 
 export async function generateMetadata({ params }: PageProps<"/sets/[id]">): Promise<Metadata> {
   const { set } = await load((await params).id);
@@ -30,9 +32,8 @@ export async function generateMetadata({ params }: PageProps<"/sets/[id]">): Pro
 
 export default async function SetPage({ params }: PageProps<"/sets/[id]">) {
   const { user, profile, set } = await load((await params).id);
-  const cards = await listCards(user.id, set.id);
-  const t = await getTranslations("set");
-  const shareUrl = set.shareSlug ? `${await appOrigin()}/s/${set.shareSlug}` : null;
+  const [cards, t, origin] = await Promise.all([listCards(user.id, set.id), getTranslations("set"), appOrigin()]);
+  const shareUrl = set.shareSlug ? `${origin}/s/${set.shareSlug}` : null;
 
   return (
     <div className="space-y-5 py-4">

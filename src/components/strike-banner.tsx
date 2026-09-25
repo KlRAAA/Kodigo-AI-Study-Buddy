@@ -2,7 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { unseenStrike } from "@/server/db/queries/moderation";
 import { DismissStrike } from "./dismiss-strike";
 
-export async function StrikeBanner({ userId }: { userId: string }) {
+export async function StrikeBanner({ userId, hasUnseen }: { userId: string; hasUnseen: boolean }) {
+  if (!hasUnseen) return null; // most page loads: no queries at all
   const strike = await unseenStrike(userId);
   if (!strike) return null;
   const t = await getTranslations("banners");

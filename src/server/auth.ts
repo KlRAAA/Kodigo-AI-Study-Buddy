@@ -2,6 +2,7 @@ import "server-only";
 import { createNeonAuth, type NeonAuth } from "@neondatabase/auth/next/server";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
+import { cache } from "react";
 import { getOrCreateProfile } from "./db/queries/profiles";
 import type { Profile } from "./db/schema";
 
@@ -25,7 +26,8 @@ export type SessionUser = {
   emailVerified: boolean;
 };
 
-export async function getSessionUser(): Promise<SessionUser | null> {
+/** Cached per request, so the layout, metadata and page share one auth round trip. */
+export const getSessionUser = cache(async function getSessionUser(): Promise<SessionUser | null> {
   // Mark the render as per-request before touching cookies, so Next doesn't try
   // (and fail noisily) to prerender session-dependent pages at build time.
   await connection();
@@ -38,17 +40,17 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     unstable_rethrow(err); // let Next's own control-flow errors through
     return null;
   }
-}
+});
 
 /** For pages: redirects to sign-in when there's no session. */
-export async function requireUser(): Promise<{ user: SessionUser; profile: Profile }> {
+export const requireUser = cache(async function requireUser(): Promise<{ user: SessionUser; profile: Profile }> {
   const user = await getSessionUser();
   if (!user) redirect("/auth/sign-in");
   if (!user.emailVerified) redirect(`/auth/verify?email=${encodeURIComponent(user.email)}`);
   const profile = await getOrCreateProfile(user.id, { displayName: user.name });
   if (profile.bannedAt) redirect("/banned");
   return { user, profile };
-}
+});
 
 export function isAdminEmail(email: string) {
   const admins = (process.env.ADMIN_EMAILS ?? "")

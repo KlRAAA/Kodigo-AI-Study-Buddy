@@ -8,10 +8,13 @@ import { isAdminEmail, requireUser } from "@/server/auth";
 import { isGlobalBudgetLow } from "@/server/limits/limiter";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const { user, profile } = await requireUser();
+  // Independent lookups run side by side instead of one after another.
+  const [{ user, profile }, t, budgetLow] = await Promise.all([
+    requireUser(),
+    getTranslations("banners"),
+    isGlobalBudgetLow().catch(() => false),
+  ]);
   if (!profile.onboarded) redirect("/onboarding");
-  const t = await getTranslations("banners");
-  const budgetLow = await isGlobalBudgetLow().catch(() => false);
 
   return (
     <>
@@ -29,7 +32,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Alert tone="info">{t("suspended")}</Alert>
             </div>
           )}
-          <StrikeBanner userId={user.id} />
+          <StrikeBanner userId={user.id} hasUnseen={profile.strikes > profile.strikesSeen} />
           {children}
           <BottomNav />
         </div>

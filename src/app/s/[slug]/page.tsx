@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -15,12 +16,13 @@ import { getPublicSetBySlug, isSetOwner } from "@/server/db/queries/sharing";
 
 const SLUG = /^[0-9A-Za-z]{10}$/;
 
-async function load(slug: string) {
+// Cached so generateMetadata and the page share one lookup.
+const load = cache(async (slug: string) => {
   if (!SLUG.test(slug)) notFound();
   const view = await getPublicSetBySlug(slug);
   if (!view) notFound();
   return view;
-}
+});
 
 export async function generateMetadata({ params }: PageProps<"/s/[slug]">): Promise<Metadata> {
   const view = await load((await params).slug);

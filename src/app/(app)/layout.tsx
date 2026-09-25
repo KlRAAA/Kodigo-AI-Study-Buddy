@@ -16,20 +16,23 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <>
       <SideNav isAdmin={isAdminEmail(user.email)} />
-      <div className="pt-safe pb-nav mx-auto min-h-dvh max-w-xl px-4 lg:ml-64 lg:max-w-3xl lg:px-8 lg:pb-10">
-        {budgetLow && (
-          <div className="pt-2">
-            <Alert tone="info">{t("globalBudget")}</Alert>
-          </div>
-        )}
-        {profile.isSuspended && (
-          <div className="pt-2">
-            <Alert tone="info">{t("suspended")}</Alert>
-          </div>
-        )}
-        <StrikeBanner userId={user.id} />
-        {children}
-        <BottomNav />
+      {/* The sidebar is fixed; reserve its width, then center the page in the space left. */}
+      <div className="lg:pl-64">
+        <div className="pt-safe pb-nav mx-auto min-h-dvh max-w-xl px-4 lg:max-w-4xl lg:px-10">
+          {budgetLow && (
+            <div className="pt-2">
+              <Alert tone="info">{t("globalBudget")}</Alert>
+            </div>
+          )}
+          {profile.isSuspended && (
+            <div className="pt-2">
+              <Alert tone="info">{t("suspended")}</Alert>
+            </div>
+          )}
+          <StrikeBanner userId={user.id} />
+          {children}
+          <BottomNav />
+        </div>
       </div>
     </>
   );

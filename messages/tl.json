@@ -145,6 +145,11 @@
     "fromFollowing": "Mula sa mga fina-follow mo"
   },
   "create": {
+    "langHint": {
+      "auto": "Kaparehong wika ng notes mo. Kung Taglish ang notes, Taglish din ang reviewer.",
+      "en": "Lahat ay nasa English, kahit Tagalog ang notes mo.",
+      "tl": "Lahat ay nasa Tagalog, kahit English ang notes mo. Hindi isasalin ang mga technical terms."
+    },
     "tooLongTitle": "{count} characters ang notes mo. Hanggang {max} lang ang isang set.",
     "tooLongHelp": "Kayang hatiin ni Kodigo ang notes sa {parts} sets, sa pagitan ng mga talata. Bawat set ay gagamit ng isa sa daily generations mo.",
     "makeParts": "Gumawa ng {parts} sets",

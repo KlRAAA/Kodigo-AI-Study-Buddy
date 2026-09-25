@@ -145,6 +145,11 @@
     "fromFollowing": "From people you follow"
   },
   "create": {
+    "langHint": {
+      "auto": "Same language as your notes. Taglish notes get a Taglish reviewer.",
+      "en": "Everything in English, even if your notes are in Tagalog.",
+      "tl": "Everything in Tagalog, even if your notes are in English. Technical terms stay as they are."
+    },
     "tooLongTitle": "Your notes are {count} characters. The limit for one set is {max}.",
     "tooLongHelp": "Kodigo can split them at paragraph breaks into {parts} sets. Each set uses one of your daily generations.",
     "makeParts": "Make {parts} sets",

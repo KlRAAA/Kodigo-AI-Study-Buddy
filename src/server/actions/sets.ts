@@ -45,7 +45,7 @@ export async function createSetAction(
   const { text, sourceType, outputLang: requested, title, subject } = parsed.data;
   if (text.length > readLimits().maxInputChars) return fail("too_long");
 
-  const lang: Lang = requested === "auto" ? me.profile.locale : requested;
+  const lang: Lang = requested;
   const userId = me.user.id;
 
   // Cached results are free; only a cache miss uses allowance.

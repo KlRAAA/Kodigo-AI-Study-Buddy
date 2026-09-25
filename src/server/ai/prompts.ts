@@ -1,6 +1,7 @@
 import type { ChatMessage } from "./providers";
 
-export type Lang = "en" | "tl";
+/** Output language for generated material. "auto" follows the notes (Taglish stays Taglish). */
+export type Lang = "en" | "tl" | "auto";
 
 /** Stops user text from opening or closing the wrapper tag (prompt-injection hygiene). */
 export function escapeTag(text: string, tag: string) {
@@ -8,8 +9,9 @@ export function escapeTag(text: string, tag: string) {
 }
 
 const LANGUAGE: Record<Lang, string> = {
-  en: "Write everything in clear, simple English.",
-  tl: "Write everything in natural Filipino (Tagalog) the way Filipino students talk; Taglish is fine. Keep technical terms, names and formulas in their original language when that is what students normally use.",
+  en: "OUTPUT LANGUAGE: English. Write the title, the summary and every card definition and example in clear, simple English, even if the notes are in another language.",
+  tl: "OUTPUT LANGUAGE: Filipino (Tagalog). Write the title, the summary and every card definition and example in natural, everyday Filipino that students understand, even if the notes are in English. Do not write English sentences. Keep a word in English or another language only when it is a technical term, a name, a formula, or the vocabulary being studied (for example the Spanish words in a Spanish class). Keep every number, time, date and amount exactly as in the notes.",
+  auto: "OUTPUT LANGUAGE: the same language as the notes. If the notes are in English, write in English; if in Tagalog, write in Tagalog; if they mix English and Tagalog (Taglish), use the same natural mix.",
 };
 
 const GUARD =
@@ -17,16 +19,17 @@ const GUARD =
 
 export function summaryAndCardsMessages(notes: string, lang: Lang, cardCount: number, part?: { index: number; total: number }): ChatMessage[] {
   const partNote = part && part.total > 1 ? ` This is part ${part.index + 1} of ${part.total} of the notes; cover only this part.` : "";
+  // Language last: models follow the most recent instruction best.
   return [
     {
       role: "system",
       content: [
         "You are Kodigo, a study assistant that turns a student's notes into review material.",
         GUARD,
-        LANGUAGE[lang],
         "Reply with ONLY a JSON object, no markdown fences, with this shape:",
         '{"title": string (short set title, max 8 words), "summary": string (markdown with ## headings, bullet points, and **bold** key terms), "cards": [{"term": string, "definition": string, "example": string or null}]}',
         `Make about ${cardCount} flashcards covering the most important terms, concepts, dates, people and formulas. Definitions must be accurate to the notes, 1–3 sentences. Do not invent facts that are not in the notes. When the notes contain a list (types, parts, steps, causes, examples), also make a list card: the term names the list (e.g. "Types of rocks") and the definition lists only the items separated by semicolons (e.g. "Igneous; Sedimentary; Metamorphic").${partNote}`,
+        LANGUAGE[lang],
       ].join("\n"),
     },
     { role: "user", content: `<notes>\n${escapeTag(notes, "notes")}\n</notes>` },

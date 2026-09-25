@@ -222,6 +222,7 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
                 { value: "tl", label: "Tagalog" },
               ]}
             />
+            <p className="mt-1.5 text-xs text-muted">{t(`langHint.${outputLang}`)}</p>
           </div>
         </div>
       )}

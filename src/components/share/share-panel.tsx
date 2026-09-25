@@ -121,11 +121,17 @@ export function SharePanel({ setId, visibility, status, reasonCategories, shareU
       {status === "taken_down" && <Alert>{t("takenDownNotice")}</Alert>}
 
       {isLive && link && (
-        <div className="flex gap-2">
-          <Input readOnly value={link} aria-label={t("shareLink")} onFocus={(e) => e.currentTarget.select()} />
+        <div className="space-y-2">
+          {/* The whole link, wrapped, so it's clear it points to this set and not just the app. */}
+          <p
+            aria-label={t("shareLink")}
+            className="rounded-2xl border border-border bg-surface-2 px-4 py-3 text-sm font-semibold break-all select-all"
+          >
+            {link}
+          </p>
           <Button
             variant="secondary"
-            className="shrink-0 whitespace-nowrap"
+            className="w-full"
             onClick={async () => {
               try {
                 if (navigator.share) await navigator.share({ url: link });

@@ -4,6 +4,18 @@
 
 Kodigo is a free, mobile-first study app for students reviewing for exams. Paste your notes, upload a PDF or PowerPoint, or snap photos of handwritten notes. Kodigo turns them into a summary and flashcards you can study with Flashcards and Learn mode. It works in **English and Tagalog** and installs on iPhone as a home-screen app.
 
+**Live:** https://kodigo-ai-study-buddy.vercel.app
+
+## Screenshots
+
+| Welcome | Home | Create |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/welcome.png" width="240" alt="Welcome page"> | <img src="docs/screenshots/home.png" width="240" alt="Home with your sets and due-today count"> | <img src="docs/screenshots/create.png" width="240" alt="Create a set from text, PDF, PowerPoint or photos"> |
+| **Set summary** | **Flashcards (dark mode)** | **Learn** |
+| <img src="docs/screenshots/set.png" width="240" alt="Set page with summary and sharing"> | <img src="docs/screenshots/flashcards-dark.png" width="240" alt="Flashcards in dark mode"> | <img src="docs/screenshots/learn.png" width="240" alt="Learn mode question types"> |
+
+<img src="docs/screenshots/desktop-set.png" alt="Desktop layout with side navigation" width="100%">
+
 ## Features
 
 **Phase 1 (done)**
@@ -15,6 +27,11 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - **Flashcards**: tap to flip, swipe, shuffle, starred only
 - **Learn**: multiple choice, true/false, identification and enumeration questions with explanations, lenient answer matching; missed cards come back until mastered
 - Library with search, "due today" count and remaining AI allowance
+- **Spaced repetition review** (SM-2) across all sets with Again / Hard / Good / Easy
+- **Hints** in Learn: multiple choice hides two wrong answers, identification shows the first letter
+- **Trash**: deleted sets can be restored for 30 days
+- Take photos with the camera or pick from the gallery
+- Side navigation on desktop, bottom tabs on phones
 - Read-aloud
 - Dark mode
 - AI router with automatic fallback across Gemini, Groq and OpenRouter, a result cache, and per-user + global limits
@@ -31,7 +48,7 @@ Kodigo is a free, mobile-first study app for students reviewing for exams. Paste
 - Explore page to browse and search public sets
 - Report a set, admin strikes and bans, Community Guidelines
 
-**Coming next:** practice tests, spaced repetition (SM-2), AI tutor, explain/example buttons (Phase 2) · match game, streaks, Pomodoro, exam countdown (Phase 3) · Quizlet-style import, export (Phase 4).
+**Coming next:** practice tests, AI tutor, explain/example buttons (Phase 2) · match game, streaks, Pomodoro, exam countdown (Phase 3) · Quizlet-style import, export (Phase 4).
 
 ## Stack
 

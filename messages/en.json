@@ -145,6 +145,12 @@
     "fromFollowing": "From people you follow"
   },
   "create": {
+    "tooLongTitle": "Your notes are {count} characters. The limit for one set is {max}.",
+    "tooLongHelp": "Kodigo can split them at paragraph breaks into {parts} sets. Each set uses one of your daily generations.",
+    "makeParts": "Make {parts} sets",
+    "keepFirstPart": "Keep only the first part",
+    "partProgress": "Making set {current} of {total}",
+    "partsMadeSome": "Made {made} of {total} sets. You can find them on Home.",
     "title": "New set",
     "sourceLabel": "Where are your notes?",
     "source": {

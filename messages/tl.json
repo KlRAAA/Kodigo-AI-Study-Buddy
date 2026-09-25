@@ -145,6 +145,12 @@
     "fromFollowing": "Mula sa mga fina-follow mo"
   },
   "create": {
+    "tooLongTitle": "{count} characters ang notes mo. Hanggang {max} lang ang isang set.",
+    "tooLongHelp": "Kayang hatiin ni Kodigo ang notes sa {parts} sets, sa pagitan ng mga talata. Bawat set ay gagamit ng isa sa daily generations mo.",
+    "makeParts": "Gumawa ng {parts} sets",
+    "keepFirstPart": "Unang bahagi lang ang gamitin",
+    "partProgress": "Ginagawa ang set {current} sa {total}",
+    "partsMadeSome": "Nagawa ang {made} sa {total} sets. Makikita mo sila sa Home.",
     "title": "Bagong set",
     "sourceLabel": "Nasaan ang notes mo?",
     "source": {

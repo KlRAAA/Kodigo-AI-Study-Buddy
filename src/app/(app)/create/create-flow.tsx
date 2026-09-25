@@ -1,13 +1,14 @@
 "use client";
 
-import { Camera, FileText, ImagePlus, Loader2, Presentation, Type, X } from "lucide-react";
+import { Camera, FileText, ImagePlus, Loader2, Presentation, Scissors, Split, Type, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { ErrorMessage } from "@/components/form";
 import { Alert, Button, Input, Label, ProgressBar, Segmented, Textarea } from "@/components/ui";
 import { CameraCapture, canUseLiveCamera } from "@/components/camera-capture";
 import { compressImage } from "@/lib/image-compress";
+import { splitNotes } from "@/lib/split-notes";
 import { cn } from "@/lib/utils";
 import { createSetAction, extractPhotoTextAction } from "@/server/actions/sets";
 import type { ErrorCode } from "@/server/actions/result";
@@ -36,8 +37,11 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
   const [busy, setBusy] = useState<"parsing" | "extracting" | null>(null);
   const [generating, startGenerate] = useTransition();
 
+  const [partProgress, setPartProgress] = useState<{ current: number; total: number } | null>(null);
+
   const tooLong = text.length > maxChars;
   const tooShort = text.trim().length < 40;
+  const parts = useMemo(() => (tooLong ? splitNotes(text, maxChars) : []), [tooLong, text, maxChars]);
 
   function resetMessages() {
     setError(null);
@@ -90,6 +94,32 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
       });
       if (res.ok) router.push(`/sets/${res.data.id}`);
       else setError(res.error);
+    });
+  }
+
+  /** Too-long notes: one set per part, made one after another. */
+  function generateParts() {
+    resetMessages();
+    const base = title.trim().slice(0, 110);
+    startGenerate(async () => {
+      for (let i = 0; i < parts.length; i++) {
+        setPartProgress({ current: i + 1, total: parts.length });
+        const res = await createSetAction({
+          text: parts[i],
+          // Without a title the AI names each part from its own content.
+          title: base ? `${base} (${i + 1}/${parts.length})` : undefined,
+          subject: subject.trim() || undefined,
+          sourceType: source,
+          outputLang,
+        });
+        if (!res.ok) {
+          setPartProgress(null);
+          setError(res.error);
+          if (i > 0) setNotice(t("partsMadeSome", { made: i, total: parts.length }));
+          return;
+        }
+      }
+      router.push("/home");
     });
   }
 
@@ -197,9 +227,31 @@ export function CreateFlow({ maxChars }: { maxChars: number }) {
       )}
 
       {error && <ErrorMessage code={error} />}
-      {tooLong && !error && <ErrorMessage code="too_long" />}
+      {tooLong && !generating && (
+        <div role="alert" className="space-y-3 rounded-2xl bg-danger-soft p-4">
+          <p className="font-bold text-danger">
+            {t("tooLongTitle", { count: text.length.toLocaleString(), max: maxChars.toLocaleString() })}
+          </p>
+          <p className="text-sm">{t("tooLongHelp", { parts: parts.length })}</p>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" onClick={generateParts} disabled={busy !== null}>
+              <Split aria-hidden className="size-4" /> {t("makeParts", { parts: parts.length })}
+            </Button>
+            <Button size="sm" variant="secondary" onClick={() => setText(parts[0] ?? "")}>
+              <Scissors aria-hidden className="size-4" /> {t("keepFirstPart")}
+            </Button>
+          </div>
+        </div>
+      )}
       {generating ? (
-        <GeneratingProgress />
+        <div className="space-y-2">
+          {partProgress && (
+            <p className="text-center text-sm font-bold" aria-live="polite">
+              {t("partProgress", partProgress)}
+            </p>
+          )}
+          <GeneratingProgress key={partProgress?.current ?? 0} />
+        </div>
       ) : (
         <Button size="lg" className="w-full" disabled={tooShort || tooLong || busy !== null} onClick={generate}>
           {t("generate")}

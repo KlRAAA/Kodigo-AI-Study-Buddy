@@ -40,7 +40,17 @@ export function SignInForm({
           {checks.message("password")}
         </div>
         <Turnstile siteKey={siteKey} language={locale} />
-        {state && !state.ok && <ErrorMessage code={state.error} />}
+        {state && !state.ok && state.error === "invalid_credentials" ? (
+          // Same message whether or not the account exists (no account probing), but point new users to sign-up.
+          <Alert>
+            {t("wrongOrNoAccount")}{" "}
+            <Link href="/auth/sign-up" className="font-bold underline">
+              {t("createAccount")}
+            </Link>
+          </Alert>
+        ) : (
+          state && !state.ok && <ErrorMessage code={state.error} />
+        )}
         <SubmitButton>{t("signIn")}</SubmitButton>
       </form>
       <div className="space-y-2 text-center text-sm">

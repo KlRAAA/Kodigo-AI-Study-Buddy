@@ -45,6 +45,8 @@
     "signIn": "Mag-log in",
     "signUp": "Mag-sign up",
     "forgot": "Nakalimutan ang password?",
+    "wrongOrNoAccount": "Mali ang email o password. Kung hindi ka pa naka-sign up gamit ang email na ito, gumawa muna ng account.",
+    "createAccount": "Gumawa ng account",
     "noAccount": "Wala ka pang account?",
     "haveAccount": "May account ka na?",
     "agree": "Sa pag-sign up, sumasang-ayon ka sa aming <terms>Terms</terms> at <privacy>Privacy Policy</privacy>.",

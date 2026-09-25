@@ -46,6 +46,8 @@
     "signUp": "Sign up",
     "forgot": "Forgot your password?",
     "noAccount": "No account yet?",
+    "wrongOrNoAccount": "Wrong email or password. If you haven't signed up with this email yet, make an account first.",
+    "createAccount": "Create an account",
     "haveAccount": "Already have an account?",
     "agree": "By signing up you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
     "verifyTitle": "Check your email",

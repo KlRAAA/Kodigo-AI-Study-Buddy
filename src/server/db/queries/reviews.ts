@@ -38,7 +38,10 @@ export async function listDueCards(
       lastGrade: cardReviews.lastGrade,
     })
     .from(cards)
-    .innerJoin(studySets, and(eq(studySets.id, cards.setId), eq(studySets.userId, userId)))
+    .innerJoin(
+      studySets,
+      and(eq(studySets.id, cards.setId), eq(studySets.userId, userId), isNull(studySets.deletedAt)),
+    )
     .leftJoin(cardReviews, eq(cardReviews.cardId, cards.id))
     .where(
       and(

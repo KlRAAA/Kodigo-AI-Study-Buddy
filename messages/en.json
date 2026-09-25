@@ -8,7 +8,10 @@
     "create": "Create",
     "review": "Review",
     "profile": "Profile",
-    "search": "Search"
+    "search": "Search",
+    "trash": "Trash",
+    "explore": "Explore",
+    "menu": "Menu"
   },
   "language": {
     "label": "Language"
@@ -196,11 +199,11 @@
     "subject": "Subject",
     "save": "Save",
     "cancel": "Cancel",
-    "deleteSet": "Delete this set",
+    "deleteSet": "Move to trash",
     "confirmDeleteSet": "Delete this set and all its cards? This can't be undone.",
     "renamePrompt": "New name for this set",
     "renameSet": "Rename {title}",
-    "deleteSetNamed": "Delete {title}",
+    "deleteSetNamed": "Move {title} to trash",
     "cards": "{count, plural, one {# card} other {# cards}}",
     "addCard": "Add card",
     "term": "Term",
@@ -212,7 +215,10 @@
     "deleteCard": "Delete card",
     "confirmDeleteCard": "Delete this card?",
     "renameTitle": "Rename set",
-    "deleteConfirmButton": "Delete"
+    "deleteConfirmButton": "Delete",
+    "trashTitle": "Move to trash?",
+    "trashConfirm": "You can restore it from Trash for 30 days. After that it's deleted for good.",
+    "trashButton": "Move to trash"
   },
   "study": {
     "flashcards": "Flashcards",
@@ -278,7 +284,9 @@
     "describesOther": "That definition describes <strong>{term}</strong>.",
     "termMeans": "<strong>{term}</strong> means:",
     "youPicked": "You picked <strong>{term}</strong>, which means:",
-    "choices": "Choices"
+    "choices": "Choices",
+    "hint": "Get a hint",
+    "hintLetter": "Starts with “{letter}” · {count} letters"
   },
   "review": {
     "title": "Review",
@@ -334,7 +342,8 @@
     "themeDark": "Dark",
     "community": "Community",
     "noHandleYet": "Pick a username when you share your first set.",
-    "followersFollowing": "Followers & following"
+    "followersFollowing": "Followers & following",
+    "trash": "Trash"
   },
   "admin": {
     "title": "Admin",
@@ -610,5 +619,17 @@
       "unavailable": "No camera was found on this device.",
       "failed": "The camera couldn't start. Try again or use your phone's camera app."
     }
+  },
+  "trash": {
+    "title": "Trash",
+    "subtitle": "Sets you deleted stay here for 30 days, then they're removed for good.",
+    "empty": "Your trash is empty.",
+    "deletedAgo": "Deleted {when}",
+    "restore": "Restore",
+    "deleteForever": "Delete forever",
+    "confirmTitle": "Delete forever?",
+    "confirmBody": "“{title}” and all its cards will be permanently deleted. This can't be undone.",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "daysLeft": "{days, plural, one {# day left} other {# days left}}"
   }
 }

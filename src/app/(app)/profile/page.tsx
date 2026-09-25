@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import { Shield, Trash2 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -43,6 +43,13 @@ export default async function ProfilePage() {
           {t("followersFollowing")}
         </Link>
       </Card>
+
+      <Link
+        href="/trash"
+        className="card-hover flex min-h-14 items-center gap-3 rounded-3xl border border-border bg-surface px-5 font-bold lg:hidden"
+      >
+        <Trash2 aria-hidden className="size-5 text-muted" /> {t("trash")}
+      </Link>
 
       <Card className="space-y-3">
         <h2 className="font-black">{t("language")}</h2>

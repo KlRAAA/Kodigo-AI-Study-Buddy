@@ -7,7 +7,15 @@ import { extractTextFromImages, generateSummaryAndCards, getCachedGeneration } f
 import type { Lang } from "../ai/prompts";
 import { addCard, deleteCard, listCards, replaceCards, setIdForCard, updateCard } from "../db/queries/cards";
 import { markSetStale } from "../db/queries/sharing";
-import { createSet, deleteSet, getSet, updateSet } from "../db/queries/sets";
+import {
+  createSet,
+  deleteSet,
+  deleteTrashedSet,
+  getSet,
+  moveSetToTrash,
+  restoreSet,
+  updateSet,
+} from "../db/queries/sets";
 import { refundDaily } from "../db/queries/usage";
 import { UPLOAD_LIMITS, readLimits } from "../limits/config";
 import { acquire } from "../limits/limiter";
@@ -125,12 +133,34 @@ export async function updateSetMetaAction(input: z.input<typeof metaSchema>): Pr
   return ok(null);
 }
 
+/** Moves a set to Trash (restorable for 30 days). */
 export async function deleteSetAction(setId: string): Promise<ActionResult> {
   const me = await actionUser();
   if (!me) return fail("unauthorized");
   if (!uuid.safeParse(setId).success) return fail("invalid_input");
-  if (!(await deleteSet(me.user.id, setId))) return fail("not_found");
+  if (!(await moveSetToTrash(me.user.id, setId))) return fail("not_found");
   revalidatePath("/home");
+  revalidatePath("/trash");
+  return ok(null);
+}
+
+export async function restoreSetAction(setId: string): Promise<ActionResult> {
+  const me = await actionUser();
+  if (!me) return fail("unauthorized");
+  if (!uuid.safeParse(setId).success) return fail("invalid_input");
+  if (!(await restoreSet(me.user.id, setId))) return fail("not_found");
+  revalidatePath("/trash");
+  revalidatePath("/home");
+  return ok(null);
+}
+
+/** Permanently deletes a set that is already in Trash. */
+export async function deleteForeverAction(setId: string): Promise<ActionResult> {
+  const me = await actionUser();
+  if (!me) return fail("unauthorized");
+  if (!uuid.safeParse(setId).success) return fail("invalid_input");
+  if (!(await deleteTrashedSet(me.user.id, setId))) return fail("not_found");
+  revalidatePath("/trash");
   return ok(null);
 }
 

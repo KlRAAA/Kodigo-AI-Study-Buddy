@@ -28,7 +28,7 @@ export function SetCardActions({ setId, title }: { setId: string; title: string 
   }
 
   async function remove() {
-    const yes = await confirm({ title: t("deleteSet"), message: t("confirmDeleteSet"), confirmLabel: t("deleteConfirmButton"), danger: true });
+    const yes = await confirm({ title: t("trashTitle"), message: t("trashConfirm"), confirmLabel: t("trashButton"), danger: true });
     if (!yes) return;
     startTransition(async () => {
       const res = await deleteSetAction(setId);

@@ -1,0 +1,1 @@
+ALTER TABLE "study_sets" ADD COLUMN "deleted_at" timestamp with time zone;

@@ -95,6 +95,8 @@ export const studySets = pgTable(
     ratingAvg: real("rating_avg").notNull().default(0),
     ratingCount: integer("rating_count").notNull().default(0),
     reportCount: integer("report_count").notNull().default(0),
+    /** Set when moved to Trash; purged after 30 days. */
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
     examDate: date("exam_date"),
     createdAt: createdAt(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

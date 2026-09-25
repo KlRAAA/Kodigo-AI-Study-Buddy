@@ -8,7 +8,10 @@
     "create": "Gumawa",
     "review": "Review",
     "profile": "Profile",
-    "search": "Hanapin"
+    "search": "Hanapin",
+    "trash": "Trash",
+    "explore": "Explore",
+    "menu": "Menu"
   },
   "language": {
     "label": "Wika"
@@ -196,11 +199,11 @@
     "subject": "Subject",
     "save": "I-save",
     "cancel": "Kanselahin",
-    "deleteSet": "Burahin ang set na ito",
+    "deleteSet": "Ilipat sa trash",
     "confirmDeleteSet": "Burahin ang set na ito at lahat ng cards nito? Hindi na ito maibabalik.",
     "renamePrompt": "Bagong pangalan ng set na ito",
     "renameSet": "Palitan ang pangalan ng {title}",
-    "deleteSetNamed": "Burahin ang {title}",
+    "deleteSetNamed": "Ilipat sa trash ang {title}",
     "cards": "{count, plural, one {# card} other {# cards}}",
     "addCard": "Magdagdag",
     "term": "Term",
@@ -212,7 +215,10 @@
     "deleteCard": "Burahin ang card",
     "confirmDeleteCard": "Burahin ang card na ito?",
     "renameTitle": "Palitan ang pangalan",
-    "deleteConfirmButton": "Burahin"
+    "deleteConfirmButton": "Burahin",
+    "trashTitle": "Ilipat sa trash?",
+    "trashConfirm": "Maibabalik mo pa ito mula sa Trash sa loob ng 30 araw. Pagkatapos noon, tuluyan na itong mabubura.",
+    "trashButton": "Ilipat sa trash"
   },
   "study": {
     "flashcards": "Flashcards",
@@ -278,7 +284,9 @@
     "describesOther": "Ang definition na iyan ay para sa <strong>{term}</strong>.",
     "termMeans": "Ang ibig sabihin ng <strong>{term}</strong>:",
     "youPicked": "Ang pinili mo ay <strong>{term}</strong>, na ang ibig sabihin ay:",
-    "choices": "Mga pagpipilian"
+    "choices": "Mga pagpipilian",
+    "hint": "Kumuha ng hint",
+    "hintLetter": "Nagsisimula sa “{letter}” · {count} letra"
   },
   "review": {
     "title": "Review",
@@ -334,7 +342,8 @@
     "themeDark": "Dark",
     "community": "Community",
     "noHandleYet": "Pumili ng username kapag nag-share ka ng unang set mo.",
-    "followersFollowing": "Followers at fina-follow"
+    "followersFollowing": "Followers at fina-follow",
+    "trash": "Trash"
   },
   "admin": {
     "title": "Admin",
@@ -610,5 +619,17 @@
       "unavailable": "Walang nakitang camera sa device na ito.",
       "failed": "Hindi mabuksan ang camera. Subukan ulit o gamitin ang camera app ng phone mo."
     }
+  },
+  "trash": {
+    "title": "Trash",
+    "subtitle": "Nandito ang mga set na binura mo nang 30 araw, bago tuluyang matanggal.",
+    "empty": "Walang laman ang trash mo.",
+    "deletedAgo": "Binura {when}",
+    "restore": "Ibalik",
+    "deleteForever": "Burahin nang tuluyan",
+    "confirmTitle": "Burahin nang tuluyan?",
+    "confirmBody": "Permanenteng mabubura ang “{title}” at lahat ng cards nito. Hindi na ito maibabalik.",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "daysLeft": "{days, plural, one {# araw na lang} other {# araw na lang}}"
   }
 }

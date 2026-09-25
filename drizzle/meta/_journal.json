@@ -29,6 +29,13 @@
       "when": 1790277119537,
       "tag": "0003_community_checks",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790281439702,
+      "tag": "0004_trash",
+      "breakpoints": true
     }
   ]
 }

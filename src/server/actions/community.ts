@@ -5,7 +5,7 @@ import { z } from "zod";
 import { handleSchema } from "@/lib/handle";
 import { copySet, followUser, rateSet, removeFollower, unfollowUser } from "../db/queries/community";
 import { getProfileByHandle } from "../db/queries/profiles";
-import { consumeDaily } from "../db/queries/usage";
+import { consumeDaily, refundDaily } from "../db/queries/usage";
 import { readLimits } from "../limits/config";
 import { actionUser } from "./session";
 import { fail, ok, type ActionResult } from "./result";
@@ -18,8 +18,10 @@ export async function copySetAction(setId: string): Promise<ActionResult<{ id: s
   if (!uuid.safeParse(setId).success) return fail("invalid_input");
   if ((await consumeDaily(me.user.id, "copy", readLimits().daily.copy)) === null) return fail("community_limit");
   const res = await copySet(me.user.id, setId);
-  if (res === "not_found") return fail("not_found");
-  if (res === "own_set") return fail("own_set");
+  if (res === "not_found" || res === "own_set") {
+    await refundDaily(me.user.id, "copy"); // a failed copy doesn't use up the daily limit
+    return fail(res);
+  }
   revalidatePath("/home");
   return ok(res);
 }

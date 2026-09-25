@@ -49,6 +49,8 @@ export async function updateDisplayNameAction(input: string): Promise<ActionResu
 export async function deleteAccountAction(confirmation: string): Promise<ActionResult> {
   const user = await getSessionUser();
   if (!user) return fail("unauthorized");
+  // Banned accounts can't delete themselves to escape the ban.
+  if ((await getOrCreateProfile(user.id)).bannedAt) return fail("banned");
   if (!["DELETE", "BURAHIN"].includes(confirmation.trim().toUpperCase())) return fail("invalid_input");
 
   await deleteAllUserData(user.id);

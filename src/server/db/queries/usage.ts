@@ -97,17 +97,20 @@ export async function getGlobalUsage(now = new Date()) {
   return rows[0]?.aiCalls ?? 0;
 }
 
-/** Per-IP sign-up throttle in fixed one-hour windows. */
-export async function consumeSignup(ipHash: string, limit: number, now = new Date()) {
-  const windowStart = new Date(now);
-  windowStart.setUTCMinutes(0, 0, 0);
+/**
+ * Fixed-window throttle for any key (e.g. "signin:<hashed ip>"). Returns true while
+ * the key has been used fewer than `limit` times in the current window.
+ * Keys should already be hashed; they are stored in signup_throttle.ip_hash.
+ */
+export async function consumeThrottle(key: string, limit: number, windowMs: number, now = new Date()) {
+  const windowStart = new Date(Math.floor(now.getTime() / windowMs) * windowMs);
   const db = getDb();
   await db
     .delete(signupThrottle)
-    .where(and(eq(signupThrottle.ipHash, ipHash), lt(signupThrottle.windowStart, windowStart)));
+    .where(and(eq(signupThrottle.ipHash, key), lt(signupThrottle.windowStart, windowStart)));
   const rows = await db
     .insert(signupThrottle)
-    .values({ ipHash, windowStart, count: 1 })
+    .values({ ipHash: key, windowStart, count: 1 })
     .onConflictDoUpdate({
       target: [signupThrottle.ipHash, signupThrottle.windowStart],
       set: { count: sql`${signupThrottle.count} + 1` },
@@ -115,6 +118,11 @@ export async function consumeSignup(ipHash: string, limit: number, now = new Dat
     })
     .returning({ count: signupThrottle.count });
   return rows.length > 0;
+}
+
+/** Per-IP sign-up throttle in fixed one-hour windows. */
+export async function consumeSignup(ipHash: string, limit: number, now = new Date()) {
+  return consumeThrottle(ipHash, limit, 60 * 60 * 1000, now);
 }
 
 export async function resetUserCounters(userId: string, now = new Date()) {

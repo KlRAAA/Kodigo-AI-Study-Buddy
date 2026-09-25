@@ -2,6 +2,11 @@ import type { ChatMessage } from "./providers";
 
 export type Lang = "en" | "tl";
 
+/** Stops user text from opening or closing the wrapper tag (prompt-injection hygiene). */
+export function escapeTag(text: string, tag: string) {
+  return text.replace(new RegExp(`<\\s*/?\\s*${tag}\\s*>`, "gi"), (m) => m.replace("<", "‹"));
+}
+
 const LANGUAGE: Record<Lang, string> = {
   en: "Write everything in clear, simple English.",
   tl: "Write everything in natural Filipino (Tagalog) the way Filipino students talk; Taglish is fine. Keep technical terms, names and formulas in their original language when that is what students normally use.",
@@ -24,7 +29,7 @@ export function summaryAndCardsMessages(notes: string, lang: Lang, cardCount: nu
         `Make about ${cardCount} flashcards covering the most important terms, concepts, dates, people and formulas. Definitions must be accurate to the notes, 1–3 sentences. Do not invent facts that are not in the notes. When the notes contain a list (types, parts, steps, causes, examples), also make a list card: the term names the list (e.g. "Types of rocks") and the definition lists only the items separated by semicolons (e.g. "Igneous; Sedimentary; Metamorphic").${partNote}`,
       ].join("\n"),
     },
-    { role: "user", content: `<notes>\n${notes}\n</notes>` },
+    { role: "user", content: `<notes>\n${escapeTag(notes, "notes")}\n</notes>` },
   ];
 }
 
@@ -54,7 +59,7 @@ export function moderationMessages(text: string): ChatMessage[] {
         `Reply with ONLY JSON: {"verdict": "allow"|"review"|"block", "categories": array of ${JSON.stringify(MODERATION_CATEGORIES)}, "reason": short English explanation or null}`,
       ].join("\n"),
     },
-    { role: "user", content: `<material>\n${text}\n</material>` },
+    { role: "user", content: `<material>\n${escapeTag(text, "material")}\n</material>` },
   ];
 }
 

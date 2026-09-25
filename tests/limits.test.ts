@@ -5,6 +5,7 @@ import {
   consumeGlobal,
   consumeRate,
   consumeSignup,
+  consumeThrottle,
   getDailyUsage,
   refundDaily,
   resetUserCounters,
@@ -100,6 +101,16 @@ describe("usage counters (Postgres)", () => {
     expect(await consumeSignup("ip", 2, now)).toBe(true);
     expect(await consumeSignup("ip", 2, now)).toBe(false);
     expect(await consumeSignup("ip", 2, new Date("2026-09-24T03:00:00Z"))).toBe(true);
+  });
+
+  it("throttles any key in its own time window", async () => {
+    const t0 = new Date("2026-09-24T02:01:00Z");
+    const tenMin = 10 * 60 * 1000;
+    expect(await consumeThrottle("signin:ip1", 2, tenMin, t0)).toBe(true);
+    expect(await consumeThrottle("signin:ip1", 2, tenMin, t0)).toBe(true);
+    expect(await consumeThrottle("signin:ip1", 2, tenMin, t0)).toBe(false);
+    expect(await consumeThrottle("signin:ip2", 2, tenMin, t0)).toBe(true); // other key
+    expect(await consumeThrottle("signin:ip1", 2, tenMin, new Date("2026-09-24T02:10:00Z"))).toBe(true); // next window
   });
 
   it("admin reset clears today's counters", async () => {

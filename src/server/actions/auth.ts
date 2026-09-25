@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getAuth } from "../auth";
 import { isEmailBanned } from "../db/queries/moderation";
 import { getOrCreateProfile } from "../db/queries/profiles";
-import { consumeSignup } from "../db/queries/usage";
+import { consumeSignup, consumeThrottle } from "../db/queries/usage";
 import { readLimits } from "../limits/config";
 import { log } from "../log";
 import { hashEmail } from "../moderation/bans";
@@ -29,6 +29,20 @@ function mapAuthError(error: AuthError): ActionResult {
   if (code.includes("OTP") || code.includes("INVALID_CODE") || code.includes("TOO_MANY_ATTEMPTS")) return fail("invalid_code");
   if (error?.status === 429) return fail("rate");
   return fail("unknown");
+}
+
+const MIN = 60 * 1000;
+type Limit = [count: number, windowMs: number];
+
+/**
+ * Brute-force and email-flood protection for logged-out auth steps: limits per
+ * network (IP) and per email address. Keys are salted hashes, never raw values.
+ */
+async function allowAuthStep(step: string, limits: { ip?: Limit; email?: Limit }, mail?: string) {
+  const ip = await clientIp();
+  if (limits.ip && ip && !(await consumeThrottle(hashIp(`${step}:ip:${ip}`), ...limits.ip))) return false;
+  if (limits.email && mail && !(await consumeThrottle(hashIp(`${step}:email:${mail}`), ...limits.email))) return false;
+  return true;
 }
 
 async function checkTurnstile(formData: FormData) {
@@ -83,6 +97,9 @@ export async function signInAction(_prev: ActionResult | null, formData: FormDat
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("invalid_credentials");
   if (!(await checkTurnstile(formData))) return fail("captcha");
+  if (!(await allowAuthStep("signin", { ip: [20, 10 * MIN], email: [10, 10 * MIN] }, parsed.data.email))) {
+    return fail("rate");
+  }
 
   const { data, error } = await getAuth().signIn.email(parsed.data);
   if (error) {
@@ -111,6 +128,7 @@ async function sendVerificationCode(mail: string) {
 export async function resendCodeAction(mailInput: string): Promise<ActionResult> {
   const parsed = email.safeParse(mailInput);
   if (!parsed.success) return fail("invalid_input");
+  if (!(await allowAuthStep("resend", { ip: [10, 60 * MIN], email: [3, 10 * MIN] }, parsed.data))) return fail("rate");
   return (await sendVerificationCode(parsed.data)) ? { ok: true, data: null } : fail("rate");
 }
 
@@ -119,6 +137,9 @@ const verifySchema = z.object({ email, otp });
 export async function verifyEmailAction(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const parsed = verifySchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fail("invalid_code");
+  if (!(await allowAuthStep("verify", { ip: [30, 10 * MIN], email: [10, 10 * MIN] }, parsed.data.email))) {
+    return fail("rate");
+  }
 
   const auth = getAuth();
   const { error } = await auth.emailOtp.verifyEmail({ email: parsed.data.email, otp: parsed.data.otp });
@@ -133,6 +154,9 @@ export async function requestResetAction(_prev: ActionResult | null, formData: F
   const parsed = email.safeParse(formData.get("email"));
   if (!parsed.success) return fail("invalid_input");
   if (!(await checkTurnstile(formData))) return fail("captcha");
+  if (!(await allowAuthStep("reset-request", { ip: [10, 60 * MIN], email: [3, 60 * MIN] }, parsed.data))) {
+    return fail("rate");
+  }
   const { error } = await getAuth().emailOtp.sendVerificationOtp({ email: parsed.data, type: "forget-password" });
   // Same response whether or not the account exists.
   if (error) log.warn("auth.reset_request_failed", { code: error.code ?? null, status: error.status ?? null });
@@ -149,6 +173,7 @@ export async function resetPasswordAction(_prev: ActionResult | null, formData: 
     return fail(typeof pw === "string" && pw.length < 8 ? "weak_password" : "invalid_code");
   }
   const { email: mail, otp: code, password: pw } = parsed.data;
+  if (!(await allowAuthStep("reset", { ip: [30, 10 * MIN], email: [10, 10 * MIN] }, mail))) return fail("rate");
   const { error } = await getAuth().emailOtp.resetPassword({ email: mail, otp: code, password: pw });
   if (error) return mapAuthError({ ...error, code: error.code ?? "INVALID_CODE" });
   redirect("/auth/sign-in?reset=1");
